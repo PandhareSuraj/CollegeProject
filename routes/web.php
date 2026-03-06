@@ -40,7 +40,8 @@ Route::middleware('guest')->group(function () {
 
 // Logout route
 Route::post('/auth/logout', [LoginController::class, 'logout'])->middleware('auth')->name('auth.logout');
-Route::get('/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
+// Support both GET and POST for the common `/logout` URI so UI links and POST forms work.
+Route::match(['get','post'], '/logout', [LoginController::class, 'logout'])->middleware('auth')->name('logout');
 
 // Dashboard routes
 Route::middleware(['auth', 'verified'])->group(function () {

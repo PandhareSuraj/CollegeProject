@@ -58,29 +58,25 @@
                 <h5 class="mb-0">Statistics</h5>
             </div>
             <div class="card-body">
-                @if($user->stationaryRequests)
                 <div class="mb-3">
                     <label><strong>Requests Created:</strong></label>
-                    <p style="font-size: 1.5rem; color: #3498db;">{{ $user->stationaryRequests->count() }}</p>
+                    <p style="font-size: 1.5rem; color: #3498db;">{{ $requestsCount ?? 0 }}</p>
                 </div>
-                @endif
 
-                @if($user->approvals)
                 <div class="mb-3">
                     <label><strong>Approvals Given:</strong></label>
-                    <p style="font-size: 1.5rem; color: #27ae60;">{{ $user->approvals->count() }}</p>
+                    <p style="font-size: 1.5rem; color: #27ae60;">{{ $approvalsCount ?? 0 }}</p>
                 </div>
-                @endif
 
-                @if(!$user->stationaryRequests && !$user->approvals)
-                <p class="text-muted">No statistics available for this user</p>
+                @if(($requestsCount ?? 0) === 0 && ($approvalsCount ?? 0) === 0)
+                    <p class="text-muted">No statistics available for this user</p>
                 @endif
             </div>
         </div>
     </div>
 </div>
 
-@if($user->stationaryRequests && $user->stationaryRequests->count() > 0)
+@if(!empty($hasRecentRequests))
     <div class="card mt-3">
         <div class="card-header">
             <h5 class="mb-0"><i class="fas fa-file-invoice"></i> User's Requests</h5>
@@ -96,7 +92,7 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach($user->stationaryRequests->take(10) as $request)
+                    @foreach($recentRequests as $request)
                         <tr>
                             <td>#{{ $request->id }}</td>
                             <td>{{ $request->created_at->format('M d, Y') }}</td>

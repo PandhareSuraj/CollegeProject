@@ -157,15 +157,16 @@ class ApprovalWorkflowService
     public function getApprovalTimeline(StationaryRequest $request): array
     {
         return $request->approvals()
-            ->with('approver')
+            ->select('id','request_id','approved_by','role','status','remarks','created_at')
+            ->with(['approver:id,name,email'])
             ->orderBy('created_at', 'asc')
             ->get()
             ->map(function (Approval $approval) {
                 return [
                     'id' => $approval->id,
                     'role' => ucfirst(str_replace('_', ' ', $approval->role)),
-                    'approver_name' => optional($approval->approver)->name ?? 'Unknown',
-                    'approver_email' => optional($approval->approver)->email ?? null,
+                    'approver_name' => $approval->approver->name ?? 'Unknown',
+                    'approver_email' => $approval->approver->email ?? null,
                     'status' => ucfirst($approval->status),
                     'date' => $approval->created_at->format('M d, Y H:i A'),
                     'remarks' => $approval->remarks,
@@ -225,7 +226,7 @@ class ApprovalWorkflowService
     /**
      * Get pending approvals for a user
      */
-    public function getPendingApprovalsForUser(User $user): \Illuminate\Database\Eloquent\Collection
+    public function getPendingApprovalsForUser(User $user): \Illuminate\Contracts\Pagination\LengthAwarePaginator
     {
         $query = StationaryRequest::query();
 
@@ -249,9 +250,16 @@ class ApprovalWorkflowService
             $query->where('department_id', $user->department_id);
         }
 
-        return $query->with(['department', 'requestedBy', 'items'])
+        // Limit selected columns to reduce payload and eager-load only necessary relations
+        return $query->select('id','department_id','requested_by','status','total_amount','created_at')
+                    ->with([
+                        'department:id,name',
+                        'requestedByTeacher:id,name',
+                        'requestedByHod:id,name',
+                        // items may be heavy; only load a count when needed in lists
+                    ])
                     ->latest()
-                    ->get();
+                    ->paginate(15);
     }
 
     /**
@@ -259,7 +267,25 @@ class ApprovalWorkflowService
      */
     public function getApprovalStats(User $user): array
     {
-        $pending = $this->getPendingApprovalsForUser($user)->count();
+        // Compute pending count via query to avoid pagination side-effects
+        $pendingQuery = StationaryRequest::query();
+        $statusFilter = match ($user->role) {
+            'hod' => 'pending',
+            'principal' => 'hod_approved',
+            'trust_head' => 'principal_approved',
+            'admin' => ['pending', 'hod_approved', 'principal_approved', 'trust_approved'],
+            default => null,
+        };
+
+        if (!$statusFilter) {
+            $pending = 0;
+        } else {
+            $pendingQuery = is_array($statusFilter) ? $pendingQuery->whereIn('status', $statusFilter) : $pendingQuery->where('status', $statusFilter);
+            if ($user->isHOD()) {
+                $pendingQuery->where('department_id', $user->department_id);
+            }
+            $pending = $pendingQuery->count();
+        }
 
         $approved = Approval::where('approved_by', $user->id)
             ->where('status', 'approved')

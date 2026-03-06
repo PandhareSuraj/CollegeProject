@@ -113,7 +113,8 @@ class OrderController extends Controller
 
     public function edit($id)
     {
-        $order = \App\Models\Order::with('items', 'vendor')->findOrFail($id);
+        // Eager-load items and vendor and include an items_count attribute for view summaries
+        $order = \App\Models\Order::with('items', 'vendor')->withCount('items')->findOrFail($id);
         $vendors = \App\Models\Vendor::orderBy('name')->get();
         return view('admin.orders.edit', compact('order', 'vendors'));
     }

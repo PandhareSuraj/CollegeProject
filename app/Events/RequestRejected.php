@@ -29,7 +29,7 @@ class RequestRejected
         $this->request = $request;
         $this->approval = $approval;
         $this->approverRole = $approval->role;
-        $this->reason = $reason ?: $approval->remarks;
+        $this->reason = $reason ?: ($approval->remarks ?? '');
     }
 
     /**

@@ -172,6 +172,9 @@ class RequestController extends Controller
             }
         ]);
 
+        // Add approvals count to avoid loading the entire collection when only count is needed in views
+        $stationaryRequest->loadCount('approvals');
+
         $user = Auth::user();
         
         // Determine if current user can approve
@@ -344,6 +347,8 @@ class RequestController extends Controller
     private function getWorkflowStatus(StationaryRequest $stationaryRequest): array
     {
         $approvals = $stationaryRequest->approvals()
+            ->select('id','request_id','approved_by','role','status','remarks','created_at')
+            ->with(['approver:id,name'])
             ->orderBy('created_at')
             ->get()
             ->groupBy('role');
@@ -367,54 +372,46 @@ class RequestController extends Controller
      */
     public function getDashboardStats($user)
     {
-        $query = StationaryRequest::query();
-
         if ($user->isTeacher()) {
-            // Teacher stats
             return [
-                'total' => $query->where('requested_by', $user->id)->count(),
-                'pending' => $query->where('requested_by', $user->id)->where('status', 'pending')->count(),
-                'approved' => $query->where('requested_by', $user->id)->where('status', 'completed')->count(),
-                'rejected' => $query->where('requested_by', $user->id)->where('status', 'rejected')->count(),
+                'total' => StationaryRequest::where('requested_by', $user->id)->count(),
+                'pending' => StationaryRequest::where('requested_by', $user->id)->where('status', 'pending')->count(),
+                'approved' => StationaryRequest::where('requested_by', $user->id)->where('status', 'completed')->count(),
+                'rejected' => StationaryRequest::where('requested_by', $user->id)->where('status', 'rejected')->count(),
             ];
         } elseif ($user->isHOD()) {
-            // HOD stats
             return [
-                'pending_approval' => $query->where('department_id', $user->department_id)->where('status', 'pending')->count(),
-                'total' => $query->where('department_id', $user->department_id)->count(),
-                'approved' => $query->where('department_id', $user->department_id)->where('status', 'completed')->count(),
-                'rejected' => $query->where('department_id', $user->department_id)->where('status', 'rejected')->count(),
+                'pending_approval' => StationaryRequest::where('department_id', $user->department_id)->where('status', 'pending')->count(),
+                'total' => StationaryRequest::where('department_id', $user->department_id)->count(),
+                'approved' => StationaryRequest::where('department_id', $user->department_id)->where('status', 'completed')->count(),
+                'rejected' => StationaryRequest::where('department_id', $user->department_id)->where('status', 'rejected')->count(),
             ];
         } elseif ($user->isPrincipal()) {
-            // Principal stats
             return [
-                'pending_approval' => $query->where('status', 'hod_approved')->count(),
-                'total' => $query->count(),
-                'completed' => $query->where('status', 'completed')->count(),
+                'pending_approval' => StationaryRequest::where('status', 'hod_approved')->count(),
+                'total' => StationaryRequest::count(),
+                'completed' => StationaryRequest::where('status', 'completed')->count(),
             ];
         } elseif ($user->isTrustHead()) {
-            // Trust Head stats
             return [
-                'pending_approval' => $query->where('status', 'principal_approved')->count(),
-                'total' => $query->count(),
-                'completed' => $query->where('status', 'completed')->count(),
+                'pending_approval' => StationaryRequest::where('status', 'principal_approved')->count(),
+                'total' => StationaryRequest::count(),
+                'completed' => StationaryRequest::where('status', 'completed')->count(),
             ];
         } elseif ($user->isProvider()) {
-            // Provider stats
             return [
-                'ready_to_supply' => $query->where('status', 'trust_approved')->count(),
-                'supplied' => $query->where('status', 'sent_to_provider')->count(),
-                'completed' => $query->where('status', 'completed')->count(),
+                'ready_to_supply' => StationaryRequest::where('status', 'trust_approved')->count(),
+                'supplied' => StationaryRequest::where('status', 'sent_to_provider')->count(),
+                'completed' => StationaryRequest::where('status', 'completed')->count(),
             ];
         } else {
-            // Admin stats
             return [
-                'total' => $query->count(),
-                'pending' => $query->where('status', 'pending')->count(),
-                'approved' => $query->where('status', 'trust_approved')->count(),
-                'completed' => $query->where('status', 'completed')->count(),
-                'rejected' => $query->where('status', 'rejected')->count(),
-                'total_amount' => $query->sum('total_amount'),
+                'total' => StationaryRequest::count(),
+                'pending' => StationaryRequest::where('status', 'pending')->count(),
+                'approved' => StationaryRequest::where('status', 'trust_approved')->count(),
+                'completed' => StationaryRequest::where('status', 'completed')->count(),
+                'rejected' => StationaryRequest::where('status', 'rejected')->count(),
+                'total_amount' => StationaryRequest::sum('total_amount'),
             ];
         }
     }

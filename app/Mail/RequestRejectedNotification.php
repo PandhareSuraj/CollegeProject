@@ -49,7 +49,7 @@ class RequestRejectedNotification extends Mailable implements ShouldQueue
                 'approval' => $this->approval,
                 'approverName' => $this->approval->approvedBy->name,
                 'approverRole' => ucfirst(str_replace('_', ' ', $this->approval->role)),
-                'requestorName' => $this->request->requestedBy->name,
+                    'requestorName' => $this->request->requester->name,
                 'departmentName' => $this->request->department->name,
                 'reason' => $this->approval->remarks ?: 'No reason provided',
                 'itemCount' => $this->request->items->count(),

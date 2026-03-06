@@ -23,7 +23,7 @@ class DashboardController extends Controller
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.admin', compact(
             'totalRequests',
@@ -40,17 +40,22 @@ class DashboardController extends Controller
     public function teacher()
     {
         $user = Auth::user();
-        $requests = StationaryRequest::where('requested_by', $user->id)->latest()->get();
-        $totalRequests = $requests->count();
-        $pendingRequests = $requests->where('status', 'pending')->count();
-        $approvedRequests = $requests->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved'])->count();
-        $completedRequests = $requests->where('status', 'completed')->count();
+        $requests = StationaryRequest::where('requested_by', $user->id)
+            ->select('id','department_id','requested_by','status','total_amount','created_at')
+            ->latest()
+            ->paginate(15);
+
+        // Compute totals via queries so pagination doesn't affect totals
+        $totalRequests = StationaryRequest::where('requested_by', $user->id)->count();
+        $pendingRequests = StationaryRequest::where('requested_by', $user->id)->where('status', 'pending')->count();
+        $approvedRequests = StationaryRequest::where('requested_by', $user->id)->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved'])->count();
+        $completedRequests = StationaryRequest::where('requested_by', $user->id)->where('status', 'completed')->count();
 
         $approvedProducts = Product::whereHas('requestItems', function ($q) {
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.teacher', compact(
             'requests',
@@ -67,11 +72,12 @@ class DashboardController extends Controller
         $user = Auth::user();
 
         $requests = StationaryRequest::where('status', 'pending')
+            ->select('id','department_id','requested_by','status','total_amount','created_at')
             ->latest()
-            ->get();
+            ->paginate(15);
 
         $totalRequests = StationaryRequest::count();
-        $pendingApprovals = $requests->count();
+        $pendingApprovals = StationaryRequest::where('status', 'pending')->count();
         $approvedRequests = StationaryRequest::whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved'])->count();
         $completedRequests = StationaryRequest::where('status', 'completed')->count();
 
@@ -79,7 +85,7 @@ class DashboardController extends Controller
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.hod', compact(
             'requests',
@@ -94,11 +100,12 @@ class DashboardController extends Controller
     public function principal()
     {
         $requests = StationaryRequest::where('status', 'hod_approved')
+            ->select('id','department_id','requested_by','status','total_amount','created_at')
             ->latest()
-            ->get();
+            ->paginate(15);
 
         $totalRequests = StationaryRequest::count();
-        $pendingApprovals = $requests->count();
+        $pendingApprovals = StationaryRequest::where('status', 'hod_approved')->count();
         $approvedRequests = StationaryRequest::whereIn('status', ['principal_approved', 'trust_approved'])->count();
         $completedRequests = StationaryRequest::where('status', 'completed')->count();
 
@@ -106,7 +113,7 @@ class DashboardController extends Controller
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.principal', compact(
             'requests',
@@ -121,11 +128,12 @@ class DashboardController extends Controller
     public function trustHead()
     {
         $requests = StationaryRequest::where('status', 'principal_approved')
+            ->select('id','department_id','requested_by','status','total_amount','created_at')
             ->latest()
-            ->get();
+            ->paginate(15);
 
         $totalRequests = StationaryRequest::count();
-        $pendingApprovals = $requests->count();
+        $pendingApprovals = StationaryRequest::where('status', 'principal_approved')->count();
         $approvedRequests = StationaryRequest::where('status', 'trust_approved')->count();
         $completedRequests = StationaryRequest::where('status', 'completed')->count();
 
@@ -133,7 +141,7 @@ class DashboardController extends Controller
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.trust-head', compact(
             'requests',
@@ -147,20 +155,23 @@ class DashboardController extends Controller
 
     public function provider()
     {
-        $requests = StationaryRequest::where('status', 'trust_approved')
-            ->orWhere('status', 'sent_to_provider')
+        $requests = StationaryRequest::where(function ($q) {
+                $q->where('status', 'trust_approved')
+                  ->orWhere('status', 'sent_to_provider');
+            })
+            ->select('id','department_id','requested_by','status','total_amount','created_at')
             ->latest()
-            ->get();
+            ->paginate(15);
 
-        $totalRequests = $requests->count();
-        $sentRequests = $requests->where('status', 'sent_to_provider')->count();
+        $totalRequests = StationaryRequest::count();
+        $sentRequests = StationaryRequest::where('status', 'sent_to_provider')->count();
         $completedRequests = StationaryRequest::where('status', 'completed')->count();
 
         $approvedProducts = Product::whereHas('requestItems', function ($q) {
             $q->whereHas('request', function ($rq) {
                 $rq->whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved', 'sent_to_provider', 'completed']);
             });
-        })->get();
+        })->select('id','name')->paginate(15);
 
         return view('dashboards.provider', compact(
             'requests',

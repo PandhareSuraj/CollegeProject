@@ -79,7 +79,7 @@
                 </div>
                 <div>
                     <p class="text-gray-600 dark:text-gray-300">Total Items:</p>
-                    <p class="font-semibold text-gray-900 dark:text-gray-300">{{ $order->items->count() }}</p>
+                    <p class="font-semibold text-gray-900 dark:text-gray-300">{{ $order->items_count }}</p>
                 </div>
                 <div>
                     <p class="text-gray-600 dark:text-gray-300">Created:</p>

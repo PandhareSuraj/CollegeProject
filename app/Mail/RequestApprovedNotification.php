@@ -2,8 +2,6 @@
 
 namespace App\Mail;
 
-use App\Models\StationaryRequest;
-use App\Models\Approval;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Mail\Mailable;
@@ -15,16 +13,20 @@ class RequestApprovedNotification extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
 
-    public StationaryRequest $request;
-    public Approval $approval;
+    /**
+     * Minimal scalar payload only. Avoid serializing full models.
+     * Example keys: request_id, approver_name, approver_role, requestor_name, requestor_email,
+     * department_name, item_count, total_amount, approval_id, approval_status, approval_remarks
+     * @var array
+     */
+    public array $payload;
 
     /**
      * Create a new message instance.
      */
-    public function __construct(StationaryRequest $request, Approval $approval)
+    public function __construct(array $payload)
     {
-        $this->request = $request;
-        $this->approval = $approval;
+        $this->payload = $payload;
     }
 
     /**
@@ -32,8 +34,10 @@ class RequestApprovedNotification extends Mailable implements ShouldQueue
      */
     public function envelope(): Envelope
     {
+        $subjRole = isset($this->payload['approver_role']) ? ucfirst(str_replace('_',' ',$this->payload['approver_role'])) : 'Approver';
+        $requestId = $this->payload['request_id'] ?? 'N/A';
         return new Envelope(
-            subject: 'Request #' . $this->request->id . ' Approved by ' . ucfirst(str_replace('_', ' ', $this->approval->role)),
+            subject: "Request #{$requestId} Approved by {$subjRole}",
         );
     }
 
@@ -45,14 +49,7 @@ class RequestApprovedNotification extends Mailable implements ShouldQueue
         return new Content(
             view: 'mail.request-approved',
             with: [
-                'request' => $this->request,
-                'approval' => $this->approval,
-                'approverName' => $this->approval->approvedBy->name,
-                'approverRole' => ucfirst(str_replace('_', ' ', $this->approval->role)),
-                'requestorName' => $this->request->requestedBy->name,
-                'departmentName' => $this->request->department->name,
-                'itemCount' => $this->request->items->count(),
-                'totalAmount' => $this->request->total_amount,
+                'payload' => $this->payload,
             ],
         );
     }

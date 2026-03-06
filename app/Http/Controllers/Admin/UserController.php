@@ -120,7 +120,27 @@ class UserController extends Controller
             abort(404, 'User not found');
         }
 
-        return view('admin.users.show', compact('user'));
+        // Calculate counts and recent requests server-side to avoid loading whole relations in the view
+        $requestsCount = 0;
+        $approvalsCount = 0;
+        $recentRequests = collect();
+
+        if (method_exists($user, 'stationaryRequests')) {
+            $requestsCount = $user->stationaryRequests()->count();
+            $recentRequests = $user->stationaryRequests()
+                ->orderBy('created_at', 'desc')
+                ->select('id','total_amount','status','created_at')
+                ->take(10)
+                ->get();
+        }
+
+        if (method_exists($user, 'approvals')) {
+            $approvalsCount = $user->approvals()->count();
+        }
+
+        $hasRecentRequests = $recentRequests->isNotEmpty();
+
+        return view('admin.users.show', compact('user', 'requestsCount', 'approvalsCount', 'recentRequests', 'hasRecentRequests'));
     }
 
     /**

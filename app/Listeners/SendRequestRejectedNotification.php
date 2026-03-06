@@ -27,11 +27,11 @@ class SendRequestRejectedNotification implements ShouldQueue
     public function handle(RequestRejected $event): void
     {
         try {
-            // Send email to the requestor
-            $requestedBy = $event->request->requestedBy();
+            // Send email to the requestor (queued)
+            $requestedBy = $event->request->requester;
             if ($requestedBy && $requestedBy->email) {
                 Mail::to($requestedBy->email)
-                    ->send(new RequestRejectedNotification($event->request, $event->approval));
+                    ->queue(new RequestRejectedNotification($event->request, $event->approval));
             }
 
             // Send email to department HOD for tracking
@@ -39,7 +39,7 @@ class SendRequestRejectedNotification implements ShouldQueue
                 $hod = \App\Models\Hod::find($event->request->department->id);
                 if ($hod && $event->approverRole !== 'hod') {
                     Mail::to($hod->email)
-                        ->send(new RequestRejectedNotification($event->request, $event->approval));
+                        ->queue(new RequestRejectedNotification($event->request, $event->approval));
                 }
             }
 
@@ -47,7 +47,7 @@ class SendRequestRejectedNotification implements ShouldQueue
             $admin = \App\Models\Administrator::first();
             if ($admin) {
                 Mail::to($admin->email)
-                    ->send(new RequestRejectedNotification($event->request, $event->approval));
+                    ->queue(new RequestRejectedNotification($event->request, $event->approval));
             }
 
             Log::warning('Request rejected notification sent', [

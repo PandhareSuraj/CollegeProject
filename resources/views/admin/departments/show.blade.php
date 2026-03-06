@@ -50,17 +50,17 @@
             <div class="card-body">
                 <div class="mb-3">
                     <label><strong>Total Teachers:</strong></label>
-                    <p style="font-size: 1.5rem; color: #3498db;">{{ $department->teachers->count() }}</p>
+                    <p style="font-size: 1.5rem; color: #3498db;">{{ $department->teachers_count }}</p>
                 </div>
 
                 <div class="mb-3">
                     <label><strong>Total HODs:</strong></label>
-                    <p style="font-size: 1.5rem; color: #2ecc71;">{{ $department->hods->count() }}</p>
+                    <p style="font-size: 1.5rem; color: #2ecc71;">{{ $department->hods_count }}</p>
                 </div>
 
                 <div class="mb-3">
                     <label><strong>Total Requests:</strong></label>
-                    <p style="font-size: 1.5rem; color: #27ae60;">{{ $department->requests->count() }}</p>
+                    <p style="font-size: 1.5rem; color: #27ae60;">{{ $department->requests_count }}</p>
                 </div>
             </div>
         </div>
@@ -82,16 +82,7 @@
                 </tr>
             </thead>
             <tbody>
-                @php
-                    $allUsers = collect();
-                    foreach ($department->teachers as $teacher) {
-                        $allUsers->push($teacher);
-                    }
-                    foreach ($department->hods as $hod) {
-                        $allUsers->push($hod);
-                    }
-                @endphp
-                @forelse($allUsers as $user)
+                @forelse($departmentUsers as $user)
                     <tr>
                         <td>{{ $user->name }}</td>
                         <td>{{ $user->email }}</td>

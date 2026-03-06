@@ -27,24 +27,45 @@ class SendRequestApprovedNotification implements ShouldQueue
     public function handle(RequestApproved $event): void
     {
         try {
-            // Send email to the requestor
-            Mail::to($event->request->requestedBy->email)
-                ->send(new RequestApprovedNotification($event->request, $event->approval));
+            // Prepare a minimal payload to avoid serializing full models
+            $approverName = optional($event->approval->approver)->name ?? null;
+            $approverEmail = optional($event->approval->approver)->email ?? null;
+            $payload = [
+                'request_id' => $event->request->id,
+                'approval_id' => $event->approval->id,
+                'approval_status' => $event->approval->status,
+                'approval_remarks' => $event->approval->remarks,
+                'approver_name' => $approverName,
+                'approver_email' => $approverEmail,
+                'approver_role' => $event->approval->role,
+                'requestor_name' => optional($event->request->requester)->name ?? null,
+                'requestor_email' => optional($event->request->requester)->email ?? null,
+                'department_name' => optional($event->request->department)->name ?? null,
+                'item_count' => $event->request->items()->count(),
+                'total_amount' => $event->request->total_amount,
+            ];
+
+            // Queue email to the requestor (non-blocking)
+            if (!empty($payload['requestor_email'])) {
+                Mail::to($payload['requestor_email'])->queue(new RequestApprovedNotification($payload));
+            }
 
             // Send email to next level approvers (except if already at final stage)
-            $this->notifyNextApprovers($event);
+            $this->notifyNextApprovers($event, $payload);
 
-            // Send email to department HOD for tracking
+            // Send email to department HOD for tracking (queued)
             if ($event->request->department && $event->request->department->hod && $event->approverRole !== 'hod') {
-                Mail::to($event->request->department->hod->email)
-                    ->send(new RequestApprovedNotification($event->request, $event->approval));
+                $hodEmail = $event->request->department->hod->email ?? null;
+                if ($hodEmail) {
+                    Mail::to($hodEmail)->queue(new RequestApprovedNotification($payload));
+                }
             }
 
             Log::info('Request approved notification sent', [
                 'request_id' => $event->request->id,
                 'approver_id' => $event->approval->approved_by,
                 'approver_role' => $event->approverRole,
-                'requestor_email' => $event->request->requestedBy->email,
+                'requestor_email' => $payload['requestor_email'],
             ]);
         } catch (\Exception $e) {
             Log::error('Failed to send request approved notification', [
@@ -56,7 +77,7 @@ class SendRequestApprovedNotification implements ShouldQueue
     /**
      * Notify the next level approvers based on workflow
      */
-    private function notifyNextApprovers(RequestApproved $event): void
+    private function notifyNextApprovers(RequestApproved $event, array $payload = []): void
     {
         // Determine who should be notified based on the approver role.
         // Map current approver role to the next approver role in workflow.
@@ -80,8 +101,25 @@ class SendRequestApprovedNotification implements ShouldQueue
                 }
 
                 // Queue the mail so sending doesn't block the listener
-                Mail::to($user->email)
-                    ->queue(new RequestApprovedNotification($event->request, $event->approval));
+                if (!empty($user->email)) {
+                    // Use payload prepared earlier if available on event; otherwise build minimal payload
+                    $approverName = optional($event->approval->approver)->name ?? null;
+                    $payload = [
+                        'request_id' => $event->request->id,
+                        'approval_id' => $event->approval->id,
+                        'approval_status' => $event->approval->status,
+                        'approval_remarks' => $event->approval->remarks,
+                        'approver_name' => $approverName,
+                        'approver_role' => $event->approval->role,
+                        'requestor_name' => optional($event->request->requester)->name ?? null,
+                        'requestor_email' => optional($event->request->requester)->email ?? null,
+                        'department_name' => optional($event->request->department)->name ?? null,
+                        'item_count' => $event->request->items()->count(),
+                        'total_amount' => $event->request->total_amount,
+                    ];
+
+                    Mail::to($user->email)->queue(new RequestApprovedNotification($payload));
+                }
             }
         }
     }
@@ -105,7 +143,8 @@ class SendRequestApprovedNotification implements ShouldQueue
 
         $modelClass = $roleModelMap[$role] ?? null;
         if ($modelClass) {
-            return $modelClass::query()->get();
+            // Only select minimal columns we need (email for notifications)
+            return $modelClass::query()->select('id','name','email')->get();
         }
 
         return collect();

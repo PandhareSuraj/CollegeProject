@@ -73,18 +73,28 @@ class CheckRequestAccess
 
         // Teacher can only view and edit own pending requests
         if ($user->isTeacher()) {
-            // cast to int to avoid string/integer mismatches from DB drivers
-            if ((int) $stationaryRequest->requested_by !== (int) $user->id) {
+            // Read the raw requester id to avoid accidental model-to-int casts
+            $requestedById = $stationaryRequest->getAttributes()['requested_by'] ?? $stationaryRequest->getRawOriginal('requested_by');
+            if (is_object($requestedById) && isset($requestedById->id)) {
+                $requestedById = $requestedById->id;
+            }
+
+            if ((int) $requestedById !== (int) $user->id) {
                 return false;
             }
-            
+
             return $method === 'GET' || ($method !== 'DELETE' && $stationaryRequest->status === 'pending');
         }
 
         // HOD can view and edit own pending, or view department requests
         if ($user->isHOD()) {
             // Own request
-            if ((int) $stationaryRequest->requested_by === (int) $user->id) {
+            $requestedById = $stationaryRequest->getAttributes()['requested_by'] ?? $stationaryRequest->getRawOriginal('requested_by');
+            if (is_object($requestedById) && isset($requestedById->id)) {
+                $requestedById = $requestedById->id;
+            }
+
+            if ((int) $requestedById === (int) $user->id) {
                 return $method === 'GET' || ($method !== 'DELETE' && $stationaryRequest->status === 'pending');
             }
             // Department request

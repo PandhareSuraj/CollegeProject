@@ -49,8 +49,24 @@ class DepartmentController extends Controller
 
     public function show($id)
     {
-        $department = Department::with(['college','teachers','hods'])->findOrFail($id);
-        return view('admin.departments.show', compact('department'));
+        // Load related collections for listing, include count attributes and prepare a merged users collection
+        $department = Department::with(['college','teachers','hods'])
+            ->withCount(['teachers','hods','requests'])
+            ->findOrFail($id);
+
+        // Merge teachers and hods into a single collection for the view and normalize ordering
+        $departmentUsers = collect([]);
+        if ($department->relationLoaded('teachers')) {
+            $departmentUsers = $departmentUsers->merge($department->teachers);
+        }
+        if ($department->relationLoaded('hods')) {
+            $departmentUsers = $departmentUsers->merge($department->hods);
+        }
+
+        // Ensure a stable order (by name)
+        $departmentUsers = $departmentUsers->sortBy('name')->values();
+
+        return view('admin.departments.show', compact('department', 'departmentUsers'));
     }
 
     public function edit($id)

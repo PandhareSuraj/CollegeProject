@@ -62,7 +62,7 @@
                     </div>
                     <div>
                         <strong class="text-gray-700">Requested By:</strong>
-                        <p class="text-gray-900 font-medium">{{ optional($stationaryRequest->requestedBy())->name ?? 'Unknown' }}</p>
+                        <p class="text-gray-900 font-medium">{{ optional($stationaryRequest->requester)->name ?? 'Unknown' }}</p>
                     </div>
                     <div>
                         <strong class="text-gray-700">Date:</strong>
@@ -111,7 +111,7 @@
                 <h5 class="font-semibold text-lg"><i class="fas fa-history"></i> Approval Timeline</h5>
             </div>
             <div class="p-6">
-                @if($stationaryRequest->approvals->count() > 0)
+                @if($stationaryRequest->approvals_count > 0)
                     <div class="space-y-4">
                         @foreach($stationaryRequest->approvals as $approval)
                             <div class="pb-4 border-b border-gray-200 last:border-b-0">

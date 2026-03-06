@@ -41,7 +41,7 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-3 text-gray-900 font-semibold">#{{ $request->id }}</td>
                             <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ $request->department->name }}</td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ optional($request->requestedBy())->name ?? 'Unknown' }}</td>
+                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ optional($request->requester)->name ?? 'Unknown' }}</td>
                             <td class="px-6 py-3 text-gray-900">₹{{ number_format($request->total_amount, 2) }}</td>
                             <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ $request->created_at->format('M d, Y') }}</td>
                             <td class="px-6 py-3">

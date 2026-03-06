@@ -47,7 +47,7 @@ class RequestSuppliedNotification extends Mailable implements ShouldQueue
             with: [
                 'request' => $this->request,
                 'supplier' => $this->supplier,
-                'requestorName' => $this->request->requestedBy->name,
+                'requestorName' => $this->request->requester->name,
                 'departmentName' => $this->request->department->name,
                 'itemCount' => $this->request->items->count(),
                 'totalAmount' => $this->request->total_amount,

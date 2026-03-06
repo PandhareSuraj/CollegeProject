@@ -27,11 +27,11 @@ class SendRequestSuppliedNotification implements ShouldQueue
     public function handle(RequestSupplied $event): void
     {
         try {
-            // Send email to the requestor
-            $requestedBy = $event->request->requestedBy();
+            // Send email to the requestor (queued)
+            $requestedBy = $event->request->requester;
             if ($requestedBy && $requestedBy->email) {
                 Mail::to($requestedBy->email)
-                    ->send(new RequestSuppliedNotification($event->request, $event->supplier));
+                    ->queue(new RequestSuppliedNotification($event->request, $event->supplier));
             }
 
             // Send email to department HOD for tracking
@@ -39,7 +39,7 @@ class SendRequestSuppliedNotification implements ShouldQueue
                 $hod = \App\Models\Hod::find($event->request->department->id);
                 if ($hod && $hod->email) {
                     Mail::to($hod->email)
-                        ->send(new RequestSuppliedNotification($event->request, $event->supplier));
+                        ->queue(new RequestSuppliedNotification($event->request, $event->supplier));
                 }
             }
 
@@ -47,7 +47,7 @@ class SendRequestSuppliedNotification implements ShouldQueue
             $admin = \App\Models\Administrator::first();
             if ($admin && $admin->email) {
                 Mail::to($admin->email)
-                    ->send(new RequestSuppliedNotification($event->request, $event->supplier));
+                    ->queue(new RequestSuppliedNotification($event->request, $event->supplier));
             }
 
             Log::info('Request supplied notification sent', [

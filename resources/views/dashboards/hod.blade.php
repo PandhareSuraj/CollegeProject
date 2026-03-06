@@ -54,7 +54,7 @@
                     @forelse($requests as $request)
                         <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
                             <td class="px-6 py-3 text-gray-900 font-semibold">#{{ $request->id }}</td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ optional($request->requestedBy())->name ?? 'Unknown' }}</td>
+                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ optional($request->requester)->name ?? 'Unknown' }}</td>
                             <td class="px-6 py-3 text-gray-900 font-semibold">₹{{ number_format($request->total_amount, 2) }}</td>
                             <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ $request->created_at->format('M d, Y') }}</td>
                             <td class="px-6 py-3">

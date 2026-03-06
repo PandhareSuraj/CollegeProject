@@ -27,29 +27,59 @@ class StationaryRequest extends Model
      */
     public function requestedBy()
     {
-        // Get the first approval (if any) to determine the requesting user's role
-        $firstApproval = $this->approvals()->first();
-        
-        if ($firstApproval && $firstApproval->role === 'hod') {
-            return Hod::find($this->requested_by);
-        }
-        
-        // Default to teacher
-        return Teacher::find($this->requested_by);
+        // Provide a proper Eloquent relation so callers using eager-loading
+        // (e.g. ->with('requestedBy')) do not error. We default this relation
+        // to Teacher; Hod is handled via a separate relation and an accessor
+        // that returns the actual requester (Teacher or Hod).
+        return $this->belongsTo(Teacher::class, 'requested_by');
     }
-    
     /**
-     * Get the requester as a relationship (for eager loading)
+     * Relationship when the requester is a Teacher
      */
-    public function requester()
+    public function requestedByTeacher(): BelongsTo
     {
-        // Try to determine from approvals, but return both possibilities for now
-        // This is mainly for display purposes
-        $teacher = Teacher::find($this->requested_by);
+        return $this->belongsTo(Teacher::class, 'requested_by');
+    }
+
+    /**
+     * Relationship when the requester is a Hod
+     */
+    public function requestedByHod(): BelongsTo
+    {
+        return $this->belongsTo(Hod::class, 'requested_by');
+    }
+
+    /**
+     * Accessor that returns the actual requester model (Teacher or Hod).
+     * Use `$request->requester` to access the model without conflicting with
+     * the `requested_by` DB column.
+     */
+    public function getRequesterAttribute()
+    {
+        if ($this->relationLoaded('requestedByTeacher') && $this->requestedByTeacher) {
+            return $this->requestedByTeacher;
+        }
+
+        if ($this->relationLoaded('requestedByHod') && $this->requestedByHod) {
+            return $this->requestedByHod;
+        }
+
+        // Fallback: avoid loading other relations here to prevent recursive
+        // resolution during view rendering. Prefer Teacher, then Hod.
+        // Read the raw attribute value directly to avoid triggering any
+        // potential accessors.
+        $requestedById = $this->getAttributeFromArray('requested_by') ?? null;
+
+        if (!$requestedById) {
+            return null;
+        }
+
+        $teacher = \App\Models\Teacher::find($requestedById);
         if ($teacher) {
             return $teacher;
         }
-        return Hod::find($this->requested_by);
+
+        return \App\Models\Hod::find($requestedById);
     }
 
     public function items(): HasMany

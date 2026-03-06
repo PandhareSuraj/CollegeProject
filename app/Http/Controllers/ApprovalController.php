@@ -33,6 +33,9 @@ class ApprovalController extends Controller
                 }
             ]);
 
+            // Provide an approvals_count attribute for view checks to avoid counting the collection in Blade
+            $stationaryRequest->loadCount('approvals');
+
     // Determine if the current user can approve - used to enable/disable the action in the view
     $canApprove = $this->canUserApprove($user, $stationaryRequest);
 
@@ -177,8 +180,24 @@ class ApprovalController extends Controller
                     // Dispatch event to notify provider
                     $providers = \App\Models\Provider::all();
                     foreach ($providers as $provider) {
+                        // Queue provider notification to avoid blocking the approval flow
+                        $approverName = optional($approval->approver)->name ?? null;
+                        $payload = [
+                            'request_id' => $stationaryRequest->id,
+                            'approval_id' => $approval->id,
+                            'approval_status' => $approval->status,
+                            'approval_remarks' => $approval->remarks,
+                            'approver_name' => $approverName,
+                            'approver_role' => $approval->role,
+                            'requestor_name' => optional($stationaryRequest->requester)->name ?? null,
+                            'requestor_email' => optional($stationaryRequest->requester)->email ?? null,
+                            'department_name' => optional($stationaryRequest->department)->name ?? null,
+                            'item_count' => $stationaryRequest->items()->count(),
+                            'total_amount' => $stationaryRequest->total_amount,
+                        ];
+
                         Mail::to($provider->email)
-                            ->send(new \App\Mail\RequestApprovedNotification($stationaryRequest, $approval));
+                            ->queue(new \App\Mail\RequestApprovedNotification($payload));
                     }
                 }
 
@@ -316,9 +335,10 @@ class ApprovalController extends Controller
                 $query->whereRaw('1=0'); // No pending approvals for other roles
         }
 
-        return $query->with(['department', 'items'])
-                    ->latest()
-                    ->get();
+        return $query->select('id','department_id','requested_by','status','total_amount','created_at')
+                ->with(['department:id,name'])
+                ->latest()
+                ->paginate(15);
     }
 
     /**
@@ -468,7 +488,29 @@ class ApprovalController extends Controller
      */
     public function getApprovalStats($user)
     {
-        $pending = $this->getPendingApprovals($user)->count();
+        // Compute pending count via query to avoid pagination side-effects
+        $pendingQuery = StationaryRequest::query();
+        switch ($user->role) {
+            case 'hod':
+                $pendingQuery->where('department_id', $user->department_id)->where('status', 'pending')->whereNotIn('requested_by', [$user->id]);
+                break;
+            case 'principal':
+                $pendingQuery->where('status', 'hod_approved');
+                break;
+            case 'trust_head':
+                $pendingQuery->where('status', 'principal_approved');
+                break;
+            case 'provider':
+                $pendingQuery->where('status', 'sent_to_provider');
+                break;
+            case 'admin':
+                $pendingQuery->where('status', 'trust_approved');
+                break;
+            default:
+                $pendingQuery->whereRaw('1=0');
+        }
+
+        $pending = $pendingQuery->count();
 
         return [
             'pending_approvals' => $pending,
