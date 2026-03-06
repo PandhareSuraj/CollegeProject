@@ -81,13 +81,10 @@
             </tbody>
         </table>
     </div>
-</div>
-@endsection
+    <!-- Pagination -->
+    <div class="flex justify-center mt-4">
+        {{ $users->links() }}
     </div>
 </div>
 
-<!-- Pagination -->
-<div class="d-flex justify-content-center mt-4">
-    {{ $users->links() }}
-</div>
 @endsection
