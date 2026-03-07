@@ -1,54 +1,427 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 
-/* Custom components for reusable styles */
+/* ============================================
+   LIGHT THEME VARIABLES
+   ============================================ */
+:root {
+  --theme-bg-primary: rgb(255 255 255);
+  --theme-bg-secondary: rgb(249 250 251);
+  --theme-bg-tertiary: rgb(243 244 246);
+  --theme-text-primary: rgb(15 23 42);
+  --theme-text-secondary: rgb(51 65 85);
+  --theme-text-tertiary: rgb(100 116 139);
+  --theme-border-primary: rgb(226 232 240);
+  --theme-border-secondary: rgb(203 213 225);
+  --theme-shadow: rgba(0 0 0 / 0.08);
+  --theme-shadow-lg: rgba(0 0 0 / 0.12);
+
+  --theme-card-bg: rgb(255 255 255);
+  --theme-card-border: rgb(226 232 240);
+  --theme-navbar-bg: rgb(255 255 255);
+  --theme-navbar-border: rgb(226 232 240);
+  --theme-sidebar-bg: rgb(15 23 42);
+  --theme-sidebar-text: rgb(241 245 249);
+  --theme-input-bg: rgb(255 255 255);
+  --theme-input-border: rgb(203 213 225);
+  --theme-input-text: rgb(15 23 42);
+
+  --theme-table-header-bg: rgb(249 250 251);
+  --theme-table-header-text: rgb(15 23 42);
+  --theme-table-row-bg: rgb(255 255 255);
+  --theme-table-row-text: rgb(51 65 85);
+  --theme-table-row-hover: rgb(248 250 252);
+  --theme-table-border: rgb(226 232 240);
+
+  --color-blue-bg: rgb(219 234 254);
+  --color-blue-text: rgb(37 99 235);
+  --color-amber-bg: rgb(254 243 224);
+  --color-amber-text: rgb(217 119 6);
+  --color-green-bg: rgb(220 252 231);
+  --color-green-text: rgb(22 163 74);
+  --color-indigo-bg: rgb(224 231 255);
+  --color-indigo-text: rgb(79 70 229);
+  --color-orange-bg: rgb(254 245 230);
+  --color-orange-text: rgb(234 88 12);
+  --color-red-bg: rgb(254 242 242);
+  --color-red-text: rgb(220 38 38);
+  --color-purple-bg: rgb(243 232 255);
+  --color-purple-text: rgb(168 85 247);
+  --color-teal-bg: rgb(204 251 241);
+  --color-teal-text: rgb(15 118 110);
+  --color-pink-bg: rgb(252 231 243);
+  --color-pink-text: rgb(190 24 93);
+}
+
+/* ============================================
+   DARK THEME VARIABLES
+   ============================================ */
+html.dark {
+  --theme-bg-primary: rgb(24 24 27);
+  --theme-bg-secondary: rgb(32 32 36);
+  --theme-bg-tertiary: rgb(38 38 43);
+  --theme-text-primary: rgb(241 245 249);
+  --theme-text-secondary: rgb(203 213 225);
+  --theme-text-tertiary: rgb(148 163 184);
+  --theme-border-primary: rgb(55 65 81);
+  --theme-border-secondary: rgb(75 85 99);
+  --theme-shadow: rgba(0 0 0 / 0.35);
+  --theme-shadow-lg: rgba(0 0 0 / 0.5);
+
+  --theme-card-bg: rgb(52 54 60);
+  --theme-card-border: rgb(68 70 78);
+  --theme-navbar-bg: rgb(30 30 34);
+  --theme-navbar-border: rgb(45 45 52);
+  --theme-sidebar-bg: rgb(15 17 20);
+  --theme-sidebar-text: rgb(241 245 249);
+  --theme-input-bg: rgb(44 46 52);
+  --theme-input-border: rgb(75 85 99);
+  --theme-input-text: rgb(241 245 249);
+
+  --theme-table-header-bg: rgb(38 40 46);
+  --theme-table-header-text: rgb(241 245 249);
+  --theme-table-row-bg: rgb(44 46 52);
+  --theme-table-row-text: rgb(203 213 225);
+  --theme-table-row-hover: rgb(58 60 68);
+  --theme-table-border: rgb(55 65 81);
+
+  --color-blue-bg: rgb(30 58 138 / 0.4);
+  --color-blue-text: rgb(147 197 253);
+  --color-amber-bg: rgb(120 53 15 / 0.4);
+  --color-amber-text: rgb(253 211 115);
+  --color-green-bg: rgb(20 83 45 / 0.4);
+  --color-green-text: rgb(134 239 172);
+  --color-indigo-bg: rgb(49 46 129 / 0.4);
+  --color-indigo-text: rgb(165 180 252);
+  --color-orange-bg: rgb(124 45 18 / 0.4);
+  --color-orange-text: rgb(253 186 116);
+  --color-red-bg: rgb(127 29 29 / 0.4);
+  --color-red-text: rgb(252 165 165);
+  --color-purple-bg: rgb(88 28 135 / 0.4);
+  --color-purple-text: rgb(216 180 254);
+  --color-teal-bg: rgb(19 78 74 / 0.4);
+  --color-teal-text: rgb(94 234 212);
+  --color-pink-bg: rgb(131 24 67 / 0.4);
+  --color-pink-text: rgb(249 168 212);
+}
+
+/* ============================================
+   BASE — Critical: html & body must fill the
+   full viewport with theme background color.
+   This eliminates ALL white/light gap areas.
+   ============================================ */
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+html {
+  height: 100%;
+  background-color: var(--theme-bg-primary);
+  transition: background-color 0.3s;
+}
+
+body {
+  min-height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* ============================================
+   LAYOUT SHELL
+   The page shell wraps sidebar + main content.
+   It must cover the full viewport height.
+   ============================================ */
+
+/* The outer shell: flex row, full height */
+.layout-shell {
+  display: flex;
+  min-height: 100vh;
+  background-color: var(--theme-bg-primary);
+}
+
+/* ============================================
+   SIDEBAR — fixed, full height, no gaps
+   ============================================ */
+.theme-sidebar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 16rem; /* 256px = w-64 */
+  height: 100vh;
+  z-index: 40;
+  background-color: var(--theme-sidebar-bg);
+  color: var(--theme-sidebar-text);
+  border-right: 1px solid var(--theme-border-primary);
+  overflow-y: auto;
+  overflow-x: hidden;
+  transition: background-color 0.3s;
+  /* Prevent any gap at the top/bottom */
+  display: flex;
+  flex-direction: column;
+}
+
+/* ============================================
+   NAVBAR — fixed at top, starts after sidebar
+   ============================================ */
+.theme-navbar {
+  position: fixed;
+  top: 0;
+  left: 16rem; /* same as sidebar width */
+  right: 0;
+  height: 4rem; /* 64px */
+  z-index: 30;
+  background-color: var(--theme-navbar-bg);
+  border-bottom: 1px solid var(--theme-navbar-border);
+  color: var(--theme-text-primary);
+  box-shadow: 0 1px 3px var(--theme-shadow);
+  transition: background-color 0.3s;
+  padding: 0 1.5rem;
+  display: flex;
+  align-items: center;
+}
+
+/* ============================================
+   MAIN CONTENT AREA
+   Offset by sidebar width (left) and navbar height (top).
+   Must fill remaining space with theme background.
+   ============================================ */
+.theme-container {
+  margin-left: 16rem;  /* sidebar width */
+  padding-top: 4rem;   /* navbar height */
+  min-height: 100vh;
+  width: calc(100% - 16rem);
+  background-color: var(--theme-bg-primary);
+  color: var(--theme-text-primary);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+/* Secondary/tertiary bg helpers */
+.theme-bg-primary   { background-color: var(--theme-bg-primary); }
+.theme-bg-secondary { background-color: var(--theme-bg-secondary); }
+.theme-bg-tertiary  { background-color: var(--theme-bg-tertiary); }
+
+/* ============================================
+   CARDS
+   ============================================ */
+.theme-card {
+  background-color: var(--theme-card-bg);
+  border: 1px solid var(--theme-card-border);
+  color: var(--theme-text-primary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 3px var(--theme-shadow);
+  transition: box-shadow 0.3s, background-color 0.3s;
+}
+
+.theme-card:hover {
+  box-shadow: 0 4px 12px var(--theme-shadow-lg);
+}
+
+/* Generic .card utility (used in inline Blade) */
+.card {
+  background-color: var(--theme-card-bg);
+  border: 1px solid var(--theme-card-border);
+  color: var(--theme-text-primary);
+  border-radius: 0.5rem;
+  box-shadow: 0 1px 4px var(--theme-shadow);
+  padding: 1.5rem;
+  transition: background-color 0.3s;
+}
+
+/* ============================================
+   TABLE
+   ============================================ */
+.theme-table-wrapper {
+  overflow-x: auto;
+  border-radius: 0.5rem;
+  border: 1px solid var(--theme-border-primary);
+  background-color: var(--theme-card-bg);
+}
+
+.theme-table {
+  width: 100%;
+  border-collapse: collapse;
+  background-color: var(--theme-card-bg);
+  color: var(--theme-text-primary);
+}
+
+.theme-table thead {
+  background-color: var(--theme-table-header-bg);
+  border-bottom: 1px solid var(--theme-table-border);
+}
+
+.theme-table thead th {
+  padding: 0.75rem 1.5rem;
+  text-align: left;
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--theme-table-header-text);
+}
+
+.theme-table tbody tr {
+  background-color: var(--theme-table-row-bg);
+  border-bottom: 1px solid var(--theme-table-border);
+  transition: background-color 0.15s;
+}
+
+.theme-table tbody tr:hover {
+  background-color: var(--theme-table-row-hover);
+}
+
+.theme-table tbody td {
+  padding: 1rem 1.5rem;
+  font-size: 0.875rem;
+  color: var(--theme-table-row-text);
+}
+
+/* ============================================
+   INPUT
+   ============================================ */
+.theme-input {
+  border-radius: 0.5rem;
+  border: 1px solid var(--theme-input-border);
+  padding: 0.5rem 1rem;
+  background-color: var(--theme-input-bg);
+  color: var(--theme-input-text);
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.theme-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--theme-border-primary);
+}
+
+/* ============================================
+   TEXT & BORDER HELPERS
+   ============================================ */
+.theme-text-primary   { color: var(--theme-text-primary); }
+.theme-text-secondary { color: var(--theme-text-secondary); }
+.theme-text-tertiary  { color: var(--theme-text-tertiary); }
+.theme-border-primary   { border-color: var(--theme-border-primary); }
+.theme-border-secondary { border-color: var(--theme-border-secondary); }
+.theme-border-light     { border-color: var(--theme-border-primary); }
+
+/* ============================================
+   SIDEBAR NAV LINKS
+   ============================================ */
 .sidebar-nav-link {
-    @apply text-white/80 px-4 py-3 rounded-lg transition-all duration-200 border-l-4 border-transparent hover:bg-white/10 hover:text-white;
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  border-radius: 0.5rem;
+  border-left: 4px solid transparent;
+  color: rgba(255, 255, 255, 0.7);
+  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
+  text-decoration: none;
+}
+
+.sidebar-nav-link:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+  color: rgba(255, 255, 255, 0.95);
 }
 
 .sidebar-nav-link.active {
-    @apply border-l-blue-500 bg-white/10 text-white;
+  border-left-color: rgb(59 130 246);
+  background-color: rgba(255, 255, 255, 0.1);
+  color: white;
 }
 
+/* ============================================
+   BUTTONS
+   ============================================ */
 .btn-primary {
-    @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(37 99 235);
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
 }
+.btn-primary:hover { background-color: rgb(29 78 216); }
 
 .btn-secondary {
-    @apply bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background-color: rgb(107 114 128);
+  color: white;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  transition: background-color 0.2s;
+  border: none;
+  cursor: pointer;
 }
+.btn-secondary:hover { background-color: rgb(75 85 99); }
 
-.card {
-    @apply bg-white rounded-lg shadow-md p-6;
-}
-
+/* ============================================
+   BADGES
+   ============================================ */
 .badge-pending {
-    @apply bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium;
+  display: inline-block;
+  background-color: rgb(254 243 199);
+  color: rgb(146 64 14);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+html.dark .badge-pending {
+  background-color: rgba(120, 53, 15, 0.35);
+  color: rgb(253 211 115);
 }
 
 .badge-approved {
-    @apply bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium;
+  display: inline-block;
+  background-color: rgb(220 252 231);
+  color: rgb(22 101 52);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+html.dark .badge-approved {
+  background-color: rgba(20, 83, 45, 0.35);
+  color: rgb(134 239 172);
 }
 
 .badge-rejected {
-    @apply bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium;
+  display: inline-block;
+  background-color: rgb(254 242 242);
+  color: rgb(185 28 28);
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+html.dark .badge-rejected {
+  background-color: rgba(127, 29, 29, 0.35);
+  color: rgb(252 165 165);
 }
 
+/* ============================================
+   FLUX FORM OVERRIDES
+   ============================================ */
 [data-flux-field]:not(ui-radio, ui-checkbox) {
-    @apply grid gap-2;
+  display: grid;
+  gap: 0.5rem;
 }
 
 [data-flux-label] {
-    @apply !mb-0 !leading-tight;
+  margin-bottom: 0 !important;
+  line-height: 1.25 !important;
 }
 
 input:focus[data-flux-control],
 textarea:focus[data-flux-control],
 select:focus[data-flux-control] {
-    @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+  outline: none;
+  box-shadow: 0 0 0 2px rgb(59 130 246);
 }
-
-
-/* \[:where(&)\]:size-4 {
-    @apply size-4;
-} */

@@ -2,12 +2,21 @@
 
 @section('title', 'Products Management')
 
+@section('navbar-title')
+<div style="display: flex; align-items: center; gap: 12px;">
+    <svg class="w-5 h-5 text-blue-600 dark:text-blue-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
+    </svg>
+    <h2 class="navbar-title">Products</h2>
+</div>
+@endsection
+
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<x-theme-container class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 class="text-3xl font-bold theme-text-primary flex items-center gap-3">
                 <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z" />
                 </svg>
@@ -23,25 +32,25 @@
     </div>
 
     <!-- Products Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
+    <div class="theme-card overflow-x-auto">
         <table class="w-full text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200">
+            <thead class="theme-bg-secondary border-b theme-border-primary">
                 <tr>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Name</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Description</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Price</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Stock</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Actions</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Name</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Description</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Price</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Stock</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($products as $product)
-                    <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                        <td class="px-6 py-4 text-gray-900 font-medium">{{ $product->name }}</td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">{{ Str::limit($product->description, 50) }}</td>
-                        <td class="px-6 py-4 text-gray-900 font-medium">₹{{ number_format($product->price, 2) }}</td>
+                    <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                        <td class="px-6 py-4 theme-text-primary font-medium">{{ $product->name }}</td>
+                        <td class="px-6 py-4 theme-text-secondary">{{ Str::limit($product->description, 50) }}</td>
+                        <td class="px-6 py-4 theme-text-primary font-medium">₹{{ number_format($product->price, 2) }}</td>
                         <td class="px-6 py-4">
-                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $product->stock_quantity > 0 ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' }}">
+                            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium {{ $product->stock_quantity > 0 ? 'bg-green-100 text-green-800 dark:bg-green-900 dark:text-green-300' : 'bg-red-100 text-red-800 dark:bg-red-900 dark:text-red-300' }}">
                                 {{ $product->stock_quantity }}
                             </span>
                         </td>
@@ -81,5 +90,5 @@
     <div class="mt-6 flex justify-center">
         {{ $products->links() }}
     </div>
-</div>
+</x-theme-container>
 @endsection

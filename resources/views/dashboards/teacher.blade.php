@@ -2,135 +2,131 @@
 
 @section('title', 'Teacher Dashboard')
 
-@section('content')
-<div class="px-4 sm:px-6 lg:px-8 py-8">
-    <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-8 flex items-center gap-3">
-        <svg class="w-10 h-10 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
-            <path d="M10.5 1.5H5.75a2.25 2.25 0 00-2.25 2.25v12a2.25 2.25 0 002.25 2.25h8.5a2.25 2.25 0 002.25-2.25V6m-11-4h4v4m0-4l4 4"/>
-        </svg>
-        Teacher Dashboard
-    </h1>
+@section('navbar-title')
+<div style="display: flex; align-items: center; gap: 12px;">
+    <svg class="w-5 h-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M10.5 1.5H5.75a2.25 2.25 0 00-2.25 2.25v12a2.25 2.25 0 002.25 2.25h8.5a2.25 2.25 0 002.25-2.25V6m-11-4h4v4m0-4l4 4"/>
+    </svg>
+    <h2 class="navbar-title">Teacher Dashboard</h2>
+</div>
+@endsection
 
-    <!-- Statistics Grid -->
-    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-4xl font-bold text-gray-900 dark:text-white">{{ $totalRequests }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">My Requests</div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-4xl font-bold text-amber-500">{{ $pendingRequests }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Pending</div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-4xl font-bold text-green-600">{{ $approvedRequests }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Approved</div>
-        </div>
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
-            <div class="text-4xl font-bold text-blue-600">{{ $completedRequests }}</div>
-            <div class="text-sm text-gray-600 dark:text-gray-300 mt-2">Completed</div>
+@section('content')
+<div style="padding: 32px 36px; background-color: var(--bg-body); min-height: 100%;">
+
+    {{-- PAGE HEADER --}}
+    <div style="margin-bottom:32px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;">
+            <div style="display:flex;align-items:center;gap:12px;">
+                <div style="width:42px;height:42px;border-radius:12px;background:linear-gradient(135deg,#22c55e,#15803d);display:flex;align-items:center;justify-content:center;">
+                    <svg style="width:22px;height:22px;color:#fff;" fill="currentColor" viewBox="0 0 20 20">
+                        <path d="M10.394 2.08a1 1 0 00-.788 0l-7 3a1 1 0 000 1.84L5.25 8.051a.999.999 0 01.356-.257l4-1.714a1 1 0 11.788 1.838L7.667 9.088l1.94.831a1 1 0 00.787 0l7-3a1 1 0 000-1.838l-7-3zM3.31 9.397L5 10.12v4.102a8.969 8.969 0 00-1.05-.174 1 1 0 01-.89-.89 11.115 11.115 0 01.25-3.762zm5.99 7.176A9.026 9.026 0 007 14.935v-3.957l1.818.78a3 3 0 002.364 0l5.508-2.361a11.026 11.026 0 01.25 3.762 1 1 0 01-.89.89 8.968 8.968 0 00-5.35 2.524 1 1 0 01-1.4 0zM6 18a1 1 0 001-1v-2.065a8.935 8.935 0 00-2-.712V17a1 1 0 001 1z"/>
+                    </svg>
+                </div>
+                <div>
+                    <h1 style="font-size:1.75rem;font-weight:800;color:var(--text-primary);margin:0;letter-spacing:-0.02em;">Teacher Dashboard</h1>
+                    <p style="font-size:0.85rem;color:var(--text-secondary);margin:0;">Your request overview</p>
+                </div>
+            </div>
+            <a href="{{ route('requests.create') }}" style="display:inline-flex;align-items:center;gap:6px;padding:9px 18px;border-radius:10px;font-size:0.85rem;font-weight:600;background:#22c55e;color:#fff;text-decoration:none;">
+                <svg style="width:16px;height:16px;" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/></svg>
+                New Request
+            </a>
         </div>
     </div>
 
-    <!-- Recent Requests Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow mb-8">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
-            <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M5.5 13a3.5 3.5 0 01-.369-6.98 4 4 0 117.753-1 4.5 4.5 0 11-4.814 6.98z"/>
-            </svg>
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">My Recent Requests</h2>
+    {{-- KEY METRICS --}}
+    <p style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-secondary);margin:0 0 14px;">KEY METRICS</p>
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-bottom:32px;">
+
+        <x-stat-card
+            title="My Requests"
+            :value="$totalRequests"
+            description="Total submitted"
+            bgColor="green"
+            badge="All time"
+            badgeColor="green"
+            :progress="100"
+            icon="<svg style='width:18px;height:18px;' fill='currentColor' viewBox='0 0 20 20'><path d='M4 4a2 2 0 012-2h6a2 2 0 012 2v12a1 1 0 110 2h-7a1 1 0 110-2h7V4z'/></svg>"
+        />
+
+        <x-stat-card
+            title="Pending"
+            :value="$pendingRequests"
+            description="Awaiting approval"
+            bgColor="amber"
+            badge="In review"
+            badgeColor="amber"
+            :progress="$totalRequests > 0 ? round(($pendingRequests / $totalRequests) * 100) : 0"
+            icon="<svg style='width:18px;height:18px;' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z' clip-rule='evenodd'/></svg>"
+        />
+
+        <x-stat-card
+            title="Approved"
+            :value="$approvedRequests"
+            description="Successfully approved"
+            bgColor="blue"
+            badge="Approved"
+            badgeColor="blue"
+            :progress="$totalRequests > 0 ? round(($approvedRequests / $totalRequests) * 100) : 0"
+            icon="<svg style='width:18px;height:18px;' fill='currentColor' viewBox='0 0 20 20'><path fill-rule='evenodd' d='M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z' clip-rule='evenodd'/></svg>"
+        />
+
+        <x-stat-card
+            title="Completed"
+            :value="$completedRequests"
+            description="Order delivered"
+            bgColor="indigo"
+            badge="Done"
+            badgeColor="indigo"
+            :progress="$totalRequests > 0 ? round(($completedRequests / $totalRequests) * 100) : 0"
+            icon="<svg style='width:18px;height:18px;' fill='currentColor' viewBox='0 0 20 20'><path d='M5 4a2 2 0 012-2h6a2 2 0 012 2v14l-5-2.5L5 18V4z'/></svg>"
+        />
+    </div>
+
+    {{-- RECENT REQUESTS TABLE --}}
+    <p style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;text-transform:uppercase;color:var(--text-secondary);margin:0 0 14px;">RECENT REQUESTS</p>
+    <div style="background-color:var(--bg-card);border:1px solid var(--border-color);border-radius:14px;box-shadow:0 1px 4px rgba(0,0,0,0.08);overflow:hidden;">
+        <div style="padding:18px 24px;border-bottom:1px solid var(--border-color);display:flex;align-items:center;gap:10px;">
+            <div style="width:8px;height:8px;border-radius:50%;background:#22c55e;"></div>
+            <span style="font-size:0.95rem;font-weight:700;color:var(--text-primary);">My Recent Requests</span>
+            <a href="{{ route('requests.index') }}" style="margin-left:auto;font-size:0.8rem;color:#3b82f6;text-decoration:none;font-weight:600;">View all →</a>
         </div>
-        <div class="overflow-x-auto">
-            <table class="w-full text-sm">
-                <thead class="bg-gray-50 dark:bg-gray-900">
-                    <tr class="bg-gray-50 dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700">
-                        <th class="px-6 py-3 text-left font-semibold text-gray-900">Request ID</th>
-                        <th class="px-6 py-3 text-left font-semibold text-gray-900">Date</th>
-                        <th class="px-6 py-3 text-left font-semibold text-gray-900">Amount</th>
-                        <th class="px-6 py-3 text-left font-semibold text-gray-900">Status</th>
-                        <th class="px-6 py-3 text-left font-semibold text-gray-900">Actions</th>
+        <div style="overflow-x:auto;">
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background-color:var(--bg-body);border-bottom:1px solid var(--border-color);">
+                        <th style="padding:12px 20px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);">Request</th>
+                        <th style="padding:12px 20px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);">Amount</th>
+                        <th style="padding:12px 20px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);">Status</th>
+                        <th style="padding:12px 20px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);">Date</th>
+                        <th style="padding:12px 20px;text-align:left;font-size:0.72rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:var(--text-secondary);"></th>
                     </tr>
                 </thead>
-                <tbody divide-y divide-gray-200">
-                    @forelse($requests as $request)
-                        <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
-                            <td class="px-6 py-3 text-gray-900 font-semibold">#{{ $request->id }}</td>
-                            <td class="px-6 py-3 text-gray-600 dark:text-gray-300">{{ $request->created_at->format('M d, Y') }}</td>
-                            <td class="px-6 py-3 text-gray-900 font-semibold">₹{{ number_format($request->total_amount, 2) }}</td>
-                            <td class="px-6 py-3">
-                                @if($request->isPending())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-orange-100 dark:bg-orange-900 dark:bg-opacity-30 text-orange-800 dark:text-orange-300">Pending</span>
-                                @elseif($request->isHodApproved())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-blue-100 dark:bg-blue-900 dark:bg-opacity-30 text-blue-800 dark:text-blue-300">HOD Approved</span>
-                                @elseif($request->isPrincipalApproved())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-purple-100 dark:bg-purple-900 dark:bg-opacity-30 text-purple-800 dark:text-purple-300">Principal Approved</span>
-                                @elseif($request->isTrustApproved())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-teal-100 dark:bg-teal-900 dark:bg-opacity-30 text-teal-800 dark:text-teal-300">Trust Approved</span>
-                                @elseif($request->isSentToProvider())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 dark:bg-yellow-900 dark:bg-opacity-30 text-yellow-800 dark:text-yellow-300">Sent to Provider</span>
-                                @elseif($request->isCompleted())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-green-100 dark:bg-green-900 dark:bg-opacity-30 text-green-800 dark:text-green-300">Completed</span>
-                                @elseif($request->isRejected())
-                                    <span class="inline-block px-3 py-1 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900 dark:bg-opacity-30 text-red-800 dark:text-red-300">Rejected</span>
-                                @endif
-                            </td>
-                            <td class="px-6 py-3">
-                                <a href="{{ route('requests.show', $request->id) }}" class="inline-flex items-center gap-1 px-3 py-1 text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 font-medium">
-                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-                                        <path d="M10 12a2 2 0 100-4 2 2 0 000 4z"/>
-                                        <path fill-rule="evenodd" d="M.458 10C1.732 5.943 5.522 3 10 3s8.268 2.943 9.542 7c-1.274 4.057-5.064 7-9.542 7S1.732 14.057.458 10zM14 10a4 4 0 11-8 0 4 4 0 018 0z" clip-rule="evenodd"/>
-                                    </svg>
-                                    View
-                                </a>
-                            </td>
-                        </tr>
+                <tbody>
+                    @forelse(isset($recentRequests) ? $recentRequests : [] as $request)
+                    <tr style="border-bottom:1px solid var(--border-color);transition:background 0.15s;" onmouseover="this.style.background='var(--bg-body)'" onmouseout="this.style.background='transparent'">
+                        <td style="padding:14px 20px;font-size:0.875rem;font-weight:600;color:var(--text-primary);">{{ $request->title ?? 'Request #'.$request->id }}</td>
+                        <td style="padding:14px 20px;font-size:0.875rem;color:var(--text-primary);">₹{{ number_format($request->total_amount ?? 0, 2) }}</td>
+                        <td style="padding:14px 20px;">
+                            @php
+                                $statusColors = ['pending'=>['bg'=>'rgba(245,158,11,0.12)','color'=>'#d97706'],'approved'=>['bg'=>'rgba(34,197,94,0.12)','color'=>'#16a34a'],'rejected'=>['bg'=>'rgba(239,68,68,0.12)','color'=>'#dc2626'],'completed'=>['bg'=>'rgba(99,102,241,0.12)','color'=>'#6366f1']];
+                                $sc = $statusColors[$request->status] ?? ['bg'=>'rgba(148,163,184,0.12)','color'=>'#64748b'];
+                            @endphp
+                            <span style="display:inline-block;font-size:0.75rem;font-weight:600;padding:3px 10px;border-radius:9999px;background:{{ $sc['bg'] }};color:{{ $sc['color'] }};">{{ ucfirst($request->status) }}</span>
+                        </td>
+                        <td style="padding:14px 20px;font-size:0.875rem;color:var(--text-secondary);">{{ $request->created_at->format('d M Y') }}</td>
+                        <td style="padding:14px 20px;">
+                            <a href="{{ route('requests.show', $request->id) }}" style="font-size:0.8rem;font-weight:600;padding:5px 12px;border-radius:8px;background:rgba(34,197,94,0.10);color:#16a34a;text-decoration:none;">View</a>
+                        </td>
+                    </tr>
                     @empty
-                        <tr>
-                            <td colspan="5" class="px-6 py-8 text-center text-gray-500">No requests found.</td>
-                        </tr>
+                    <tr><td colspan="5" style="padding:40px;text-align:center;color:var(--text-secondary);font-size:0.9rem;">No requests yet. Create your first one!</td></tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 
-    <!-- Create Request Button & Filter Buttons -->
-    <div class="mb-8 flex flex-col gap-4">
-        <a href="{{ route('requests.create') }}" class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-blue-600 text-white hover:bg-blue-700 dark:hover:bg-blue-800 dark:hover:bg-blue-800 transition w-full md:w-auto">
-            <svg class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
-                <path fill-rule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clip-rule="evenodd"/>
-            </svg>
-            Create New Request
-        </a>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-            <a href="{{ route('requests.index', ['status' => '']) }}" class="px-4 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition text-center">My Requests</a>
-            <a href="{{ route('requests.index', ['status' => 'pending']) }}" class="px-4 py-3 border border-amber-600 text-amber-600 font-semibold rounded-lg hover:bg-amber-50 transition text-center">Pending</a>
-            <a href="{{ route('requests.index', ['status' => 'hod_approved']) }}" class="px-4 py-3 border border-green-600 text-green-600 font-semibold rounded-lg hover:bg-green-50 transition text-center">Approved</a>
-            <a href="{{ route('requests.index', ['status' => 'completed']) }}" class="px-4 py-3 border border-blue-600 text-blue-600 font-semibold rounded-lg hover:bg-blue-50 transition text-center">Completed</a>
-        </div>
-    </div>
-
-    <!-- Approved Products -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow">
-        <div class="px-6 py-4 border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900 flex items-center gap-2">
-            <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20">
-                <path d="M3 1a1 1 0 000 2h1.22l.305 1.222a.997.997 0 00.01.042l1.358 5.43-.893.892C3.74 11.846 4.632 14 6.414 14H15a1 1 0 000-2H6.414l1-1H14a1 1 0 00.894-.553l3-6A1 1 0 0017 6H6.28l-.31-1.243A1 1 0 005 4H3z"/>
-            </svg>
-            <h2 class="text-lg font-semibold text-gray-900 dark:text-white">Approved Products</h2>
-        </div>
-        <div class="p-6">
-            @if(isset($approvedProducts) && count($approvedProducts))
-                <div class="space-y-2">
-                    @foreach($approvedProducts as $product)
-                        <div class="flex justify-between items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50">
-                            <span class="text-gray-900 font-medium">{{ $product->name }}</span>
-                            <span class="inline-block px-3 py-1 bg-blue-100 dark:bg-blue-900 dark:bg-opacity-30 text-blue-800 dark:text-blue-300 text-sm font-semibold rounded-full">₹{{ number_format($product->price, 2) }}</span>
-                        </div>
-                    @endforeach
-                </div>
-            @else
-                <div class="text-center py-8 text-gray-500">No approved products to display.</div>
-            @endif
-        </div>
-    </div>
 </div>
 @endsection

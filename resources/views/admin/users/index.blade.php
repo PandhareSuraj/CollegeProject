@@ -2,12 +2,21 @@
 
 @section('title', 'Users Management')
 
+@section('navbar-title')
+<div style="display: flex; align-items: center; gap: 12px;">
+    <svg class="w-5 h-5 text-purple-600 dark:text-purple-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M12 12a2 2 0 100-4 2 2 0 000 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/>
+    </svg>
+    <h2 class="navbar-title">Users</h2>
+</div>
+@endsection
+
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<x-theme-container class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="flex justify-between items-center mb-6">
         <div>
-            <h1 class="text-3xl font-bold text-gray-900 flex items-center gap-3">
+            <h1 class="text-3xl font-bold theme-text-primary flex items-center gap-3">
                 <svg class="w-8 h-8 text-blue-600" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M9 6a3 3 0 11-6 0 3 3 0 016 0zM9 6a3 3 0 11-6 0 3 3 0 016 0zM9 6a3 3 0 11-6 0 3 3 0 016 0zM17 6a3 3 0 11-6 0 3 3 0 016 0zM14.5 8a2.5 2.5 0 100-5 2.5 2.5 0 000 5z"/>
                     <path d="M16.82 16a4 4 0 01-8.04 0c0-.93.402-1.79 1.068-2.567a6 6 0 016.905 0c.666.776 1.068 1.636 1.068 2.567zM2.5 10a3.5 3.5 0 100-7 3.5 3.5 0 000 7z"/>
@@ -24,32 +33,32 @@
     </div>
 
     <!-- Users Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
+    <div class="theme-card overflow-x-auto">
         <table class="w-full text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200">
+            <thead class="theme-bg-secondary border-b theme-border-primary">
                 <tr>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Name</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Email</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Role</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Department</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Joined</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Actions</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Name</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Email</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Role</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Department</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Joined</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($users as $user)
-                    <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                        <td class="px-6 py-4 text-gray-900 font-medium">{{ $user->name }}</td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">{{ $user->email }}</td>
+                    <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                        <td class="px-6 py-4 theme-text-primary font-medium">{{ $user->name }}</td>
+                        <td class="px-6 py-4 theme-text-secondary">{{ $user->email }}</td>
                         <td class="px-6 py-4">
                             <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
                                 {{ ucfirst($user->role) }}
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+                        <td class="px-6 py-4 theme-text-secondary">
                             {{ isset($user->department) && $user->department ? $user->department->name : 'N/A' }}
                         </td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">{{ $user->created_at->format('M d, Y') }}</td>
+                        <td class="px-6 py-4 theme-text-secondary">{{ $user->created_at->format('M d, Y') }}</td>
                         <td class="px-6 py-4 flex gap-2">
                             <a href="{{ route('admin.users.show', $user->id) }}" class="inline-flex items-center justify-center w-8 h-8 rounded-lg bg-blue-100 text-blue-600 hover:bg-blue-200 transition" title="View">
                                 <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -75,7 +84,7 @@
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="6" class="px-6 py-8 text-center text-gray-500">No users found.</td>
+                        <td colspan="6" class="px-6 py-8 text-center theme-text-tertiary">No users found.</td>
                     </tr>
                 @endforelse
             </tbody>
@@ -85,6 +94,6 @@
     <div class="flex justify-center mt-4">
         {{ $users->links() }}
     </div>
-</div>
+</x-theme-container>
 
 @endsection

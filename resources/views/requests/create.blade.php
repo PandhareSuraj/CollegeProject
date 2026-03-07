@@ -12,7 +12,7 @@
     </h1>
 
     <div class="max-w-3xl mx-auto">
-        <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6">
+        <div class="theme-card rounded-lg shadow p-6">
             <h2 class="text-xl font-semibold text-gray-900 dark:text-gray-300 mb-6">Request Details</h2>
 
             <form action="{{ route('requests.store') }}" method="POST" id="requestForm" class="space-y-6">

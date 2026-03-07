@@ -2,6 +2,15 @@
 
 @section('title','Order Reports')
 
+@section('navbar-title')
+<div style="display: flex; align-items: center; gap: 12px;">
+    <svg class="w-5 h-5 text-teal-600 dark:text-teal-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM9 17H7v-7h2v7zm4 0h-2V7h2v10zm4 0h-2v-4h2v4z"/>
+    </svg>
+    <h2 class="navbar-title">Order Reports</h2>
+</div>
+@endsection
+
 @section('content')
 <div class="container">
     <h1 class="mb-4">Order Reports</h1>

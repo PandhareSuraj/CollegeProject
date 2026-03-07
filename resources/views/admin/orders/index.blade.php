@@ -2,11 +2,20 @@
 
 @section('title','Orders')
 
+@section('navbar-title')
+<div style="display: flex; align-items: center; gap: 12px;">
+    <svg class="w-5 h-5 text-green-600 dark:text-green-400" fill="currentColor" viewBox="0 0 20 20">
+        <path d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zM3 10a1 1 0 011-1h6a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1v-6zM14 9a1 1 0 00-1 1v6a1 1 0 001 1h2a1 1 0 001-1v-6a1 1 0 00-1-1h-2z"/>
+    </svg>
+    <h2 class="navbar-title">Orders</h2>
+</div>
+@endsection
+
 @section('content')
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+<x-theme-container class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
     <!-- Header -->
     <div class="mb-6">
-        <h1 class="text-3xl font-bold text-gray-900">Orders</h1>
+        <h1 class="text-3xl font-bold theme-text-primary">Orders</h1>
     </div>
 
     <!-- Create Bulk Orders Button -->
@@ -20,23 +29,23 @@
     </div>
 
     <!-- Orders Table -->
-    <div class="bg-white dark:bg-gray-800 rounded-lg shadow overflow-x-auto">
+    <div class="theme-card rounded-lg shadow overflow-x-auto">
         <table class="w-full text-sm">
-            <thead class="bg-gray-50 border-b border-gray-200">
+            <thead class="theme-bg-secondary border-b theme-border-primary">
                 <tr>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700 w-12">#</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Order No</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Vendor</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Status</th>
-                    <th class="px-6 py-3 text-left font-semibold text-gray-700">Actions</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary w-12">#</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Order No</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Vendor</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Status</th>
+                    <th class="px-6 py-3 text-left font-semibold theme-text-primary">Actions</th>
                 </tr>
             </thead>
             <tbody>
                 @forelse($orders as $o)
-                    <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700 transition">
-                        <td class="px-6 py-4 text-gray-900">{{ $o->id }}</td>
-                        <td class="px-6 py-4 text-gray-900 font-medium">{{ $o->order_number ?? '-' }}</td>
-                        <td class="px-6 py-4 text-gray-600 dark:text-gray-300">
+                    <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                        <td class="px-6 py-4 theme-text-primary">{{ $o->id }}</td>
+                        <td class="px-6 py-4 theme-text-primary font-medium">{{ $o->order_number ?? '-' }}</td>
+                        <td class="px-6 py-4 theme-text-secondary">
                             @if($o->vendor)
                                 <a href="{{ route('admin.vendors.show', $o->vendor->id) }}" class="text-blue-600 dark:text-blue-400 hover:text-blue-800 dark:hover:text-blue-300 underline">{{ $o->vendor->name }}</a>
                             @else
@@ -98,5 +107,5 @@
     <div class="mt-6">
         {{ $orders->links() }}
     </div>
-</div>
+</x-theme-container>
 @endsection
