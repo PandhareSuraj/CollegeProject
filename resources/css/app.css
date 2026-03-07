@@ -1,5 +1,6 @@
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+/* stylelint-disable at-rule-no-unknown */
 
 /* ============================================
    LIGHT THEME VARIABLES
@@ -343,9 +344,84 @@ body {
   transition: background-color 0.2s;
   border: none;
   cursor: pointer;
+
+}
+
+/* Custom components for reusable styles */
+@layer components {
+    .sidebar-nav-link {
+        @apply text-white/80 px-4 py-3 rounded-lg transition-all duration-200 border-l-4 border-transparent hover:bg-white/10 hover:text-white;
+    }
+
+    .sidebar-nav-link.active {
+        @apply border-l-blue-500 bg-white/10 text-white;
+    }
+
+    .btn-primary {
+        @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    }
+
+    .btn-secondary {
+        @apply bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
+    }
+
+    .card {
+        @apply bg-white rounded-lg shadow-md p-6;
+    }
+
+    .badge-pending {
+        @apply bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium;
+    }
+
+    .badge-approved {
+        @apply bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium;
+    }
+
+    .badge-rejected {
+        @apply bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium;
+    }
+
+    [data-flux-field]:not(ui-radio, ui-checkbox) {
+        @apply grid gap-2;
+    }
+
+    [data-flux-label] {
+        @apply !mb-0 !leading-tight;
+    }
+
+    input:focus[data-flux-control],
+    textarea:focus[data-flux-control],
+    select:focus[data-flux-control] {
+        @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
+    }
+}
+/* stylelint-enable at-rule-no-unknown */
+
+/* === College Section / Admin listing styles === */
+    padding: 36px 24px;
+}
+
+.college-section-wrap {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.college-search-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 14px;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+>>>>>>> Stashed changes
 }
 .btn-primary:hover { background-color: rgb(29 78 216); }
 
+<<<<<<< Updated upstream
 .btn-secondary {
   display: inline-flex;
   align-items: center;
@@ -358,9 +434,28 @@ body {
   transition: background-color 0.2s;
   border: none;
   cursor: pointer;
+=======
+.college-search-input {
+    flex: 1;
+    padding: 12px 14px;
+    border-radius: 8px;
+    border: 1px solid var(--input-border);
+    background: var(--input-bg);
+    color: var(--input-text);
+}
+
+.college-search-btn {
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: linear-gradient(90deg,var(--bg-sidebar-end),var(--bg-sidebar));
+    color: white;
+    border: none;
+    font-weight: 700;
+>>>>>>> Stashed changes
 }
 .btn-secondary:hover { background-color: rgb(75 85 99); }
 
+<<<<<<< Updated upstream
 /* ============================================
    BADGES
    ============================================ */
@@ -425,3 +520,204 @@ select:focus[data-flux-control] {
   outline: none;
   box-shadow: 0 0 0 2px rgb(59 130 246);
 }
+=======
+.table-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px;
+    box-shadow: var(--shadow);
+}
+
+.table-card .table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.table-card th, .table-card td {
+    padding: 12px 10px;
+    text-align: left;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table-card thead th {
+    color: var(--text-secondary);
+    font-weight: 700;
+    background: transparent;
+}
+
+.table-empty {
+    text-align: center;
+    padding: 40px 12px;
+    color: var(--text-secondary);
+}
+
+.add-college-btn {
+    align-self: flex-end;
+    padding: 8px 12px;
+    border-radius: 8px;
+    background: linear-gradient(90deg,#2563eb,#7c3aed);
+    color: #fff;
+    border: none;
+    font-weight: 700;
+}
+
+/* === Additional polish for College Section and admin lists === */
+/* Make admin cards more prominent and centered inside content */
+.content-inner .card {
+    border-radius: 12px;
+    padding: 18px;
+    box-shadow: 0 8px 30px rgba(2,6,23,0.45);
+}
+
+/* Better search bar layout (works when markup uses an input + button inside a card) */
+.college-search-card {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+.college-search-card .college-search-input {
+    flex: 1 1 auto;
+    min-width: 0;
+}
+.college-search-card .college-search-btn {
+    flex: 0 0 auto;
+}
+
+/* Table styling: stronger header row, subtle row hover */
+.table-card table thead th {
+    background: transparent;
+    border-bottom: 1px solid var(--border-color);
+    color: var(--text-secondary);
+    font-weight: 700;
+}
+.table-card table tbody tr {
+    transition: background 0.12s, transform 0.12s;
+}
+.table-card table tbody tr:hover {
+    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+    transform: translateY(-2px);
+}
+
+/* Empty state card padding + centered text */
+.table-card .table-empty { padding: 48px 12px; }
+
+/* Add button prominence */
+.add-college-btn {
+    padding: 10px 14px;
+    border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(37,99,235,0.18);
+}
+
+/* Make small badges consistent */
+.role-badge {
+    display: inline-block;
+    padding: 6px 10px;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 0.78rem;
+    color: #075985;
+    background: #dbeafe;
+}
+
+/* Ensure large white cards have good contrast in dark theme */
+html.dark .content-inner .card { background: var(--bg-card); border-color: var(--border-color); }
+
+/* Small responsive tweak: make table scroll on small screens */
+.table-card { overflow-x: auto; }
+.table-card table { min-width: 640px; }
+
+/* Tiny utility spacing helper used by some views */
+.mt-12 { margin-top: 12px !important; }
+.mb-12 { margin-bottom: 12px !important; }
+
+/* Responsive adjustments */
+@media (max-width: 900px) {
+    .college-section-wrap { padding: 0 12px; }
+    .college-search-card { flex-direction: column; align-items: stretch; }
+    .college-search-btn { width: 100%; }
+}
+
+/* Dark mode overrides */
+html.dark .college-search-card {
+    background: var(--bg-card);
+    border-color: var(--border-color);
+}
+
+/* === Tailwind utility components for dark (moon) theme matching === */
+@layer components {
+    /* College section */
+    .college-search-card {
+        @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex gap-3 items-center;
+    }
+    .college-search-input {
+        @apply w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-4 py-2 text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500;
+    }
+    .college-search-btn {
+        @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold px-4 py-2 rounded-md shadow-md hover:opacity-95;
+    }
+
+    /* Table/card */
+    .table-card {
+        @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden;
+    }
+    .table-card table thead th {
+        @apply text-gray-500 dark:text-gray-300 font-semibold;
+    }
+    .table-card table tbody tr:hover {
+        @apply bg-gray-50 dark:bg-gray-800;
+    }
+
+    /* Add button */
+    .add-college-btn {
+        @apply bg-blue-600 hover:bg-blue-700 text-white rounded-md px-3 py-2 shadow-lg font-semibold;
+    }
+
+    /* Auth / login */
+    .auth-root {
+        @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-indigo-700 to-purple-800 dark:from-black dark:via-gray-900;
+    }
+    .auth-card {
+        @apply w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden;
+    }
+    .auth-head {
+        @apply p-6 text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white;
+    }
+    .auth-body {
+        @apply p-6;
+    }
+    .auth-alert {
+        @apply rounded-md px-4 py-3 bg-red-50 text-red-700 border border-red-100 dark:bg-red-900 dark:text-red-200 dark:border-red-800;
+    }
+    .auth-input {
+        @apply w-full rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500;
+    }
+    .auth-btn {
+        @apply w-full rounded-md py-2 font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg;
+    }
+
+    /* Role badge */
+    .role-badge {
+        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200;
+    }
+}
+
+/* stylelint-enable at-rule-no-unknown */
+
+/* Small responsiveness helpers (Tailwind friendly) */
+@media (max-width: 640px) {
+    .college-search-card { @apply flex-col items-stretch; }
+    .college-search-btn { @apply w-full; }
+}
+
+/* Small utility */
+.kv-center { display:flex; align-items:center; gap:12px; }
+
+html.dark .college-search-input {
+    background: var(--input-bg);
+    border-color: var(--input-border);
+    color: var(--input-text);
+}
+html.dark .table-card { background: var(--bg-card); border-color: var(--border-color); }
+html.dark .table-card th, html.dark .table-card td { border-bottom-color: var(--border-color); color: var(--text-primary); }
+>>>>>>> Stashed changes
