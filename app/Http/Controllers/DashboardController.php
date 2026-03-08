@@ -77,9 +77,13 @@ class DashboardController extends Controller
             ->paginate(15);
 
         $totalRequests = StationaryRequest::count();
-        $pendingApprovals = StationaryRequest::where('status', 'pending')->count();
+    // number used in stat card
+    $pendingRequests = StationaryRequest::where('status', 'pending')->count();
+    // collection used for the table (paginated)
+    $pendingApprovals = $requests;
         $approvedRequests = StationaryRequest::whereIn('status', ['hod_approved', 'principal_approved', 'trust_approved'])->count();
         $completedRequests = StationaryRequest::where('status', 'completed')->count();
+    $rejectedRequests = StationaryRequest::where('status', 'rejected')->count();
 
         $approvedProducts = Product::whereHas('requestItems', function ($q) {
             $q->whereHas('request', function ($rq) {
@@ -91,9 +95,11 @@ class DashboardController extends Controller
             'requests',
             'totalRequests',
             'pendingApprovals',
+            'pendingRequests',
             'approvedRequests',
-            'completedRequests'
-            ,'approvedProducts'
+            'completedRequests',
+            'rejectedRequests',
+            'approvedProducts'
         ));
     }
 

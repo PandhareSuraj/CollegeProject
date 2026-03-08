@@ -1,723 +1,275 @@
+
+/* Clean Tailwind entry + project helpers
+     This file is intentionally minimal and free of git conflict markers.
+     Keep custom rules simple so tailwind's parser can run without syntax errors. */
+
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
 /* stylelint-disable at-rule-no-unknown */
 
-/* ============================================
-   LIGHT THEME VARIABLES
-   ============================================ */
+/* Theme variables */
 :root {
-  --theme-bg-primary: rgb(255 255 255);
-  --theme-bg-secondary: rgb(249 250 251);
-  --theme-bg-tertiary: rgb(243 244 246);
-  --theme-text-primary: rgb(15 23 42);
-  --theme-text-secondary: rgb(51 65 85);
-  --theme-text-tertiary: rgb(100 116 139);
-  --theme-border-primary: rgb(226 232 240);
-  --theme-border-secondary: rgb(203 213 225);
-  --theme-shadow: rgba(0 0 0 / 0.08);
-  --theme-shadow-lg: rgba(0 0 0 / 0.12);
-
-  --theme-card-bg: rgb(255 255 255);
-  --theme-card-border: rgb(226 232 240);
-  --theme-navbar-bg: rgb(255 255 255);
-  --theme-navbar-border: rgb(226 232 240);
-  --theme-sidebar-bg: rgb(15 23 42);
-  --theme-sidebar-text: rgb(241 245 249);
-  --theme-input-bg: rgb(255 255 255);
-  --theme-input-border: rgb(203 213 225);
-  --theme-input-text: rgb(15 23 42);
-
-  --theme-table-header-bg: rgb(249 250 251);
-  --theme-table-header-text: rgb(15 23 42);
-  --theme-table-row-bg: rgb(255 255 255);
-  --theme-table-row-text: rgb(51 65 85);
-  --theme-table-row-hover: rgb(248 250 252);
-  --theme-table-border: rgb(226 232 240);
-
-  --color-blue-bg: rgb(219 234 254);
-  --color-blue-text: rgb(37 99 235);
-  --color-amber-bg: rgb(254 243 224);
-  --color-amber-text: rgb(217 119 6);
-  --color-green-bg: rgb(220 252 231);
-  --color-green-text: rgb(22 163 74);
-  --color-indigo-bg: rgb(224 231 255);
-  --color-indigo-text: rgb(79 70 229);
-  --color-orange-bg: rgb(254 245 230);
-  --color-orange-text: rgb(234 88 12);
-  --color-red-bg: rgb(254 242 242);
-  --color-red-text: rgb(220 38 38);
-  --color-purple-bg: rgb(243 232 255);
-  --color-purple-text: rgb(168 85 247);
-  --color-teal-bg: rgb(204 251 241);
-  --color-teal-text: rgb(15 118 110);
-  --color-pink-bg: rgb(252 231 243);
-  --color-pink-text: rgb(190 24 93);
+    --theme-bg-primary: 255 255 255;
+    --theme-card-bg: 255 255 255;
+    --theme-card-border: 226 232 240;
+    --theme-input-bg: 255 255 255;
+    --theme-input-border: 203 213 225;
+    --theme-input-text: 15 23 42;
+    --theme-text-primary: 15 23 42;
+    --theme-text-secondary: 51 65 85;
 }
 
-/* ============================================
-   DARK THEME VARIABLES
-   ============================================ */
 html.dark {
-  --theme-bg-primary: rgb(24 24 27);
-  --theme-bg-secondary: rgb(32 32 36);
-  --theme-bg-tertiary: rgb(38 38 43);
-  --theme-text-primary: rgb(241 245 249);
-  --theme-text-secondary: rgb(203 213 225);
-  --theme-text-tertiary: rgb(148 163 184);
-  --theme-border-primary: rgb(55 65 81);
-  --theme-border-secondary: rgb(75 85 99);
-  --theme-shadow: rgba(0 0 0 / 0.35);
-  --theme-shadow-lg: rgba(0 0 0 / 0.5);
-
-  --theme-card-bg: rgb(52 54 60);
-  --theme-card-border: rgb(68 70 78);
-  --theme-navbar-bg: rgb(30 30 34);
-  --theme-navbar-border: rgb(45 45 52);
-  --theme-sidebar-bg: rgb(15 17 20);
-  --theme-sidebar-text: rgb(241 245 249);
-  --theme-input-bg: rgb(44 46 52);
-  --theme-input-border: rgb(75 85 99);
-  --theme-input-text: rgb(241 245 249);
-
-  --theme-table-header-bg: rgb(38 40 46);
-  --theme-table-header-text: rgb(241 245 249);
-  --theme-table-row-bg: rgb(44 46 52);
-  --theme-table-row-text: rgb(203 213 225);
-  --theme-table-row-hover: rgb(58 60 68);
-  --theme-table-border: rgb(55 65 81);
-
-  --color-blue-bg: rgb(30 58 138 / 0.4);
-  --color-blue-text: rgb(147 197 253);
-  --color-amber-bg: rgb(120 53 15 / 0.4);
-  --color-amber-text: rgb(253 211 115);
-  --color-green-bg: rgb(20 83 45 / 0.4);
-  --color-green-text: rgb(134 239 172);
-  --color-indigo-bg: rgb(49 46 129 / 0.4);
-  --color-indigo-text: rgb(165 180 252);
-  --color-orange-bg: rgb(124 45 18 / 0.4);
-  --color-orange-text: rgb(253 186 116);
-  --color-red-bg: rgb(127 29 29 / 0.4);
-  --color-red-text: rgb(252 165 165);
-  --color-purple-bg: rgb(88 28 135 / 0.4);
-  --color-purple-text: rgb(216 180 254);
-  --color-teal-bg: rgb(19 78 74 / 0.4);
-  --color-teal-text: rgb(94 234 212);
-  --color-pink-bg: rgb(131 24 67 / 0.4);
-  --color-pink-text: rgb(249 168 212);
+    --theme-bg-primary: 24 24 27;
+    --theme-card-bg: 52 54 60;
+    --theme-card-border: 68 70 78;
+    --theme-input-bg: 44 46 52;
+    --theme-input-border: 75 85 99;
+    --theme-input-text: 241 245 249;
+    --theme-text-primary: 241 245 249;
+    --theme-text-secondary: 203 213 225;
 }
 
-/* ============================================
-   BASE — Critical: html & body must fill the
-   full viewport with theme background color.
-   This eliminates ALL white/light gap areas.
-   ============================================ */
-*, *::before, *::after {
-  box-sizing: border-box;
-}
+/* Base layout */
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;background-color:rgb(var(--theme-bg-primary));transition:background-color .2s}
+body{min-height:100%;margin:0;padding:0;background-color:rgb(var(--theme-bg-primary));color:rgb(var(--theme-text-primary));transition:background-color .2s,color .2s}
 
-html {
-  height: 100%;
-  background-color: var(--theme-bg-primary);
-  transition: background-color 0.3s;
-}
+.layout-shell{display:flex;min-height:100vh}
 
-body {
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: var(--theme-bg-primary);
-  color: var(--theme-text-primary);
-  transition: background-color 0.3s, color 0.3s;
-}
+/* Simple card/table/input helpers used across the app */
+.theme-card{background-color:rgb(var(--theme-card-bg));border:1px solid rgb(var(--theme-card-border));border-radius:.5rem;padding:1rem}
+.theme-table{width:100%;border-collapse:collapse}
+.theme-input{border-radius:.5rem;border:1px solid rgb(var(--theme-input-border));padding:.5rem 1rem;background-color:rgb(var(--theme-input-bg));color:rgb(var(--theme-input-text))}
 
-/* ============================================
-   LAYOUT SHELL
-   The page shell wraps sidebar + main content.
-   It must cover the full viewport height.
-   ============================================ */
+/* Small reusable utilities */
+.mt-12{margin-top:12px!important}.mb-12{margin-bottom:12px!important}
+.kv-center{display:flex;align-items:center;gap:12px}
 
-/* The outer shell: flex row, full height */
-.layout-shell {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--theme-bg-primary);
-}
-
-/* ============================================
-   SIDEBAR — fixed, full height, no gaps
-   ============================================ */
-.theme-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 16rem; /* 256px = w-64 */
-  height: 100vh;
-  z-index: 40;
-  background-color: var(--theme-sidebar-bg);
-  color: var(--theme-sidebar-text);
-  border-right: 1px solid var(--theme-border-primary);
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: background-color 0.3s;
-  /* Prevent any gap at the top/bottom */
-  display: flex;
-  flex-direction: column;
-}
-
-/* ============================================
-   NAVBAR — fixed at top, starts after sidebar
-   ============================================ */
-.theme-navbar {
-  position: fixed;
-  top: 0;
-  left: 16rem; /* same as sidebar width */
-  right: 0;
-  height: 4rem; /* 64px */
-  z-index: 30;
-  background-color: var(--theme-navbar-bg);
-  border-bottom: 1px solid var(--theme-navbar-border);
-  color: var(--theme-text-primary);
-  box-shadow: 0 1px 3px var(--theme-shadow);
-  transition: background-color 0.3s;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-}
-
-/* ============================================
-   MAIN CONTENT AREA
-   Offset by sidebar width (left) and navbar height (top).
-   Must fill remaining space with theme background.
-   ============================================ */
-.theme-container {
-  margin-left: 16rem;  /* sidebar width */
-  padding-top: 4rem;   /* navbar height */
-  min-height: 100vh;
-  width: calc(100% - 16rem);
-  background-color: var(--theme-bg-primary);
-  color: var(--theme-text-primary);
-  transition: background-color 0.3s, color 0.3s;
-}
-
-/* Secondary/tertiary bg helpers */
-.theme-bg-primary   { background-color: var(--theme-bg-primary); }
-.theme-bg-secondary { background-color: var(--theme-bg-secondary); }
-.theme-bg-tertiary  { background-color: var(--theme-bg-tertiary); }
-
-/* ============================================
-   CARDS
-   ============================================ */
-.theme-card {
-  background-color: var(--theme-card-bg);
-  border: 1px solid var(--theme-card-border);
-  color: var(--theme-text-primary);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px var(--theme-shadow);
-  transition: box-shadow 0.3s, background-color 0.3s;
-}
-
-.theme-card:hover {
-  box-shadow: 0 4px 12px var(--theme-shadow-lg);
-}
-
-/* Generic .card utility (used in inline Blade) */
-.card {
-  background-color: var(--theme-card-bg);
-  border: 1px solid var(--theme-card-border);
-  color: var(--theme-text-primary);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 4px var(--theme-shadow);
-  padding: 1.5rem;
-  transition: background-color 0.3s;
-}
-
-/* ============================================
-   TABLE
-   ============================================ */
-.theme-table-wrapper {
-  overflow-x: auto;
-  border-radius: 0.5rem;
-  border: 1px solid var(--theme-border-primary);
-  background-color: var(--theme-card-bg);
-}
-
-.theme-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--theme-card-bg);
-  color: var(--theme-text-primary);
-}
-
-.theme-table thead {
-  background-color: var(--theme-table-header-bg);
-  border-bottom: 1px solid var(--theme-table-border);
-}
-
-.theme-table thead th {
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--theme-table-header-text);
-}
-
-.theme-table tbody tr {
-  background-color: var(--theme-table-row-bg);
-  border-bottom: 1px solid var(--theme-table-border);
-  transition: background-color 0.15s;
-}
-
-.theme-table tbody tr:hover {
-  background-color: var(--theme-table-row-hover);
-}
-
-.theme-table tbody td {
-  padding: 1rem 1.5rem;
-  font-size: 0.875rem;
-  color: var(--theme-table-row-text);
-}
-
-/* ============================================
-   INPUT
-   ============================================ */
-.theme-input {
-  border-radius: 0.5rem;
-  border: 1px solid var(--theme-input-border);
-  padding: 0.5rem 1rem;
-  background-color: var(--theme-input-bg);
-  color: var(--theme-input-text);
-  transition: border-color 0.2s, box-shadow 0.2s;
-}
-
-.theme-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--theme-border-primary);
-}
-
-/* ============================================
-   TEXT & BORDER HELPERS
-   ============================================ */
-.theme-text-primary   { color: var(--theme-text-primary); }
-.theme-text-secondary { color: var(--theme-text-secondary); }
-.theme-text-tertiary  { color: var(--theme-text-tertiary); }
-.theme-border-primary   { border-color: var(--theme-border-primary); }
-.theme-border-secondary { border-color: var(--theme-border-secondary); }
-.theme-border-light     { border-color: var(--theme-border-primary); }
-
-/* ============================================
-   SIDEBAR NAV LINKS
-   ============================================ */
-.sidebar-nav-link {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  border-left: 4px solid transparent;
-  color: rgba(255, 255, 255, 0.7);
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-  text-decoration: none;
-}
-
-.sidebar-nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.sidebar-nav-link.active {
-  border-left-color: rgb(59 130 246);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-/* ============================================
-   BUTTONS
-   ============================================ */
-.btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(37 99 235);
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-  border: none;
-  cursor: pointer;
-
-}
-
-/* Custom components for reusable styles */
+/* Components expressed without @apply to avoid stylelint parser issues */
 @layer components {
-    .sidebar-nav-link {
-        @apply text-white/80 px-4 py-3 rounded-lg transition-all duration-200 border-l-4 border-transparent hover:bg-white/10 hover:text-white;
-    }
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;background-color:#2563eb;color:#fff;font-weight:600;padding:.5rem 1rem;border-radius:.5rem;border:none}
+    .btn-primary:hover{background-color:#1d4ed8}
 
-    .sidebar-nav-link.active {
-        @apply border-l-blue-500 bg-white/10 text-white;
-    }
-
-    .btn-primary {
-        @apply bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
-    }
-
-    .btn-secondary {
-        @apply bg-gray-500 hover:bg-gray-600 text-white font-semibold py-2 px-4 rounded-lg transition-colors;
-    }
-
-    .card {
-        @apply bg-white rounded-lg shadow-md p-6;
-    }
-
-    .badge-pending {
-        @apply bg-yellow-100 text-yellow-800 px-3 py-1 rounded-full text-sm font-medium;
-    }
-
-    .badge-approved {
-        @apply bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium;
-    }
-
-    .badge-rejected {
-        @apply bg-red-100 text-red-800 px-3 py-1 rounded-full text-sm font-medium;
-    }
-
-    [data-flux-field]:not(ui-radio, ui-checkbox) {
-        @apply grid gap-2;
-    }
-
-    [data-flux-label] {
-        @apply !mb-0 !leading-tight;
-    }
-
-    input:focus[data-flux-control],
-    textarea:focus[data-flux-control],
-    select:focus[data-flux-control] {
-        @apply outline-hidden ring-2 ring-accent ring-offset-2 ring-offset-accent-foreground;
-    }
+    .badge-pending{display:inline-block;background:#fef3c7;color:#92400e;padding:.25rem .75rem;border-radius:9999px}
+    .badge-approved{display:inline-block;background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:9999px}
+    .badge-rejected{display:inline-block;background:#fef2f2;color:#b91c1c;padding:.25rem .75rem;border-radius:9999px}
 }
+
+/* Responsive tweaks */
+@media (max-width:900px){.college-section-wrap{padding:0 12px}.college-search-card{flex-direction:column}.college-search-btn{width:100%}}
+
+/* stylelint restore */
 /* stylelint-enable at-rule-no-unknown */
 
-/* === College Section / Admin listing styles === */
-    padding: 36px 24px;
+/* ==========================
+     Admin dashboard specific
+     ========================== */
+
+/* Sidebar */
+.admin-sidebar { width:64px; background:#0f172a; color:#fff; position:fixed; left:0; top:0; bottom:0; z-index:60; display:flex; flex-direction:column; align-items:center; padding-top:12px }
+.admin-sidebar .nav-icon { width:44px; height:44px; display:flex; align-items:center; justify-content:center; margin:8px 0; border-radius:10px; color: #e6eefc }
+.admin-sidebar .nav-icon:hover { background: rgba(255,255,255,0.03) }
+
+/* Top navbar */
+.admin-topbar { height:64px; margin-left:64px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-bottom:1px solid rgba(0,0,0,0.04) }
+
+/* Stat cards row */
+.stat-row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 18px 0; margin-left:64px }
+.stat-card { background: linear-gradient(180deg, #fff, #fbfbfd); border-radius:12px; padding:20px; border:1px solid rgba(2,6,23,0.06); display:flex; flex-direction:column; gap:8px }
+.stat-card .value { font-size:28px; font-weight:800 }
+.stat-card .label { font-size:0.8rem; color: rgb(var(--theme-text-secondary)) }
+
+/* Quick actions area */
+.quick-actions { margin:18px 0; margin-left:64px; padding: 14px; border-radius:10px; border:1px solid rgba(2,6,23,0.06); background: linear-gradient(180deg,#fff,#fbfbfd) }
+.quick-actions .btn { margin-right:12px }
+
+/* Approved products table */
+.approved-products { margin-left:64px; margin-top:20px }
+.approved-products .card { min-height:120px }
+
+@media (max-width: 900px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); margin-left:0 }
+    .admin-topbar { margin-left:0 }
+    .approved-products { margin-left:0 }
+    .quick-actions { margin-left:0 }
 }
 
-.college-section-wrap {
-    max-width: 1100px;
-    margin: 0 auto;
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
+/* ==========================
+     Registration / Auth pages
+     ========================== */
 
-.college-search-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 14px;
+/* Full-bleed gradient background and centered auth card */
+
+/* Full gradient background and centered auth card */
+.auth-root {
+    min-height: 100vh;
     display: flex;
-    gap: 12px;
     align-items: center;
->>>>>>> Stashed changes
-}
-.btn-primary:hover { background-color: rgb(29 78 216); }
-
-<<<<<<< Updated upstream
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(107 114 128);
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-  border: none;
-  cursor: pointer;
-=======
-.college-search-input {
-    flex: 1;
-    padding: 12px 14px;
-    border-radius: 8px;
-    border: 1px solid var(--input-border);
-    background: var(--input-bg);
-    color: var(--input-text);
+    justify-content: center;
+    background: linear-gradient(135deg,#163aee 0%, #6b21a8 50%, #0f172a 100%);
+    padding: 40px 16px;
 }
 
-.college-search-btn {
-    padding: 10px 14px;
-    border-radius: 8px;
-    background: linear-gradient(90deg,var(--bg-sidebar-end),var(--bg-sidebar));
-    color: white;
-    border: none;
-    font-weight: 700;
->>>>>>> Stashed changes
-}
-.btn-secondary:hover { background-color: rgb(75 85 99); }
-
-<<<<<<< Updated upstream
-/* ============================================
-   BADGES
-   ============================================ */
-.badge-pending {
-  display: inline-block;
-  background-color: rgb(254 243 199);
-  color: rgb(146 64 14);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-pending {
-  background-color: rgba(120, 53, 15, 0.35);
-  color: rgb(253 211 115);
+/* Auth Card (FIXED WIDTH) */
+.auth-card {
+   width: 100%;
+      max-width: 580px;   
+    margin: 0 auto;  /* ✅ Perfect auth card width */
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 18px 55px rgba(2,6,23,0.45);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-.badge-approved {
-  display: inline-block;
-  background-color: rgb(220 252 231);
-  color: rgb(22 101 52);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-approved {
-  background-color: rgba(20, 83, 45, 0.35);
-  color: rgb(134 239 172);
+/* Header */
+.auth-head {
+    padding: 26px 22px;
+    background: linear-gradient(180deg, #7c3aed, #4f46e5);
+    color: #fff;
 }
 
-.badge-rejected {
-  display: inline-block;
-  background-color: rgb(254 242 242);
-  color: rgb(185 28 28);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-rejected {
-  background-color: rgba(127, 29, 29, 0.35);
-  color: rgb(252 165 165);
+.auth-head h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
 }
 
-/* ============================================
-   FLUX FORM OVERRIDES
-   ============================================ */
-[data-flux-field]:not(ui-radio, ui-checkbox) {
-  display: grid;
-  gap: 0.5rem;
+.auth-head p {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
 }
 
-[data-flux-label] {
-  margin-bottom: 0 !important;
-  line-height: 1.25 !important;
+/* Body */
+.auth-body {
+    padding: 22px 22px 28px;
+    background: linear-gradient(180deg, rgba(2,6,23,0.88), rgba(2,6,23,0.95));
+    color: #e6eefc;
 }
 
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-  outline: none;
-  box-shadow: 0 0 0 2px rgb(59 130 246);
-}
-=======
-.table-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 10px;
-    padding: 12px;
-    box-shadow: var(--shadow);
+/* Labels */
+.auth-body label {
+    display: block;
+    font-size: 0.72rem;
+    color: rgba(230,238,252,0.7);
+    margin-bottom: 5px;
 }
 
-.table-card .table {
+/* Inputs */
+.auth-body input[type="text"],
+.auth-body input[type="email"],
+.auth-body input[type="password"] {
     width: 100%;
-    border-collapse: collapse;
+    padding: 9px 11px;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
 }
 
-.table-card th, .table-card td {
-    padding: 12px 10px;
-    text-align: left;
-    border-bottom: 1px solid var(--border-color);
+.auth-body input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
 }
 
-.table-card thead th {
-    color: var(--text-secondary);
-    font-weight: 700;
-    background: transparent;
+.auth-body input::placeholder {
+    color: rgba(255,255,255,0.5);
 }
 
-.table-empty {
+/* Password row */
+.password-row {
+    display: flex;
+    gap: 10px;
+}
+
+.password-row div {
+    flex: 1;
+}
+
+/* Role selection */
+.role-grid {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0 18px;
+}
+
+.role-option {
+    flex: 1;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 10px;
     text-align: center;
-    padding: 40px 12px;
-    color: var(--text-secondary);
+    cursor: pointer;
+    color: #e6eefc;
 }
 
-.add-college-btn {
-    align-self: flex-end;
+.role-option:hover {
+    background: rgba(255,255,255,0.05);
+}
+
+/* Active role */
+.role-option.active {
+    border-color: #6366f1;
+    box-shadow: 0 6px 16px rgba(79,70,229,0.25);
+    background: linear-gradient(180deg, rgba(79,70,229,0.18), rgba(79,70,229,0.08));
+}
+
+/* Buttons */
+.auth-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.btn-primary {
+    flex: 1;
+    background: linear-gradient(90deg,#6366f1,#7c3aed);
+    border: none;
+    padding: 9px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.btn-primary:hover {
+    opacity: 0.9;
+}
+
+.btn-ghost {
     padding: 8px 12px;
     border-radius: 8px;
-    background: linear-gradient(90deg,#2563eb,#7c3aed);
-    color: #fff;
-    border: none;
-    font-weight: 700;
-}
-
-/* === Additional polish for College Section and admin lists === */
-/* Make admin cards more prominent and centered inside content */
-.content-inner .card {
-    border-radius: 12px;
-    padding: 18px;
-    box-shadow: 0 8px 30px rgba(2,6,23,0.45);
-}
-
-/* Better search bar layout (works when markup uses an input + button inside a card) */
-.college-search-card {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-}
-.college-search-card .college-search-input {
-    flex: 1 1 auto;
-    min-width: 0;
-}
-.college-search-card .college-search-btn {
-    flex: 0 0 auto;
-}
-
-/* Table styling: stronger header row, subtle row hover */
-.table-card table thead th {
+    border: 1px solid rgba(255,255,255,0.1);
     background: transparent;
-    border-bottom: 1px solid var(--border-color);
-    color: var(--text-secondary);
-    font-weight: 700;
-}
-.table-card table tbody tr {
-    transition: background 0.12s, transform 0.12s;
-}
-.table-card table tbody tr:hover {
-    background: linear-gradient(90deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
-    transform: translateY(-2px);
+    color: #e6eefc;
 }
 
-/* Empty state card padding + centered text */
-.table-card .table-empty { padding: 48px 12px; }
-
-/* Add button prominence */
-.add-college-btn {
-    padding: 10px 14px;
-    border-radius: 10px;
-    box-shadow: 0 8px 20px rgba(37,99,235,0.18);
+/* Bottom note */
+.auth-note {
+    font-size: 0.72rem;
+    color: rgba(230,238,252,0.6);
+    padding: 12px 20px;
+    border-top: 1px dashed rgba(255,255,255,0.05);
 }
 
-/* Make small badges consistent */
-.role-badge {
-    display: inline-block;
-    padding: 6px 10px;
-    border-radius: 999px;
-    font-weight: 700;
-    font-size: 0.78rem;
-    color: #075985;
-    background: #dbeafe;
-}
+/* Responsive */
+@media (   max-width: 640px) {
 
-/* Ensure large white cards have good contrast in dark theme */
-html.dark .content-inner .card { background: var(--bg-card); border-color: var(--border-color); }
-
-/* Small responsive tweak: make table scroll on small screens */
-.table-card { overflow-x: auto; }
-.table-card table { min-width: 640px; }
-
-/* Tiny utility spacing helper used by some views */
-.mt-12 { margin-top: 12px !important; }
-.mb-12 { margin-bottom: 12px !important; }
-
-/* Responsive adjustments */
-@media (max-width: 900px) {
-    .college-section-wrap { padding: 0 12px; }
-    .college-search-card { flex-direction: column; align-items: stretch; }
-    .college-search-btn { width: 100%; }
-}
-
-/* Dark mode overrides */
-html.dark .college-search-card {
-    background: var(--bg-card);
-    border-color: var(--border-color);
-}
-
-/* === Tailwind utility components for dark (moon) theme matching === */
-@layer components {
-    /* College section */
-    .college-search-card {
-        @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg p-4 flex gap-3 items-center;
-    }
-    .college-search-input {
-        @apply w-full bg-gray-50 dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-4 py-2 text-gray-700 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500;
-    }
-    .college-search-btn {
-        @apply bg-gradient-to-r from-blue-600 to-purple-600 text-white font-bold px-4 py-2 rounded-md shadow-md hover:opacity-95;
+    .password-row {
+        flex-direction: column;
     }
 
-    /* Table/card */
-    .table-card {
-        @apply bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg overflow-hidden;
-    }
-    .table-card table thead th {
-        @apply text-gray-500 dark:text-gray-300 font-semibold;
-    }
-    .table-card table tbody tr:hover {
-        @apply bg-gray-50 dark:bg-gray-800;
+    .role-grid {
+        flex-direction: column;
     }
 
-    /* Add button */
-    .add-college-btn {
-        @apply bg-blue-600 hover:bg-blue-700 text-white rounded-md px-3 py-2 shadow-lg font-semibold;
-    }
-
-    /* Auth / login */
-    .auth-root {
-        @apply min-h-screen flex items-center justify-center bg-gradient-to-br from-purple-700 via-indigo-700 to-purple-800 dark:from-black dark:via-gray-900;
-    }
     .auth-card {
-        @apply w-full max-w-md bg-white dark:bg-gray-900 rounded-xl shadow-2xl overflow-hidden;
-    }
-    .auth-head {
-        @apply p-6 text-center bg-gradient-to-r from-blue-600 to-indigo-600 text-white;
-    }
-    .auth-body {
-        @apply p-6;
-    }
-    .auth-alert {
-        @apply rounded-md px-4 py-3 bg-red-50 text-red-700 border border-red-100 dark:bg-red-900 dark:text-red-200 dark:border-red-800;
-    }
-    .auth-input {
-        @apply w-full rounded-md border border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-800 px-3 py-2 text-gray-800 dark:text-gray-100 placeholder-gray-400 dark:placeholder-gray-500;
-    }
-    .auth-btn {
-        @apply w-full rounded-md py-2 font-bold bg-gradient-to-r from-blue-600 to-purple-600 text-white shadow-lg;
-    }
-
-    /* Role badge */
-    .role-badge {
-        @apply inline-block px-3 py-1 rounded-full text-sm font-semibold bg-blue-100 text-blue-700 dark:bg-blue-900 dark:text-blue-200;
+        max-width: 100%;
     }
 }
-
-/* stylelint-enable at-rule-no-unknown */
-
-/* Small responsiveness helpers (Tailwind friendly) */
-@media (max-width: 640px) {
-    .college-search-card { @apply flex-col items-stretch; }
-    .college-search-btn { @apply w-full; }
-}
-
-/* Small utility */
-.kv-center { display:flex; align-items:center; gap:12px; }
-
-html.dark .college-search-input {
-    background: var(--input-bg);
-    border-color: var(--input-border);
-    color: var(--input-text);
-}
-html.dark .table-card { background: var(--bg-card); border-color: var(--border-color); }
-html.dark .table-card th, html.dark .table-card td { border-bottom-color: var(--border-color); color: var(--text-primary); }
->>>>>>> Stashed changes
