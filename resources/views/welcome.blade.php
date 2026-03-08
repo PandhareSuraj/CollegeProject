@@ -93,7 +93,7 @@
         }
         .nav-brand span { color: var(--gold); }
         .nav-links {
-            display: flex; align-items: center; gap: 12px;
+            display: flex; align-items: center; gap: 10px;
         }
         .btn-outline {
             padding: 9px 22px; border-radius: 8px;
@@ -109,6 +109,22 @@
             background: rgba(201,168,76,0.12);
             color: var(--gold2);
         }
+        .btn-signup {
+            padding: 9px 22px; border-radius: 8px;
+            border: 1.5px solid rgba(255,255,255,0.50);
+            color: #fff; background: rgba(255,255,255,0.12);
+            font-size: 0.875rem; font-weight: 600;
+            text-decoration: none; cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.2s, background 0.2s, color 0.2s;
+            display: inline-flex; align-items: center; gap: 6px;
+        }
+        .btn-signup:hover {
+            border-color: #fff;
+            background: rgba(255,255,255,0.20);
+            color: #fff;
+        }
+        .btn-signup svg { width: 15px; height: 15px; }
         .btn-gold {
             padding: 9px 22px; border-radius: 8px;
             background: linear-gradient(135deg, var(--gold), #a8720e);
@@ -116,8 +132,34 @@
             text-decoration: none; cursor: pointer; border: none;
             transition: opacity 0.2s, transform 0.2s;
             box-shadow: 0 4px 18px rgba(201,168,76,0.35);
+            display: inline-flex; align-items: center; gap: 6px;
         }
         .btn-gold:hover { opacity: 0.9; transform: translateY(-1px); }
+        .btn-gold svg { width: 15px; height: 15px; }
+
+        /* ── Theme Toggle Button ── */
+        .btn-theme {
+            width: 38px; height: 38px;
+            border-radius: 9px;
+            border: 1.5px solid rgba(255,255,255,0.25);
+            background: rgba(255,255,255,0.07);
+            color: #fff;
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            backdrop-filter: blur(8px);
+            transition: border-color 0.2s, background 0.2s, transform 0.2s;
+            flex-shrink: 0;
+        }
+        .btn-theme:hover {
+            border-color: var(--gold);
+            background: rgba(201,168,76,0.14);
+            transform: rotate(20deg);
+        }
+        .btn-theme svg { width: 17px; height: 17px; }
+        .icon-sun  { display: none; }
+        .icon-moon { display: block; }
+        html.light .icon-sun  { display: block; }
+        html.light .icon-moon { display: none; }
 
         /* ── Hero Content ── */
         .hero-content {
@@ -480,6 +522,7 @@
             .features-grid, .roles-grid { grid-template-columns: 1fr; }
             .hero-stats { display: none; }
             .nav-brand { font-size: 0.95rem; }
+            .btn-signup span { display: none; }
         }
     </style>
 </head>
@@ -502,7 +545,32 @@
         </div>
         <div class="nav-links">
             <a href="#features" class="btn-outline">About</a>
-            <a href="#login" class="btn-gold">Login</a>
+
+            <a href="{{ route('auth.register-form') }}" class="btn-signup">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                </svg>
+                <span>Sign Up</span>
+            </a>
+
+            <a href="#login" class="btn-gold">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M11 16l-4-4m0 0l4-4m-4 4h14m-5 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h7a3 3 0 013 3v1"/>
+                </svg>
+                Login
+            </a>
+
+            <!-- Theme Toggle -->
+            <button class="btn-theme" id="theme-toggle" title="Toggle theme" type="button">
+                <!-- Moon icon (shown in dark mode) -->
+                <svg class="icon-moon" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M21 12.79A9 9 0 1111.21 3a7 7 0 109.79 9.79z"/>
+                </svg>
+                <!-- Sun icon (shown in light mode) -->
+                <svg class="icon-sun" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M12 3V1m0 22v-2M4.22 4.22L2.81 2.81m16.97 16.97l-1.41-1.41M1 12H3m18 0h2M4.22 19.78L2.81 21.19M21.19 2.81l-1.41 1.41M12 5a7 7 0 100 14A7 7 0 0012 5z"/>
+                </svg>
+            </button>
         </div>
     </nav>
 
@@ -713,7 +781,9 @@
 
     <div class="roles-grid">
 
-        <a href="{{ route('login') }}?role=teacher" class="role-card reveal">
+        {{-- ── Each card now links to role-specific login page ── --}}
+
+        <a href="{{ route('auth.role-login', 'teacher') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(34,197,94,0.15);">
                 <svg fill="currentColor" style="color:#4ade80" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18V15l7 4 7-4v-3.82L23 9zm0 2.27L19.52 9 12 12.73 4.48 9z"/></svg>
             </div>
@@ -725,7 +795,7 @@
             </span>
         </a>
 
-        <a href="{{ route('login') }}?role=hod" class="role-card reveal">
+        <a href="{{ route('auth.role-login', 'hod') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(99,102,241,0.15);">
                 <svg fill="currentColor" style="color:#a5b4fc" viewBox="0 0 24 24"><path d="M17 12h-5v5h5v-5zM16 1v2H8V1H6v2H5c-1.11 0-1.99.9-1.99 2L3 19c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2h-1V1h-2zm3 18H5V8h14v11z"/></svg>
             </div>
@@ -737,7 +807,7 @@
             </span>
         </a>
 
-        <a href="{{ route('login') }}?role=principal" class="role-card reveal">
+        <a href="{{ route('auth.role-login', 'principal') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(245,158,11,0.15);">
                 <svg fill="currentColor" style="color:#fbbf24" viewBox="0 0 24 24"><path d="M12 1l-9 4v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4zm0 4l5 2.18V11c0 3.5-2.33 6.79-5 7.93C9.33 17.79 7 14.5 7 11V7.18L12 5z"/></svg>
             </div>
@@ -749,7 +819,7 @@
             </span>
         </a>
 
-        <a href="{{ route('login') }}?role=trust_head" class="role-card reveal">
+        <a href="{{ route('auth.role-login', 'trust_head') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(168,85,247,0.15);">
                 <svg fill="currentColor" style="color:#c084fc" viewBox="0 0 24 24"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg>
             </div>
@@ -761,7 +831,7 @@
             </span>
         </a>
 
-        <a href="{{ route('login') }}?role=provider" class="role-card reveal">
+        <a href="{{ route('auth.role-login', 'provider') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(249,115,22,0.15);">
                 <svg fill="currentColor" style="color:#fb923c" viewBox="0 0 24 24"><path d="M8 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0zM15 16.5a1.5 1.5 0 11-3 0 1.5 1.5 0 013 0z"/><path d="M3 4a1 1 0 00-1 1v10a1 1 0 001 1h1.05a2.5 2.5 0 014.9 0H10a1 1 0 001-1V5a1 1 0 00-1-1H3zM14 7a1 1 0 00-1 1v6.05A2.5 2.5 0 0115.95 16H17a1 1 0 001-1v-5a1 1 0 00-.293-.707l-2-2A1 1 0 0015 7h-1z"/></svg>
             </div>
@@ -773,7 +843,7 @@
             </span>
         </a>
 
-        <a href="{{ route('login') }}?role=admin" class="role-card reveal">
+        <a href="{{ route('auth.role-login', 'admin') }}" class="role-card reveal">
             <div class="role-icon" style="background:rgba(59,130,246,0.15);">
                 <svg fill="currentColor" style="color:#60a5fa" viewBox="0 0 24 24"><path d="M12 15.5A3.5 3.5 0 018.5 12 3.5 3.5 0 0112 8.5a3.5 3.5 0 013.5 3.5 3.5 3.5 0 01-3.5 3.5m7.43-2.92c.04-.34.07-.68.07-1.08s-.03-.74-.07-1.08l2.32-1.81c.21-.16.27-.46.13-.7l-2.2-3.81c-.14-.24-.42-.32-.66-.24l-2.74 1.1c-.57-.44-1.18-.81-1.86-1.09l-.41-2.91C14.57 2.18 14.29 2 14 2h-4c-.29 0-.57.18-.62.46l-.41 2.91c-.68.28-1.29.65-1.86 1.09l-2.74-1.1c-.24-.08-.52 0-.66.24l-2.2 3.81c-.14.24-.08.54.13.7l2.32 1.81C4.03 11.26 4 11.6 4 12s.03.74.07 1.08L1.75 14.89c-.21.16-.27.46-.13.7l2.2 3.81c.14.24.42.32.66.24l2.74-1.1c.57.44 1.18.81 1.86 1.09l.41 2.91c.05.28.33.46.62.46h4c.29 0 .57-.18.62-.46l.41-2.91c.68-.28 1.29-.65 1.86-1.09l2.74 1.1c.24.08.52 0 .66-.24l2.2-3.81c.14-.24.08-.54-.13-.7l-2.32-1.81z"/></svg>
             </div>
@@ -787,10 +857,12 @@
 
     </div>
 
-    <!-- Single unified login link -->
-    <p style="text-align:center;margin-top:36px;font-size:0.875rem;color:rgba(255,255,255,0.35);">
-        Or use the unified login &nbsp;·&nbsp;
-        <a href="{{ route('login') }}" style="color:var(--gold);text-decoration:none;font-weight:600;">Sign In →</a>
+    <!-- Register CTA -->
+    <p style="text-align:center;margin-top:44px;font-size:0.875rem;color:rgba(255,255,255,0.35);">
+        Don't have an account? &nbsp;·&nbsp;
+        <a href="{{ route('auth.register-form') }}" style="color:var(--gold);text-decoration:none;font-weight:600;">Create Account →</a>
+        &nbsp;&nbsp;|&nbsp;&nbsp;
+        <a href="{{ route('auth.role-selection') }}" style="color:rgba(255,255,255,0.5);text-decoration:none;">Role Selection Page →</a>
     </p>
 </section>
 
@@ -805,7 +877,24 @@
 
 
 <script>
-    // Scroll reveal
+    // ── Theme toggle ──
+    (function() {
+        var saved = localStorage.getItem('theme');
+        var prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var useDark = saved ? saved === 'dark' : prefersDark;
+        document.getElementById('html-root').classList.toggle('dark', useDark);
+        if (!useDark) document.getElementById('html-root').classList.add('light');
+    })();
+
+    document.getElementById('theme-toggle').addEventListener('click', function() {
+        var root = document.getElementById('html-root');
+        var isDark = root.classList.contains('dark');
+        root.classList.toggle('dark', !isDark);
+        root.classList.toggle('light', isDark);
+        localStorage.setItem('theme', isDark ? 'light' : 'dark');
+    });
+
+    // ── Scroll reveal ──
     var observer = new IntersectionObserver(function(entries) {
         entries.forEach(function(e) {
             if (e.isIntersecting) {
@@ -820,7 +909,7 @@
         observer.observe(el);
     });
 
-    // Smooth scroll for anchor links
+    // ── Smooth scroll for anchor links ──
     document.querySelectorAll('a[href^="#"]').forEach(function(a) {
         a.addEventListener('click', function(e) {
             var target = document.querySelector(this.getAttribute('href'));

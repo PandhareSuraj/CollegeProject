@@ -21,11 +21,8 @@ Route::middleware('guest')->group(function () {
     
     // Role-specific login pages
     Route::get('/auth/login/{role}', [LoginController::class, 'showLoginByRole'])->name('auth.role-login');
-    Route::post('/auth/login/{role}', [LoginController::class, 'loginByRole'])->name('auth.role-login-submit');
+    Route::post('/auth/login/{role}', [LoginController::class, 'lo  ginByRole'])->name('auth.role-login-submit');
     
-    // Generic login page
-    Route::get('/auth/login', [LoginController::class, 'show'])->name('auth.login');
-    Route::post('/auth/login', [LoginController::class, 'login'])->name('auth.login-submit');
     
     // Alias routes - redirect /login to /auth/login
     Route::get('/login', [LoginController::class, 'show'])->name('login');
