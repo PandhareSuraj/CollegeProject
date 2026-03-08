@@ -30,94 +30,105 @@ class DatabaseSeeder extends Seeder
             ['description' => 'Department of Mechanical Engineering']
         );
 
-        // Create admin user (Administrator model)
-        \App\Models\Administrator::firstOrCreate([
+        // Create or update admin user (Administrator model) - ensure password is hashed and email is verified
+        \App\Models\Administrator::updateOrCreate([
             'email' => 'admin@campus.test',
         ],[
             'name' => 'Admin User',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
 
-        // Create principal
-        \App\Models\Principal::firstOrCreate([
+        // Create or update principal (mark verified)
+        \App\Models\Principal::updateOrCreate([
             'email' => 'principal@campus.test',
         ],[
             'name' => 'Dr. Principal Kumar',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
 
-        // Create trust head
-        \App\Models\TrustHead::firstOrCreate([
+        // Create or update trust head (mark verified)
+        \App\Models\TrustHead::updateOrCreate([
             'email' => 'trusthead@campus.test',
         ],[
             'name' => 'Mr. Trust Head Singh',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
 
-        // Create HODs
-        \App\Models\Hod::firstOrCreate([
+        // Create or update HODs (mark verified)
+        \App\Models\Hod::updateOrCreate([
             'email' => 'hod.cs@campus.test',
         ],[
             'name' => 'Dr. CS HOD Sharma',
             'password' => bcrypt('password'),
             'department_id' => $csDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        \App\Models\Hod::firstOrCreate([
+        \App\Models\Hod::updateOrCreate([
             'email' => 'hod.ece@campus.test',
         ],[
             'name' => 'Dr. ECE HOD Verma',
             'password' => bcrypt('password'),
             'department_id' => $eceDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        \App\Models\Hod::firstOrCreate([
+        \App\Models\Hod::updateOrCreate([
             'email' => 'hod.me@campus.test',
         ],[
             'name' => 'Dr. ME HOD Patel',
             'password' => bcrypt('password'),
             'department_id' => $meDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        // Create teachers
-        \App\Models\Teacher::firstOrCreate([
+        // Create or update teachers (mark verified)
+        \App\Models\Teacher::updateOrCreate([
             'email' => 'teacher.cs1@campus.test',
         ],[
             'name' => 'Mrs. Teacher Gupta',
             'password' => bcrypt('password'),
             'department_id' => $csDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        \App\Models\Teacher::firstOrCreate([
+        \App\Models\Teacher::updateOrCreate([
             'email' => 'teacher.cs2@campus.test',
         ],[
             'name' => 'Mr. Teacher Rajpol',
             'password' => bcrypt('password'),
             'department_id' => $csDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        \App\Models\Teacher::firstOrCreate([
+        \App\Models\Teacher::updateOrCreate([
             'email' => 'teacher.ece@campus.test',
         ],[
             'name' => 'Mrs. Teacher Das',
             'password' => bcrypt('password'),
             'department_id' => $eceDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        \App\Models\Teacher::firstOrCreate([
+        \App\Models\Teacher::updateOrCreate([
             'email' => 'teacher.me@campus.test',
         ],[
             'name' => 'Mr. Teacher Kumar',
             'password' => bcrypt('password'),
             'department_id' => $meDept->id,
+            'email_verified_at' => now(),
         ]);
 
-        // Create provider
-        \App\Models\Provider::firstOrCreate([
+        // Create or update provider (mark verified)
+        \App\Models\Provider::updateOrCreate([
             'email' => 'provider@campus.test',
         ],[
             'name' => 'Supply Provider Ltd.',
             'password' => bcrypt('password'),
+            'email_verified_at' => now(),
         ]);
 
         // Create products

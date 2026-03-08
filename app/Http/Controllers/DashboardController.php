@@ -91,9 +91,11 @@ class DashboardController extends Controller
             ->latest()
             ->paginate(15);
 
+        // totals for stat cards
         $totalRequests     = StationaryRequest::count();
         $pendingRequests   = StationaryRequest::where('status', 'pending')->count();
-        $pendingApprovals  = $pendingRequests; // alias — blade may use either name
+        // collection used for the HOD table (paginated)
+        $pendingApprovals  = $requests;
         $approvedRequests  = StationaryRequest::whereIn('status', [
                                 'hod_approved', 'principal_approved', 'trust_approved'
                              ])->count();
@@ -114,6 +116,7 @@ class DashboardController extends Controller
             'totalRequests',
             'pendingRequests',
             'pendingApprovals',
+            'pendingRequests',
             'approvedRequests',
             'completedRequests',
             'rejectedRequests',

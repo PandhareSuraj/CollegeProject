@@ -1,427 +1,275 @@
+
+/* Clean Tailwind entry + project helpers
+     This file is intentionally minimal and free of git conflict markers.
+     Keep custom rules simple so tailwind's parser can run without syntax errors. */
+
 @import 'tailwindcss';
 @import '../../vendor/livewire/flux/dist/flux.css';
+/* stylelint-disable at-rule-no-unknown */
 
-/* ============================================
-   LIGHT THEME VARIABLES
-   ============================================ */
+/* Theme variables */
 :root {
-  --theme-bg-primary: rgb(255 255 255);
-  --theme-bg-secondary: rgb(249 250 251);
-  --theme-bg-tertiary: rgb(243 244 246);
-  --theme-text-primary: rgb(15 23 42);
-  --theme-text-secondary: rgb(51 65 85);
-  --theme-text-tertiary: rgb(100 116 139);
-  --theme-border-primary: rgb(226 232 240);
-  --theme-border-secondary: rgb(203 213 225);
-  --theme-shadow: rgba(0 0 0 / 0.08);
-  --theme-shadow-lg: rgba(0 0 0 / 0.12);
-
-  --theme-card-bg: rgb(255 255 255);
-  --theme-card-border: rgb(226 232 240);
-  --theme-navbar-bg: rgb(255 255 255);
-  --theme-navbar-border: rgb(226 232 240);
-  --theme-sidebar-bg: rgb(15 23 42);
-  --theme-sidebar-text: rgb(241 245 249);
-  --theme-input-bg: rgb(255 255 255);
-  --theme-input-border: rgb(203 213 225);
-  --theme-input-text: rgb(15 23 42);
-
-  --theme-table-header-bg: rgb(249 250 251);
-  --theme-table-header-text: rgb(15 23 42);
-  --theme-table-row-bg: rgb(255 255 255);
-  --theme-table-row-text: rgb(51 65 85);
-  --theme-table-row-hover: rgb(248 250 252);
-  --theme-table-border: rgb(226 232 240);
-
-  --color-blue-bg: rgb(219 234 254);
-  --color-blue-text: rgb(37 99 235);
-  --color-amber-bg: rgb(254 243 224);
-  --color-amber-text: rgb(217 119 6);
-  --color-green-bg: rgb(220 252 231);
-  --color-green-text: rgb(22 163 74);
-  --color-indigo-bg: rgb(224 231 255);
-  --color-indigo-text: rgb(79 70 229);
-  --color-orange-bg: rgb(254 245 230);
-  --color-orange-text: rgb(234 88 12);
-  --color-red-bg: rgb(254 242 242);
-  --color-red-text: rgb(220 38 38);
-  --color-purple-bg: rgb(243 232 255);
-  --color-purple-text: rgb(168 85 247);
-  --color-teal-bg: rgb(204 251 241);
-  --color-teal-text: rgb(15 118 110);
-  --color-pink-bg: rgb(252 231 243);
-  --color-pink-text: rgb(190 24 93);
+    --theme-bg-primary: 255 255 255;
+    --theme-card-bg: 255 255 255;
+    --theme-card-border: 226 232 240;
+    --theme-input-bg: 255 255 255;
+    --theme-input-border: 203 213 225;
+    --theme-input-text: 15 23 42;
+    --theme-text-primary: 15 23 42;
+    --theme-text-secondary: 51 65 85;
 }
 
-/* ============================================
-   DARK THEME VARIABLES
-   ============================================ */
 html.dark {
-  --theme-bg-primary: rgb(24 24 27);
-  --theme-bg-secondary: rgb(32 32 36);
-  --theme-bg-tertiary: rgb(38 38 43);
-  --theme-text-primary: rgb(241 245 249);
-  --theme-text-secondary: rgb(203 213 225);
-  --theme-text-tertiary: rgb(148 163 184);
-  --theme-border-primary: rgb(55 65 81);
-  --theme-border-secondary: rgb(75 85 99);
-  --theme-shadow: rgba(0 0 0 / 0.35);
-  --theme-shadow-lg: rgba(0 0 0 / 0.5);
-
-  --theme-card-bg: rgb(52 54 60);
-  --theme-card-border: rgb(68 70 78);
-  --theme-navbar-bg: rgb(30 30 34);
-  --theme-navbar-border: rgb(45 45 52);
-  --theme-sidebar-bg: rgb(15 17 20);
-  --theme-sidebar-text: rgb(241 245 249);
-  --theme-input-bg: rgb(44 46 52);
-  --theme-input-border: rgb(75 85 99);
-  --theme-input-text: rgb(241 245 249);
-
-  --theme-table-header-bg: rgb(38 40 46);
-  --theme-table-header-text: rgb(241 245 249);
-  --theme-table-row-bg: rgb(44 46 52);
-  --theme-table-row-text: rgb(203 213 225);
-  --theme-table-row-hover: rgb(58 60 68);
-  --theme-table-border: rgb(55 65 81);
-
-  --color-blue-bg: rgb(30 58 138 / 0.4);
-  --color-blue-text: rgb(147 197 253);
-  --color-amber-bg: rgb(120 53 15 / 0.4);
-  --color-amber-text: rgb(253 211 115);
-  --color-green-bg: rgb(20 83 45 / 0.4);
-  --color-green-text: rgb(134 239 172);
-  --color-indigo-bg: rgb(49 46 129 / 0.4);
-  --color-indigo-text: rgb(165 180 252);
-  --color-orange-bg: rgb(124 45 18 / 0.4);
-  --color-orange-text: rgb(253 186 116);
-  --color-red-bg: rgb(127 29 29 / 0.4);
-  --color-red-text: rgb(252 165 165);
-  --color-purple-bg: rgb(88 28 135 / 0.4);
-  --color-purple-text: rgb(216 180 254);
-  --color-teal-bg: rgb(19 78 74 / 0.4);
-  --color-teal-text: rgb(94 234 212);
-  --color-pink-bg: rgb(131 24 67 / 0.4);
-  --color-pink-text: rgb(249 168 212);
+    --theme-bg-primary: 24 24 27;
+    --theme-card-bg: 52 54 60;
+    --theme-card-border: 68 70 78;
+    --theme-input-bg: 44 46 52;
+    --theme-input-border: 75 85 99;
+    --theme-input-text: 241 245 249;
+    --theme-text-primary: 241 245 249;
+    --theme-text-secondary: 203 213 225;
 }
 
-/* ============================================
-   BASE — Critical: html & body must fill the
-   full viewport with theme background color.
-   This eliminates ALL white/light gap areas.
-   ============================================ */
-*, *::before, *::after {
-  box-sizing: border-box;
+/* Base layout */
+*,*::before,*::after{box-sizing:border-box}
+html{height:100%;background-color:rgb(var(--theme-bg-primary));transition:background-color .2s}
+body{min-height:100%;margin:0;padding:0;background-color:rgb(var(--theme-bg-primary));color:rgb(var(--theme-text-primary));transition:background-color .2s,color .2s}
+
+.layout-shell{display:flex;min-height:100vh}
+
+/* Simple card/table/input helpers used across the app */
+.theme-card{background-color:rgb(var(--theme-card-bg));border:1px solid rgb(var(--theme-card-border));border-radius:.5rem;padding:1rem}
+.theme-table{width:100%;border-collapse:collapse}
+.theme-input{border-radius:.5rem;border:1px solid rgb(var(--theme-input-border));padding:.5rem 1rem;background-color:rgb(var(--theme-input-bg));color:rgb(var(--theme-input-text))}
+
+/* Small reusable utilities */
+.mt-12{margin-top:12px!important}.mb-12{margin-bottom:12px!important}
+.kv-center{display:flex;align-items:center;gap:12px}
+
+/* Components expressed without @apply to avoid stylelint parser issues */
+@layer components {
+    .btn-primary{display:inline-flex;align-items:center;justify-content:center;background-color:#2563eb;color:#fff;font-weight:600;padding:.5rem 1rem;border-radius:.5rem;border:none}
+    .btn-primary:hover{background-color:#1d4ed8}
+
+    .badge-pending{display:inline-block;background:#fef3c7;color:#92400e;padding:.25rem .75rem;border-radius:9999px}
+    .badge-approved{display:inline-block;background:#dcfce7;color:#166534;padding:.25rem .75rem;border-radius:9999px}
+    .badge-rejected{display:inline-block;background:#fef2f2;color:#b91c1c;padding:.25rem .75rem;border-radius:9999px}
 }
 
-html {
-  height: 100%;
-  background-color: var(--theme-bg-primary);
-  transition: background-color 0.3s;
+/* Responsive tweaks */
+@media (max-width:900px){.college-section-wrap{padding:0 12px}.college-search-card{flex-direction:column}.college-search-btn{width:100%}}
+
+/* stylelint restore */
+/* stylelint-enable at-rule-no-unknown */
+
+/* ==========================
+     Admin dashboard specific
+     ========================== */
+
+/* Sidebar */
+.admin-sidebar { width:64px; background:#0f172a; color:#fff; position:fixed; left:0; top:0; bottom:0; z-index:60; display:flex; flex-direction:column; align-items:center; padding-top:12px }
+.admin-sidebar .nav-icon { width:44px; height:44px; display:flex; align-items:center; justify-content:center; margin:8px 0; border-radius:10px; color: #e6eefc }
+.admin-sidebar .nav-icon:hover { background: rgba(255,255,255,0.03) }
+
+/* Top navbar */
+.admin-topbar { height:64px; margin-left:64px; display:flex; align-items:center; justify-content:space-between; padding:0 20px; background: linear-gradient(180deg, rgba(255,255,255,0.02), transparent); border-bottom:1px solid rgba(0,0,0,0.04) }
+
+/* Stat cards row */
+.stat-row { display:grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin: 18px 0; margin-left:64px }
+.stat-card { background: linear-gradient(180deg, #fff, #fbfbfd); border-radius:12px; padding:20px; border:1px solid rgba(2,6,23,0.06); display:flex; flex-direction:column; gap:8px }
+.stat-card .value { font-size:28px; font-weight:800 }
+.stat-card .label { font-size:0.8rem; color: rgb(var(--theme-text-secondary)) }
+
+/* Quick actions area */
+.quick-actions { margin:18px 0; margin-left:64px; padding: 14px; border-radius:10px; border:1px solid rgba(2,6,23,0.06); background: linear-gradient(180deg,#fff,#fbfbfd) }
+.quick-actions .btn { margin-right:12px }
+
+/* Approved products table */
+.approved-products { margin-left:64px; margin-top:20px }
+.approved-products .card { min-height:120px }
+
+@media (max-width: 900px) {
+    .stat-row { grid-template-columns: repeat(2, 1fr); margin-left:0 }
+    .admin-topbar { margin-left:0 }
+    .approved-products { margin-left:0 }
+    .quick-actions { margin-left:0 }
 }
 
-body {
-  min-height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: var(--theme-bg-primary);
-  color: var(--theme-text-primary);
-  transition: background-color 0.3s, color 0.3s;
+/* ==========================
+     Registration / Auth pages
+     ========================== */
+
+/* Full-bleed gradient background and centered auth card */
+
+/* Full gradient background and centered auth card */
+.auth-root {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: linear-gradient(135deg,#163aee 0%, #6b21a8 50%, #0f172a 100%);
+    padding: 40px 16px;
 }
 
-/* ============================================
-   LAYOUT SHELL
-   The page shell wraps sidebar + main content.
-   It must cover the full viewport height.
-   ============================================ */
-
-/* The outer shell: flex row, full height */
-.layout-shell {
-  display: flex;
-  min-height: 100vh;
-  background-color: var(--theme-bg-primary);
+/* Auth Card (FIXED WIDTH) */
+.auth-card {
+   width: 100%;
+      max-width: 580px;   
+    margin: 0 auto;  /* ✅ Perfect auth card width */
+    border-radius: 14px;
+    overflow: hidden;
+    box-shadow: 0 18px 55px rgba(2,6,23,0.45);
+    background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.01));
+    border: 1px solid rgba(255,255,255,0.05);
 }
 
-/* ============================================
-   SIDEBAR — fixed, full height, no gaps
-   ============================================ */
-.theme-sidebar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 16rem; /* 256px = w-64 */
-  height: 100vh;
-  z-index: 40;
-  background-color: var(--theme-sidebar-bg);
-  color: var(--theme-sidebar-text);
-  border-right: 1px solid var(--theme-border-primary);
-  overflow-y: auto;
-  overflow-x: hidden;
-  transition: background-color 0.3s;
-  /* Prevent any gap at the top/bottom */
-  display: flex;
-  flex-direction: column;
+/* Header */
+.auth-head {
+    padding: 26px 22px;
+    background: linear-gradient(180deg, #7c3aed, #4f46e5);
+    color: #fff;
 }
 
-/* ============================================
-   NAVBAR — fixed at top, starts after sidebar
-   ============================================ */
-.theme-navbar {
-  position: fixed;
-  top: 0;
-  left: 16rem; /* same as sidebar width */
-  right: 0;
-  height: 4rem; /* 64px */
-  z-index: 30;
-  background-color: var(--theme-navbar-bg);
-  border-bottom: 1px solid var(--theme-navbar-border);
-  color: var(--theme-text-primary);
-  box-shadow: 0 1px 3px var(--theme-shadow);
-  transition: background-color 0.3s;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
+.auth-head h2 {
+    margin: 0;
+    font-size: 1.2rem;
+    font-weight: 800;
 }
 
-/* ============================================
-   MAIN CONTENT AREA
-   Offset by sidebar width (left) and navbar height (top).
-   Must fill remaining space with theme background.
-   ============================================ */
-.theme-container {
-  margin-left: 16rem;  /* sidebar width */
-  padding-top: 4rem;   /* navbar height */
-  min-height: 100vh;
-  width: calc(100% - 16rem);
-  background-color: var(--theme-bg-primary);
-  color: var(--theme-text-primary);
-  transition: background-color 0.3s, color 0.3s;
+.auth-head p {
+    margin: 5px 0 0;
+    font-size: 0.85rem;
+    opacity: 0.9;
 }
 
-/* Secondary/tertiary bg helpers */
-.theme-bg-primary   { background-color: var(--theme-bg-primary); }
-.theme-bg-secondary { background-color: var(--theme-bg-secondary); }
-.theme-bg-tertiary  { background-color: var(--theme-bg-tertiary); }
-
-/* ============================================
-   CARDS
-   ============================================ */
-.theme-card {
-  background-color: var(--theme-card-bg);
-  border: 1px solid var(--theme-card-border);
-  color: var(--theme-text-primary);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 3px var(--theme-shadow);
-  transition: box-shadow 0.3s, background-color 0.3s;
+/* Body */
+.auth-body {
+    padding: 22px 22px 28px;
+    background: linear-gradient(180deg, rgba(2,6,23,0.88), rgba(2,6,23,0.95));
+    color: #e6eefc;
 }
 
-.theme-card:hover {
-  box-shadow: 0 4px 12px var(--theme-shadow-lg);
+/* Labels */
+.auth-body label {
+    display: block;
+    font-size: 0.72rem;
+    color: rgba(230,238,252,0.7);
+    margin-bottom: 5px;
 }
 
-/* Generic .card utility (used in inline Blade) */
-.card {
-  background-color: var(--theme-card-bg);
-  border: 1px solid var(--theme-card-border);
-  color: var(--theme-text-primary);
-  border-radius: 0.5rem;
-  box-shadow: 0 1px 4px var(--theme-shadow);
-  padding: 1.5rem;
-  transition: background-color 0.3s;
+/* Inputs */
+.auth-body input[type="text"],
+.auth-body input[type="email"],
+.auth-body input[type="password"] {
+    width: 100%;
+    padding: 9px 11px;
+    border-radius: 7px;
+    border: 1px solid rgba(255,255,255,0.08);
+    background: rgba(255,255,255,0.03);
+    color: #fff;
+    margin-bottom: 12px;
+    font-size: 0.85rem;
 }
 
-/* ============================================
-   TABLE
-   ============================================ */
-.theme-table-wrapper {
-  overflow-x: auto;
-  border-radius: 0.5rem;
-  border: 1px solid var(--theme-border-primary);
-  background-color: var(--theme-card-bg);
+.auth-body input:focus {
+    outline: none;
+    border-color: #6366f1;
+    box-shadow: 0 0 0 2px rgba(99,102,241,0.25);
 }
 
-.theme-table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: var(--theme-card-bg);
-  color: var(--theme-text-primary);
+.auth-body input::placeholder {
+    color: rgba(255,255,255,0.5);
 }
 
-.theme-table thead {
-  background-color: var(--theme-table-header-bg);
-  border-bottom: 1px solid var(--theme-table-border);
+/* Password row */
+.password-row {
+    display: flex;
+    gap: 10px;
 }
 
-.theme-table thead th {
-  padding: 0.75rem 1.5rem;
-  text-align: left;
-  font-size: 0.875rem;
-  font-weight: 600;
-  color: var(--theme-table-header-text);
+.password-row div {
+    flex: 1;
 }
 
-.theme-table tbody tr {
-  background-color: var(--theme-table-row-bg);
-  border-bottom: 1px solid var(--theme-table-border);
-  transition: background-color 0.15s;
+/* Role selection */
+.role-grid {
+    display: flex;
+    gap: 10px;
+    margin: 14px 0 18px;
 }
 
-.theme-table tbody tr:hover {
-  background-color: var(--theme-table-row-hover);
+.role-option {
+    flex: 1;
+    background: rgba(255,255,255,0.02);
+    border: 1px solid rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+    cursor: pointer;
+    color: #e6eefc;
 }
 
-.theme-table tbody td {
-  padding: 1rem 1.5rem;
-  font-size: 0.875rem;
-  color: var(--theme-table-row-text);
+.role-option:hover {
+    background: rgba(255,255,255,0.05);
 }
 
-/* ============================================
-   INPUT
-   ============================================ */
-.theme-input {
-  border-radius: 0.5rem;
-  border: 1px solid var(--theme-input-border);
-  padding: 0.5rem 1rem;
-  background-color: var(--theme-input-bg);
-  color: var(--theme-input-text);
-  transition: border-color 0.2s, box-shadow 0.2s;
+/* Active role */
+.role-option.active {
+    border-color: #6366f1;
+    box-shadow: 0 6px 16px rgba(79,70,229,0.25);
+    background: linear-gradient(180deg, rgba(79,70,229,0.18), rgba(79,70,229,0.08));
 }
 
-.theme-input:focus {
-  outline: none;
-  box-shadow: 0 0 0 3px var(--theme-border-primary);
+/* Buttons */
+.auth-actions {
+    display: flex;
+    gap: 10px;
+    align-items: center;
 }
 
-/* ============================================
-   TEXT & BORDER HELPERS
-   ============================================ */
-.theme-text-primary   { color: var(--theme-text-primary); }
-.theme-text-secondary { color: var(--theme-text-secondary); }
-.theme-text-tertiary  { color: var(--theme-text-tertiary); }
-.theme-border-primary   { border-color: var(--theme-border-primary); }
-.theme-border-secondary { border-color: var(--theme-border-secondary); }
-.theme-border-light     { border-color: var(--theme-border-primary); }
-
-/* ============================================
-   SIDEBAR NAV LINKS
-   ============================================ */
-.sidebar-nav-link {
-  display: flex;
-  align-items: center;
-  padding: 0.75rem 1rem;
-  border-radius: 0.5rem;
-  border-left: 4px solid transparent;
-  color: rgba(255, 255, 255, 0.7);
-  transition: background-color 0.2s, color 0.2s, border-color 0.2s;
-  text-decoration: none;
-}
-
-.sidebar-nav-link:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-  color: rgba(255, 255, 255, 0.95);
-}
-
-.sidebar-nav-link.active {
-  border-left-color: rgb(59 130 246);
-  background-color: rgba(255, 255, 255, 0.1);
-  color: white;
-}
-
-/* ============================================
-   BUTTONS
-   ============================================ */
 .btn-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(37 99 235);
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-  border: none;
-  cursor: pointer;
-}
-.btn-primary:hover { background-color: rgb(29 78 216); }
-
-.btn-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(107 114 128);
-  color: white;
-  font-weight: 600;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
-  transition: background-color 0.2s;
-  border: none;
-  cursor: pointer;
-}
-.btn-secondary:hover { background-color: rgb(75 85 99); }
-
-/* ============================================
-   BADGES
-   ============================================ */
-.badge-pending {
-  display: inline-block;
-  background-color: rgb(254 243 199);
-  color: rgb(146 64 14);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-pending {
-  background-color: rgba(120, 53, 15, 0.35);
-  color: rgb(253 211 115);
+    flex: 1;
+    background: linear-gradient(90deg,#6366f1,#7c3aed);
+    border: none;
+    padding: 9px;
+    border-radius: 8px;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
 }
 
-.badge-approved {
-  display: inline-block;
-  background-color: rgb(220 252 231);
-  color: rgb(22 101 52);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-approved {
-  background-color: rgba(20, 83, 45, 0.35);
-  color: rgb(134 239 172);
+.btn-primary:hover {
+    opacity: 0.9;
 }
 
-.badge-rejected {
-  display: inline-block;
-  background-color: rgb(254 242 242);
-  color: rgb(185 28 28);
-  padding: 0.25rem 0.75rem;
-  border-radius: 9999px;
-  font-size: 0.875rem;
-  font-weight: 500;
-}
-html.dark .badge-rejected {
-  background-color: rgba(127, 29, 29, 0.35);
-  color: rgb(252 165 165);
+.btn-ghost {
+    padding: 8px 12px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: transparent;
+    color: #e6eefc;
 }
 
-/* ============================================
-   FLUX FORM OVERRIDES
-   ============================================ */
-[data-flux-field]:not(ui-radio, ui-checkbox) {
-  display: grid;
-  gap: 0.5rem;
+/* Bottom note */
+.auth-note {
+    font-size: 0.72rem;
+    color: rgba(230,238,252,0.6);
+    padding: 12px 20px;
+    border-top: 1px dashed rgba(255,255,255,0.05);
 }
 
-[data-flux-label] {
-  margin-bottom: 0 !important;
-  line-height: 1.25 !important;
-}
+/* Responsive */
+@media (   max-width: 640px) {
 
-input:focus[data-flux-control],
-textarea:focus[data-flux-control],
-select:focus[data-flux-control] {
-  outline: none;
-  box-shadow: 0 0 0 2px rgb(59 130 246);
+    .password-row {
+        flex-direction: column;
+    }
+
+    .role-grid {
+        flex-direction: column;
+    }
+
+    .auth-card {
+        max-width: 100%;
+    }
 }

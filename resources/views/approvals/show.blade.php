@@ -143,7 +143,7 @@
                 </div>
 
                 <div class="space-y-3">
-                    <form action="{{ route('approvals.store', $stationaryRequest->id) }}" method="POST" id="approveForm" style="display:inline;">
+                    <form action="{{ route('approvals.store', $stationaryRequest->id) }}" method="POST" id="approveForm" style="display:inline;" data-can-approve="{{ $canApprove ? '1' : '0' }}">
                         @csrf
                         <input type="hidden" name="status" value="approved">
                         <input type="hidden" name="remarks" id="approveRemarks">
@@ -152,7 +152,7 @@
                         </button>
                     </form>
 
-                    <form action="{{ route('approvals.store', $stationaryRequest->id) }}" method="POST" id="rejectForm" style="display:inline;">
+                    <form action="{{ route('approvals.store', $stationaryRequest->id) }}" method="POST" id="rejectForm" style="display:inline;" data-can-approve="{{ $canApprove ? '1' : '0' }}">
                         @csrf
                         <input type="hidden" name="status" value="rejected">
                         <input type="hidden" name="remarks" id="rejectRemarks">
@@ -256,9 +256,14 @@ document.addEventListener('DOMContentLoaded', function () {
     function confirmReject() {
         const remarksEl = document.getElementById('remarks');
         const remarks = remarksEl ? remarksEl.value : '';
+        const rejectForm = document.getElementById('rejectForm');
+        const canApprove = rejectForm && rejectForm.dataset && rejectForm.dataset.canApprove === '1';
+        if (!canApprove) {
+            alert('You are not allowed to take this action at this stage.');
+            return;
+        }
         if (confirm('Are you sure you want to reject this request? This action cannot be undone.')) {
             const rejectRemarks = document.getElementById('rejectRemarks');
-            const rejectForm = document.getElementById('rejectForm');
             if (rejectRemarks) rejectRemarks.value = remarks;
             if (rejectForm) rejectForm.submit();
         }
@@ -273,8 +278,14 @@ document.addEventListener('DOMContentLoaded', function () {
     const remarksEl = document.getElementById('remarks');
 
     if (approveForm) {
-        // Defensive submit handler
+        // Defensive submit handler: block if not allowed (prevents programmatic submits)
         approveForm.addEventListener('submit', function (e) {
+            const canApprove = approveForm.dataset && approveForm.dataset.canApprove === '1';
+            if (!canApprove) {
+                e.preventDefault();
+                alert('You are not allowed to take this action at this stage.');
+                return;
+            }
             if (approveRemarks && remarksEl) {
                 approveRemarks.value = remarksEl.value;
             }
@@ -285,6 +296,12 @@ document.addEventListener('DOMContentLoaded', function () {
         const approveButton = approveForm.querySelector('button[type="submit"]');
         if (approveButton) {
             approveButton.addEventListener('click', function (e) {
+                const canApprove = approveForm.dataset && approveForm.dataset.canApprove === '1';
+                if (!canApprove) {
+                    e.preventDefault();
+                    alert('You are not allowed to take this action at this stage.');
+                    return;
+                }
                 if (approveRemarks && remarksEl) {
                     approveRemarks.value = remarksEl.value;
                 }
