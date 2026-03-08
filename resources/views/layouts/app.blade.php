@@ -10,7 +10,7 @@
 
     <style>
         /* =============================================
-           THEME VARIABLES
+           LIGHT THEME VARIABLES (default)
            ============================================= */
         :root {
             --bg-body:        #f1f5f9;
@@ -20,23 +20,51 @@
             --bg-card:        #ffffff;
             --bg-hover:       rgba(255,255,255,0.15);
             --bg-active:      rgba(255,255,255,0.25);
+
             --text-primary:   #0f172a;
             --text-secondary: #475569;
+            --text-tertiary:  #94a3b8;
             --text-sidebar:   #ffffff;
+
             --border-color:   #e2e8f0;
             --shadow:         0 1px 3px rgba(0,0,0,0.10);
+
             --input-bg:       #ffffff;
             --input-border:   #cbd5e1;
             --input-text:     #0f172a;
+
             --badge-bg:       #dbeafe;
             --badge-text:     #1e40af;
 
-            /* ── THE ONE VARIABLE that controls everything ──
-               JS updates this on hover/pin. Sidebar width,
-               topbar left, and content margin all read from it. */
+            /* Table */
+            --table-header-bg:  #f8fafc;
+            --table-header-text:#0f172a;
+            --table-row-bg:     #ffffff;
+            --table-row-alt:    #f8fafc;
+            --table-row-hover:  #f1f5f9;
+            --table-border:     #e2e8f0;
+            --table-text:       #0f172a;
+            --table-text-muted: #475569;
+
+            /* Status badges — light */
+            --badge-pending-bg:    rgba(245,158,11,0.12);
+            --badge-pending-c:     #d97706;
+            --badge-approved-bg:   rgba(34,197,94,0.12);
+            --badge-approved-c:    #16a34a;
+            --badge-rejected-bg:   rgba(239,68,68,0.12);
+            --badge-rejected-c:    #dc2626;
+            --badge-completed-bg:  rgba(99,102,241,0.12);
+            --badge-completed-c:   #6366f1;
+            --badge-supplied-bg:   rgba(249,115,22,0.12);
+            --badge-supplied-c:    #ea580c;
+
+            /* Sidebar width — JS updates this single var; everything else reads it */
             --sb-w: 72px;
         }
 
+        /* =============================================
+           DARK THEME VARIABLES
+           ============================================= */
         html.dark {
             --bg-body:        #18181b;
             --bg-sidebar:     #0f172a;
@@ -45,16 +73,43 @@
             --bg-card:        #1e293b;
             --bg-hover:       rgba(255,255,255,0.10);
             --bg-active:      rgba(255,255,255,0.18);
+
             --text-primary:   #f1f5f9;
             --text-secondary: #94a3b8;
+            --text-tertiary:  #64748b;
             --text-sidebar:   #e2e8f0;
+
             --border-color:   #334155;
             --shadow:         0 1px 3px rgba(0,0,0,0.35);
+
             --input-bg:       #1e293b;
             --input-border:   #475569;
             --input-text:     #f1f5f9;
+
             --badge-bg:       #1e3a8a;
             --badge-text:     #93c5fd;
+
+            /* Table */
+            --table-header-bg:  #262630;
+            --table-header-text:#f1f5f9;
+            --table-row-bg:     #1e293b;
+            --table-row-alt:    #232c3d;
+            --table-row-hover:  #2d3748;
+            --table-border:     #334155;
+            --table-text:       #f1f5f9;
+            --table-text-muted: #94a3b8;
+
+            /* Status badges — dark */
+            --badge-pending-bg:    rgba(245,158,11,0.18);
+            --badge-pending-c:     #fbbf24;
+            --badge-approved-bg:   rgba(34,197,94,0.18);
+            --badge-approved-c:    #4ade80;
+            --badge-rejected-bg:   rgba(239,68,68,0.18);
+            --badge-rejected-c:    #f87171;
+            --badge-completed-bg:  rgba(99,102,241,0.18);
+            --badge-completed-c:   #a5b4fc;
+            --badge-supplied-bg:   rgba(249,115,22,0.18);
+            --badge-supplied-c:    #fb923c;
         }
 
         /* =============================================
@@ -71,14 +126,12 @@
         }
 
         /* =============================================
-           SIDEBAR
-           ── width = var(--sb-w), updated live by JS ──
+           SIDEBAR — width = var(--sb-w)
            ============================================= */
         #sidebar {
             position: fixed;
             left: 0; top: 0;
             height: 100vh;
-            /* Width IS --sb-w. JS animates this variable directly. */
             width: var(--sb-w);
             background: linear-gradient(160deg, var(--bg-sidebar), var(--bg-sidebar-end));
             color: var(--text-sidebar);
@@ -87,11 +140,9 @@
             overflow: hidden;
             display: flex;
             flex-direction: column;
-            /* Smooth CSS transition on --sb-w changes */
             transition: width 0.28s cubic-bezier(0.4,0,0.2,1);
         }
 
-        /* ── Sidebar header ── */
         .sidebar-header {
             height: 72px;
             display: flex; align-items: center;
@@ -108,24 +159,8 @@
             opacity: 0; transform: translateX(-6px);
             transition: opacity 0.2s 0.06s, transform 0.2s 0.06s;
         }
-
-        #sidebarPinBtn {
-            background: transparent; border: none;
-            color: #fff; cursor: pointer;
-            width: 24px; height: 24px;
-            flex-shrink: 0; display: flex; align-items: center; justify-content: center;
-            opacity: 0; transition: opacity 0.2s 0.06s, transform 0.18s;
-            padding: 0;
-        }
-        #sidebarPinBtn:hover { transform: scale(1.1); }
-        #sidebarPinBtn svg { width: 100%; height: 100%; }
-
-        #sidebar.is-open #sidebarPinBtn { opacity: 1; }
-        #sidebar.is-pinned #sidebarPinBtn { opacity: 1; }
-        /* Show brand text when sidebar is expanded (> 100px) via .is-open class */
         #sidebar.is-open .sidebar-brand { opacity: 1; transform: translateX(0); }
 
-        /* ── Pin button ── */
         #sidebarPinBtn {
             flex-shrink: 0;
             width: 28px; height: 28px;
@@ -140,14 +175,13 @@
             transition: opacity 0.2s, background 0.18s, color 0.18s;
         }
         #sidebarPinBtn svg { width: 14px; height: 14px; pointer-events: none; }
-        #sidebar.is-open #sidebarPinBtn { opacity: 1; pointer-events: auto; }
+        #sidebar.is-open  #sidebarPinBtn { opacity: 1; pointer-events: auto; }
         #sidebarPinBtn:hover { background: rgba(255,255,255,0.22); color: #fff; }
         #sidebar.is-pinned #sidebarPinBtn {
             background: rgba(255,255,255,0.22); color: #fff;
             border-color: rgba(255,255,255,0.5);
         }
 
-        /* ── Nav items ── */
         .sidebar-nav {
             padding: 14px 10px;
             display: flex; flex-direction: column; gap: 3px;
@@ -173,13 +207,13 @@
             transition: opacity 0.18s 0.05s, transform 0.18s 0.05s;
         }
         #sidebar.is-open .nav-label { opacity: 1; transform: translateX(0); }
-        .nav-item:hover { background: var(--bg-hover); color: #fff; }
+        .nav-item:hover  { background: var(--bg-hover); color: #fff; }
         .nav-item.active {
             background: var(--bg-active); color: #fff;
             box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
         }
 
-        /* Tooltip when collapsed */
+        /* Tooltip for collapsed sidebar */
         .nav-item::after {
             content: attr(data-label);
             position: absolute;
@@ -191,7 +225,6 @@
             transition: opacity 0.15s;
             box-shadow: 0 4px 12px rgba(0,0,0,0.3); z-index: 999;
         }
-        /* Show tooltip only when truly collapsed */
         #sidebar:not(.is-open) .nav-item:hover::after { opacity: 1; }
 
         .nav-arrow {
@@ -201,13 +234,12 @@
         #sidebar.is-open .nav-arrow { opacity: 1; }
 
         /* =============================================
-           TOPBAR
-           ── left = var(--sb-w), tracks sidebar exactly ──
+           TOPBAR — left tracks --sb-w
            ============================================= */
         #topbar {
             position: fixed;
             top: 0; right: 0;
-            left: var(--sb-w);   /* ← tracks sidebar */
+            left: var(--sb-w);
             height: 72px;
             background: var(--bg-navbar);
             border-bottom: 1px solid var(--border-color);
@@ -219,29 +251,19 @@
             transition: left 0.28s cubic-bezier(0.4,0,0.2,1),
                         background 0.25s, border-color 0.25s;
         }
-        .topbar-right { display: flex; align-items: center; gap: 8px; }
 
-        /* =============================================
-           NAVBAR TITLE SECTION
-           ============================================= */
         .navbar-title-section {
             display: flex; align-items: center; gap: 14px;
             flex: 1; min-width: 0;
         }
-
         .navbar-title {
             font-size: 1rem; font-weight: 600;
             color: var(--text-primary); white-space: nowrap;
             overflow: hidden; text-overflow: ellipsis;
         }
-
-        .navbar-breadcrumb {
-            font-size: 0.85rem; color: var(--text-secondary);
-            white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-        }
-
         .topbar-right { display: flex; align-items: center; gap: 8px; }
 
+        /* ─── Icon button (search, notif, theme) ─── */
         .icon-btn {
             width: 40px; height: 40px; border: none;
             background: transparent; border-radius: 10px;
@@ -253,12 +275,18 @@
         .icon-btn:hover { background: var(--border-color); color: var(--text-primary); }
         .icon-btn svg { width: 22px; height: 22px; }
 
+        /* ─── Theme icon: NO CSS controlling display.
+               JS alone sets style.display on #icon-sun and #icon-moon.
+               Rule of thumb:
+                 Light mode → show MOON  (click to go dark)
+                 Dark mode  → show SUN   (click to go light)          ─── */
         .notif-dot {
             position: absolute; top: 7px; right: 7px;
             width: 9px; height: 9px; background: #ef4444;
             border-radius: 50%; border: 2px solid var(--bg-navbar);
         }
 
+        /* ─── User menu ─── */
         .user-menu { position: relative; }
         .user-btn {
             display: flex; align-items: center; gap: 10px;
@@ -268,8 +296,8 @@
             font-size: 0.875rem; font-weight: 500;
             transition: background 0.18s;
         }
-        .user-btn:hover { background: rgba(0,0,0,0.05); }
-        html.dark .user-btn:hover { background: rgba(255,255,255,0.08); }
+        .user-btn:hover                  { background: rgba(0,0,0,0.05); }
+        html.dark .user-btn:hover        { background: rgba(255,255,255,0.08); }
 
         .avatar {
             width: 32px; height: 32px;
@@ -300,31 +328,26 @@
         .dropdown-divider { height: 1px; background: var(--border-color); margin: 0; }
 
         /* =============================================
-           MAIN LAYOUT
-           ── margin-left = var(--sb-w), tracks sidebar ──
+           LAYOUT
            ============================================= */
         .app-shell {
             display: flex; min-height: 100vh;
             background-color: var(--bg-body);
         }
-
         .main-col {
-            /* Takes up remaining space AFTER sidebar */
-            margin-left: var(--sb-w);   /* ← tracks sidebar */
+            margin-left: var(--sb-w);
             flex: 1; min-width: 0;
             display: flex; flex-direction: column;
             background-color: var(--bg-body);
             transition: margin-left 0.28s cubic-bezier(0.4,0,0.2,1),
                         background-color 0.25s;
         }
-
         .content-area {
             flex: 1; overflow-x: hidden;
             background: var(--bg-body);
             padding-top: 72px; min-height: 100vh;
             transition: background 0.25s;
         }
-
         .content-inner {
             width: 100%; max-width: 100%;
             padding: 28px 32px;
@@ -332,55 +355,127 @@
         @media (max-width: 768px) { .content-inner { padding: 20px 16px; } }
 
         /* =============================================
-           UTILITIES
+           UTILITY CLASSES — theme-aware
            ============================================= */
         .page-title { font-size: 2rem; font-weight: 700; color: var(--text-primary); margin: 0 0 4px; }
         .page-desc  { font-size: 0.925rem; color: var(--text-secondary); margin: 0 0 28px; }
 
+        /* Card */
         .card {
-            background: var(--bg-card); border: 1px solid var(--border-color);
-            border-radius: 16px; padding: 24px; box-shadow: var(--shadow);
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 16px; padding: 24px;
+            box-shadow: var(--shadow);
             transition: background 0.25s, border-color 0.25s;
         }
 
+        /* Section eyebrow label */
+        .section-eyebrow {
+            font-size: 0.7rem; font-weight: 700;
+            letter-spacing: 0.1em; text-transform: uppercase;
+            color: var(--text-secondary);
+            margin: 0 0 14px;
+        }
+
+        /* ── Table helpers ── */
+        table { border-collapse: collapse; width: 100%; }
+        th {
+            background-color: var(--table-header-bg);
+            color: var(--table-header-text);
+            font-size: 0.72rem; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 0.06em;
+            padding: 12px 20px; text-align: left;
+        }
+        td {
+            color: var(--table-text);
+            padding: 14px 20px; font-size: 0.875rem;
+        }
+        tr { border-bottom: 1px solid var(--table-border); }
+        tbody tr { background-color: var(--table-row-bg); transition: background 0.15s; }
+        tbody tr:hover { background-color: var(--table-row-hover) !important; }
+
+        /* Table wrapper card */
+        .dash-table-wrap {
+            background-color: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            transition: background 0.25s, border-color 0.25s;
+        }
+        .dash-table-head {
+            padding: 18px 24px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex; align-items: center; gap: 10px;
+            background-color: var(--bg-card);
+        }
+        .dash-table-title {
+            font-size: 0.95rem; font-weight: 700;
+            color: var(--text-primary);
+        }
+        .dash-table-count {
+            margin-left: auto;
+            font-size: 0.72rem; font-weight: 700;
+            padding: 3px 10px; border-radius: 9999px;
+            background: var(--badge-pending-bg);
+            color: var(--badge-pending-c);
+        }
+
+        /* ── Status badges — use CSS vars, switch with theme ── */
+        .status-badge {
+            display: inline-block;
+            font-size: 0.75rem; font-weight: 600;
+            padding: 3px 10px; border-radius: 9999px;
+        }
+        .status-pending   { background: var(--badge-pending-bg);   color: var(--badge-pending-c); }
+        .status-approved  { background: var(--badge-approved-bg);  color: var(--badge-approved-c); }
+        .status-rejected  { background: var(--badge-rejected-bg);  color: var(--badge-rejected-c); }
+        .status-completed { background: var(--badge-completed-bg); color: var(--badge-completed-c); }
+        .status-supplied  { background: var(--badge-supplied-bg);  color: var(--badge-supplied-c); }
+
+        /* Alerts */
         .alert {
             display: flex; align-items: flex-start; gap: 14px;
             padding: 14px 16px; border-radius: 12px;
             margin-bottom: 20px; font-size: 0.9rem;
         }
-        .alert svg { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; }
-        .alert-close { margin-left: auto; background: transparent; border: none; cursor: pointer; padding: 0; opacity: 0.6; }
-        .alert-close:hover { opacity: 1; }
-        .alert-error   { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
-        .alert-success { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
+        .alert svg        { flex-shrink: 0; width: 20px; height: 20px; margin-top: 1px; }
+        .alert-close      { margin-left: auto; background: transparent; border: none; cursor: pointer; padding: 0; opacity: 0.6; }
+        .alert-close:hover{ opacity: 1; }
+        .alert-error      { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; }
+        .alert-success    { background: #f0fdf4; border: 1px solid #bbf7d0; color: #166534; }
         html.dark .alert-error   { background: rgba(127,29,29,0.2);  border-color: #7f1d1d; color: #fca5a5; }
         html.dark .alert-success { background: rgba(20,83,45,0.2);   border-color: #14532d; color: #86efac; }
-        .alert-error svg   { color: #dc2626; }
+        .alert-error   svg { color: #dc2626; }
         .alert-success svg { color: #16a34a; }
         html.dark .alert-error   svg { color: #f87171; }
         html.dark .alert-success svg { color: #4ade80; }
         .alert-title { font-weight: 600; margin-bottom: 6px; }
         .alert ul { margin: 0; padding: 0 0 0 4px; list-style: none; }
-        .alert li  { margin-bottom: 2px; }
+        .alert li { margin-bottom: 2px; }
 
-        table { color: var(--text-primary); }
-        th    { color: var(--text-secondary); }
-        td    { color: var(--text-primary); }
-
-        html.dark       #icon-sun  { display: none; }
-        html.dark       #icon-moon { display: block; }
-        html:not(.dark) #icon-sun  { display: block; }
-        html:not(.dark) #icon-moon { display: none; }
+        /* Input */
+        .theme-input {
+            background: var(--input-bg);
+            border: 1px solid var(--input-border);
+            color: var(--input-text);
+            border-radius: 8px;
+            padding: 8px 12px;
+            font-size: 0.875rem;
+            transition: border-color 0.2s;
+        }
+        .theme-input:focus { outline: none; border-color: #3b82f6; box-shadow: 0 0 0 3px rgba(59,130,246,0.15); }
     </style>
 </head>
 
 <body>
-    {{-- ─── Anti-flash: set theme + --sb-w before first paint ─── --}}
+    {{-- ─── Anti-flash: apply correct theme + sidebar width BEFORE first paint ─── --}}
     <script>
     (function(){
-        var t = localStorage.getItem('theme');
-        if(t ? t==='dark' : window.matchMedia('(prefers-color-scheme:dark)').matches)
-            document.getElementById('html-root').classList.add('dark');
+        var root  = document.getElementById('html-root');
+        var t     = localStorage.getItem('theme');
+        var dark  = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme:dark)').matches;
+        if (dark) root.classList.add('dark');
         var pinned = localStorage.getItem('sidebarPinned') === 'true';
         document.documentElement.style.setProperty('--sb-w', pinned ? '240px' : '72px');
     })();
@@ -393,11 +488,10 @@
         <aside id="sidebar">
             <div class="sidebar-header">
                 <svg class="sidebar-logo-icon" fill="currentColor" viewBox="0 0 24 24">
-                    <path d="M6 2C3.239 2 2 3.239 2 6v7h2V6c0-.551.448-1 1-1h12c.552 0 1 .449 1 1v7h2V6c0-2.761-1.239-4-4-4H6zm14 8h-4v7h6v-7h-2z"/>
+                    <path d="M7 18c-1.1 0-1.99.9-1.99 2S5.9 22 7 22s2-.9 2-2-.9-2-2-2zM1 2v2h2l3.6 7.59-1.35 2.45c-.16.28-.25.61-.25.96C5 14.1 5.9 15 7 15h12v-2H7.42c-.14 0-.25-.11-.25-.25l.03-.12.9-1.63H17c.75 0 1.41-.41 1.75-1.03l3.58-6.49A1 1 0 0017 6H5.21l-.94-2H1zm16 16c-1.1 0-1.99.9-1.99 2s.89 2 1.99 2 2-.9 2-2-.9-2-2-2z"/>
                 </svg>
                 <span class="sidebar-brand">Campus Store</span>
 
-                {{-- PIN BUTTON --}}
                 <button id="sidebarPinBtn" aria-label="Pin sidebar" aria-pressed="false">
                     <svg id="icon-pin-off" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M16 12V4h1V2H7v2h1v8l-2 2v2h5.2v6h1.6v-6H18v-2l-2-2z"/>
@@ -433,7 +527,7 @@
 
                 <a href="{{ route('admin.orders.index') }}" data-label="Orders"
                    class="nav-item {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6h-2.5l-.71-2.04A1 1 0 0 0 14.86 3H5.14a1 1 0 0 0-.93.64L3.5 6H1a2 2 0 0 0-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zM12 17c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M19 6h-2.5l-.71-2.04A1 1 0 0 0 14.86 3H5.14a1 1 0 0 0-.93.64L3.5 6H1a2 2 0 0 0-2 2v11c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2z"/></svg>
                     <span class="nav-label">Orders</span>
                 </a>
 
@@ -461,7 +555,6 @@
                     <span class="nav-label">Departments</span>
                 </a>
 
-                {{-- Collapsible: College Section --}}
                 <button id="collegeBtn"
                         class="nav-item {{ request()->routeIs('admin.college-section.*') ? 'active' : '' }}">
                     <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18V15l7 4 7-4v-3.82L23 9zm0 2.27L19.52 9 12 12.73 4.48 9zm6 6.43L12 15.73 6 11.7V12.9l6 3.27 6-3.27z"/></svg>
@@ -472,7 +565,7 @@
                 <div id="collegeMenu" style="display:none;flex-direction:column;gap:3px;padding-left:18px;margin-top:2px;border-left:2px solid rgba(255,255,255,0.1);margin-left:8px;">
                     <a href="{{ route('admin.college-section.sanstha') }}" data-label="Sanstha"
                        class="nav-item {{ request()->routeIs('admin.college-section.sanstha') ? 'active' : '' }}" style="font-size:.85rem;padding:8px 10px;">
-                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-5 9.5c0 .83-.67 1.5-1.5 1.5S11 14.33 11 13.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5z"/></svg>
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
                         <span class="nav-label">Sanstha</span>
                     </a>
                     <a href="{{ route('admin.college-section.college') }}" data-label="College"
@@ -510,25 +603,37 @@
                 </div>
 
                 <div class="topbar-right">
+
                     <button class="icon-btn" aria-label="Search">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
                         </svg>
                     </button>
+
                     <button class="icon-btn" aria-label="Notifications">
                         <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
                         </svg>
                         <span class="notif-dot"></span>
                     </button>
-                    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme">
+
+                    {{-- ══════════════════════════════════════════
+                         THEME TOGGLE
+                         Light mode → moon icon visible  (click → go dark)
+                         Dark  mode → sun  icon visible  (click → go light)
+                         JS sets style.display. NO CSS rules touch these icons.
+                    ═══════════════════════════════════════════ --}}
+                    <button id="themeToggle" class="icon-btn" aria-label="Toggle theme" title="Switch light / dark">
+                        {{-- MOON: default visible (starts in light mode) --}}
                         <svg id="icon-moon" fill="currentColor" viewBox="0 0 20 20">
                             <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z"/>
                         </svg>
-                        <svg id="icon-sun" fill="currentColor" viewBox="0 0 20 20">
+                        {{-- SUN: default hidden --}}
+                        <svg id="icon-sun" fill="currentColor" viewBox="0 0 20 20" style="display:none;">
                             <path fill-rule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.464 5.05l-.707-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z" clip-rule="evenodd"/>
                         </svg>
                     </button>
+
                     <div class="user-menu">
                         <button class="user-btn" type="button" aria-haspopup="true">
                             <div class="avatar">{{ substr(Auth::user()->name, 0, 1) }}</div>
@@ -562,7 +667,8 @@
                     @if($errors->any())
                     <div class="alert alert-error">
                         <svg fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/></svg>
-                        <div><div class="alert-title">Validation Errors</div>
+                        <div>
+                            <div class="alert-title">Validation Errors</div>
                             <ul>@foreach($errors->all() as $error)<li>• {{ $error }}</li>@endforeach</ul>
                         </div>
                     </div>
@@ -596,6 +702,7 @@
     </div>
 
     @else
+    {{-- Guest / auth pages --}}
     <style>
         .auth-wrap { min-height:100vh; display:flex; align-items:center; justify-content:center; background:linear-gradient(135deg,#1e40af 0%,#1e3a8a 50%,#312e81 100%); padding:24px; }
         .auth-card  { width:100%; max-width:420px; }
@@ -616,18 +723,8 @@
         var COLLAPSED = '72px';
         var EXPANDED  = '240px';
 
-        /* ─── setWidth: updates --sb-w on the root element.
-           Since sidebar width, topbar left, and main-col margin-left
-           ALL use var(--sb-w), changing this one value moves everything. ─── */
-        function setWidth(w) {
-            root.style.setProperty('--sb-w', w);
-        }
-
-        /* ─── open/close sidebar (adds .is-open for label/btn visibility) ─── */
-        function openSidebar()  {
-            sidebar.classList.add('is-open');
-            setWidth(EXPANDED);
-        }
+        function setWidth(w) { root.style.setProperty('--sb-w', w); }
+        function openSidebar()  { sidebar.classList.add('is-open'); setWidth(EXPANDED); }
         function closeSidebar() {
             if (!sidebar.classList.contains('is-pinned')) {
                 sidebar.classList.remove('is-open');
@@ -635,7 +732,6 @@
             }
         }
 
-        /* ─── Pin state ─── */
         var pinned = localStorage.getItem('sidebarPinned') === 'true';
 
         function applyPin(p) {
@@ -656,7 +752,6 @@
             }
         }
 
-        /* ─── Init on load (no animation needed, CSS var already set by inline script) ─── */
         if (pinned) {
             sidebar.classList.add('is-pinned', 'is-open');
             iconOff.style.display = 'none';
@@ -664,51 +759,48 @@
             if (pinBtn) pinBtn.setAttribute('aria-pressed', 'true');
         }
 
-        /* ─── Hover events ─── */
         if (sidebar) {
-            sidebar.addEventListener('mouseenter', function () {
-                if (!pinned) openSidebar();
-            });
-            sidebar.addEventListener('mouseleave', function () {
-                if (!pinned) closeSidebar();
-            });
+            sidebar.addEventListener('mouseenter', function () { if (!pinned) openSidebar(); });
+            sidebar.addEventListener('mouseleave', function () { if (!pinned) closeSidebar(); });
         }
-
-        /* ─── Pin button click ─── */
         if (pinBtn) {
-            pinBtn.addEventListener('click', function (e) {
-                e.stopPropagation();
-                applyPin(!pinned);
-            });
+            pinBtn.addEventListener('click', function (e) { e.stopPropagation(); applyPin(!pinned); });
         }
 
-        /* ─── Theme toggle ─── */
-        var themeToggle = document.getElementById('themeToggle');
-        var moonIcon = document.getElementById('icon-moon');
-        var sunIcon = document.getElementById('icon-sun');
-        
-        // Initialize theme icon on page load
-        if (html.classList.contains('dark')) {
-            moonIcon.style.display = 'none';
-            sunIcon.style.display = 'block';
-        } else {
-            moonIcon.style.display = 'block';
-            sunIcon.style.display = 'none';
+        /* ═══════════════════════════════════════════════
+           THEME TOGGLE — single source of truth
+           ───────────────────────────────────────────────
+           Convention:
+             Light mode → MOON visible  (click to go dark)
+             Dark  mode → SUN  visible  (click to go light)
+
+           NO CSS rules control these icons.
+           JS is the ONLY thing that sets their display.
+        ═══════════════════════════════════════════════ */
+        var themeBtn  = document.getElementById('themeToggle');
+        var moonIcon  = document.getElementById('icon-moon');
+        var sunIcon   = document.getElementById('icon-sun');
+
+        function applyThemeIcons(isDark) {
+            if (isDark) {
+                // Dark mode — show sun so user can go back to light
+                moonIcon.style.display = 'none';
+                sunIcon.style.display  = 'block';
+            } else {
+                // Light mode — show moon so user can go to dark
+                moonIcon.style.display = 'block';
+                sunIcon.style.display  = 'none';
+            }
         }
-        
-        if (themeToggle) {
-            themeToggle.addEventListener('click', function () {
-                var isDark = html.classList.toggle('dark');
-                localStorage.setItem('theme', isDark ? 'dark' : 'light');
-                
-                // Update icon display
-                if (isDark) {
-                    moonIcon.style.display = 'none';
-                    sunIcon.style.display = 'block';
-                } else {
-                    moonIcon.style.display = 'block';
-                    sunIcon.style.display = 'none';
-                }
+
+        // Sync icon with current theme on load
+        applyThemeIcons(html.classList.contains('dark'));
+
+        if (themeBtn) {
+            themeBtn.addEventListener('click', function () {
+                var nowDark = html.classList.toggle('dark');
+                localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+                applyThemeIcons(nowDark);
             });
         }
 
@@ -717,12 +809,11 @@
         if (mobileBtn && window.innerWidth < 1024) {
             mobileBtn.style.display = 'flex';
             mobileBtn.addEventListener('click', function () {
-                if (sidebar.classList.contains('is-open')) closeSidebar();
-                else openSidebar();
+                sidebar.classList.contains('is-open') ? closeSidebar() : openSidebar();
             });
         }
 
-        /* ─── College section submenu ─── */
+        /* ─── College submenu ─── */
         var collegeBtn   = document.getElementById('collegeBtn');
         var collegeMenu  = document.getElementById('collegeMenu');
         var collegeArrow = document.getElementById('collegeArrow');
