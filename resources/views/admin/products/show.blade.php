@@ -3,57 +3,58 @@
 @section('title', 'View Product')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1><i class="fas fa-box"></i> {{ $product->name }}</h1>
+<x-theme-container class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <div class="flex justify-between items-center mb-8">
+        <h1 class="text-3xl font-bold theme-text-primary">{{ $product->name }}</h1>
+        <div class="flex gap-3">
+            <x-action-button 
+                href="{{ route('admin.products.edit', $product->id) }}"
+                type="warning"
+            >
+                Edit
+            </x-action-button>
+            <x-action-button 
+                href="{{ route('admin.products.index') }}"
+                type="secondary"
+            >
+                Back
+            </x-action-button>
+        </div>
     </div>
-    <div class="col-md-4 text-end">
-        <a href="{{ route('admin.products.edit', $product->id) }}" class="btn btn-warning">
-            <i class="fas fa-edit"></i> Edit
-        </a>
-        <a href="{{ route('admin.products.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back
-        </a>
-    </div>
-</div>
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h5 class="mb-0">Product Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label><strong>Product Name:</strong></label>
-                    <p>{{ $product->name }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div class="theme-card p-6">
+            <h2 class="text-xl font-semibold theme-text-primary mb-4">Product Details</h2>
+            
+            <div class="space-y-4">
+                <div>
+                    <label class="text-sm font-semibold theme-text-secondary">Product Name</label>
+                    <p class="theme-text-primary font-medium">{{ $product->name }}</p>
                 </div>
 
-                <div class="mb-3">
-                    <label><strong>Description:</strong></label>
-                    <p>{{ $product->description ?? 'N/A' }}</p>
+                <div>
+                    <label class="text-sm font-semibold theme-text-secondary">Description</label>
+                    <p class="theme-text-primary">{{ $product->description ?? 'N/A' }}</p>
                 </div>
 
-                <div class="mb-3">
-                    <label><strong>Price:</strong></label>
-                    <p style="font-size: 1.3rem; color: #27ae60;">₹{{ number_format($product->price, 2) }}</p>
+                <div>
+                    <label class="text-sm font-semibold theme-text-secondary">Price</label>
+                    <p class="text-lg font-bold text-green-600">₹{{ number_format($product->price, 2) }}</p>
                 </div>
 
-                <div class="mb-3">
-                    <label><strong>Stock Quantity:</strong></label>
+                <div>
+                    <label class="text-sm font-semibold theme-text-secondary">Stock Quantity</label>
                     <p>
-                        <span class="badge" style="font-size: 1rem; padding: 0.5rem 1rem; background-color: {{ $product->stock_quantity > 0 ? '#27ae60' : '#e74c3c' }};">
-                            {{ $product->stock_quantity }} units
-                        </span>
+                        <x-stock-badge :quantity="$product->stock_quantity" />
                     </p>
                 </div>
 
-                <div class="mb-3">
-                    <label><strong>Created At:</strong></label>
-                    <p>{{ $product->created_at->format('M d, Y H:i') }}</p>
+                <div>
+                    <label class="text-sm font-semibold theme-text-secondary">Created At</label>
+                    <p class="theme-text-primary">{{ $product->created_at->format('M d, Y H:i') }}</p>
                 </div>
             </div>
         </div>
     </div>
-</div>
+</x-theme-container>
 @endsection

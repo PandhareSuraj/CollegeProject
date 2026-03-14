@@ -3,238 +3,224 @@
 @section('title', 'College Section')
 
 @section('content')
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="h3 mb-0">College Section</h1>
-        <small class="text-muted">Manage Sanstha / College / Department / Department Users</small>
-    </div>
+<x-theme-container class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <x-page-header 
+        title="College Section" 
+        icon="building-office"
+    >
+        <p class="text-sm theme-text-secondary mt-1">Manage Sanstha / College / Department / Department Users</p>
+    </x-page-header>
 
-    <div class="card shadow-sm">
-        <div class="card-body">
-            <ul class="nav nav-tabs" id="collegeTabs" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="sanstha-tab" data-bs-toggle="tab" data-bs-target="#sanstha" type="button" role="tab" aria-controls="sanstha" aria-selected="true">Sanstha</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="college-tab" data-bs-toggle="tab" data-bs-target="#college" type="button" role="tab" aria-controls="college" aria-selected="false">College</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="department-tab" data-bs-toggle="tab" data-bs-target="#department" type="button" role="tab" aria-controls="department" aria-selected="false">Department</button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="dept-users-tab" data-bs-toggle="tab" data-bs-target="#dept-users" type="button" role="tab" aria-controls="dept-users" aria-selected="false">Department Users</button>
-                </li>
-            </ul>
+    <div class="theme-card">
+        <!-- Tab Buttons -->
+        <div class="flex border-b theme-border-primary">
+            <button data-tab="sanstha" class="tab-button active px-6 py-3 font-medium theme-text-primary border-b-2 border-blue-600">
+                Sanstha
+            </button>
+            <button data-tab="college" class="tab-button px-6 py-3 font-medium theme-text-secondary border-b-2 border-transparent hover:theme-text-primary">
+                College
+            </button>
+            <button data-tab="department" class="tab-button px-6 py-3 font-medium theme-text-secondary border-b-2 border-transparent hover:theme-text-primary">
+                Department
+            </button>
+            <button data-tab="dept-users" class="tab-button px-6 py-3 font-medium theme-text-secondary border-b-2 border-transparent hover:theme-text-primary">
+                Department Users
+            </button>
+        </div>
 
-            <div class="tab-content mt-3" id="collegeTabsContent">
-                <!-- Sanstha Tab -->
-                <div class="tab-pane fade show active" id="sanstha" role="tabpanel" aria-labelledby="sanstha-tab">
-                    <div class="d-flex justify-content-between mb-3">
-                        <div>
-                            <a href="#" class="btn btn-primary" onclick="return false;">Add Sanstha</a>
-                        </div>
-                        <div class="input-group w-50">
-                            <input type="search" class="form-control" placeholder="Search sansthas..." aria-label="Search sansthas">
-                            <button class="btn btn-outline-secondary">Search</button>
-                        </div>
+        <!-- Tab Content -->
+        <div class="p-6">
+            <!-- Sanstha Tab -->
+            <div id="sanstha-panel" class="tab-panel active">
+                <div class="flex justify-between items-center mb-4">
+                    <div>
+                        <x-action-button href="#" type="primary" onclick="return false;">
+                            Add Sanstha
+                        </x-action-button>
                     </div>
-
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px">#</th>
-                                    <th>Name</th>
-                                    <th>Description</th>
-                                    <th style="width:180px">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($sansthas as $s)
-                                    <tr>
-                                        <td>{{ $s->id }}</td>
-                                        <td>{{ $s->name }}</td>
-                                        <td>{{ Illuminate\Support\Str::limit($s->description, 80) }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                            <form method="POST" action="#" class="d-inline">
-                                                @csrf
-                                                <button class="btn btn-sm btn-outline-danger" onclick="return confirm('Delete this sanstha?')">Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="4" class="text-center">No sansthas found.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
-
-                    <div class="mt-3">
-                        {{ $sansthas->links() }}
+                    <div class="flex gap-2">
+                        <input type="search" class="px-4 py-2 border theme-border-primary rounded-lg theme-bg-primary theme-text-primary" placeholder="Search sansthas..." aria-label="Search sansthas">
+                        <button class="px-4 py-2 border theme-border-primary text-theme-text-primary rounded-lg hover:theme-bg-secondary transition">Search</button>
                     </div>
                 </div>
 
-                <!-- College Tab -->
-                <div class="tab-pane fade" id="college" role="tabpanel" aria-labelledby="college-tab">
-                    <div class="d-flex justify-content-between mb-3">
-                        <a href="#" class="btn btn-primary" onclick="return false;">Add College</a>
-                        <div class="input-group w-50">
-                            <input type="search" class="form-control" placeholder="Search colleges..." aria-label="Search colleges">
-                            <button class="btn btn-outline-secondary">Search</button>
-                        </div>
-                    </div>
+                <x-data-table>
+                    <x-table-header :columns="['#', 'Name', 'Description', 'Actions']" />
+                    <tbody>
+                        @forelse($sansthas as $s)
+                            <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                                <td class="px-6 py-3 font-semibold theme-text-primary">{{ $s->id }}</td>
+                                <td class="px-6 py-3 theme-text-primary">{{ $s->name }}</td>
+                                <td class="px-6 py-3 theme-text-secondary">{{ Illuminate\Support\Str::limit($s->description, 80) }}</td>
+                                <td class="px-6 py-3 flex gap-2">
+                                    <x-action-button href="#" type="secondary" class="w-20 text-center">Edit</x-action-button>
+                                    <form method="POST" action="#" class="inline" onsubmit="return confirm('Delete this sanstha?')">
+                                        @csrf
+                                        <button type="submit" class="px-3 py-1 text-sm bg-red-100 text-red-600 rounded hover:bg-red-200 transition">Delete</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        @empty
+                            <x-empty-state title="No sansthas found" colspan="4" />
+                        @endforelse
+                    </tbody>
+                </x-data-table>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px">#</th>
-                                    <th>Name</th>
-                                    <th>Sanstha</th>
-                                    <th>Address</th>
-                                    <th style="width:180px">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($colleges as $c)
-                                    <tr>
-                                        <td>{{ $c->id }}</td>
-                                        <td>{{ $c->name }}</td>
-                                        <td>{{ $c->sanstha->name ?? '-' }}</td>
-                                        <td>{{ $c->address }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="5" class="text-center">No colleges found.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="mt-4">
+                    {{ $sansthas->links() }}
+                </div>
+            </div>
 
-                    <div class="mt-3">
-                        {{ $colleges->links() }}
+            <!-- College Tab -->
+            <div id="college-panel" class="tab-panel hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <x-action-button href="#" type="primary" onclick="return false;">
+                        Add College
+                    </x-action-button>
+                    <div class="flex gap-2">
+                        <input type="search" class="px-4 py-2 border theme-border-primary rounded-lg theme-bg-primary theme-text-primary" placeholder="Search colleges..." aria-label="Search colleges">
+                        <button class="px-4 py-2 border theme-border-primary text-theme-text-primary rounded-lg hover:theme-bg-secondary transition">Search</button>
                     </div>
                 </div>
 
-                <!-- Department Tab -->
-                <div class="tab-pane fade" id="department" role="tabpanel" aria-labelledby="department-tab">
-                    <div class="d-flex justify-content-between mb-3">
-                        <a href="{{ route('admin.departments.create') }}" class="btn btn-primary">Add Department</a>
-                        <div class="input-group w-50">
-                            <input type="search" class="form-control" placeholder="Search departments..." aria-label="Search departments">
-                            <button class="btn btn-outline-secondary">Search</button>
-                        </div>
-                    </div>
+                <x-data-table>
+                    <x-table-header :columns="['#', 'Name', 'Sanstha', 'Address', 'Actions']" />
+                    <tbody>
+                        @forelse($colleges as $c)
+                            <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                                <td class="px-6 py-3 font-semibold theme-text-primary">{{ $c->id }}</td>
+                                <td class="px-6 py-3 theme-text-primary">{{ $c->name }}</td>
+                                <td class="px-6 py-3 theme-text-secondary">{{ optional($c->sanstha)->name ?? '-' }}</td>
+                                <td class="px-6 py-3 theme-text-secondary">{{ $c->address }}</td>
+                                <td class="px-6 py-3 flex gap-2">
+                                    <x-action-button href="#" type="secondary" class="w-20 text-center">Edit</x-action-button>
+                                    <x-action-button href="#" type="danger" class="w-24 text-center">Delete</x-action-button>
+                                </td>
+                            </tr>
+                        @empty
+                            <x-empty-state title="No colleges found" colspan="5" />
+                        @endforelse
+                    </tbody>
+                </x-data-table>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px">#</th>
-                                    <th>Name</th>
-                                    <th>College</th>
-                                    <th style="width:180px">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($departments as $d)
-                                    <tr>
-                                        <td>{{ $d->id }}</td>
-                                        <td>{{ $d->name }}</td>
-                                        <td>{{ $d->college->name ?? '-' }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary">Edit</a>
-                                            <a href="#" class="btn btn-sm btn-outline-danger">Delete</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="4" class="text-center">No departments found.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="mt-4">
+                    {{ $colleges->links() }}
+                </div>
+            </div>
 
-                    <div class="mt-3">
-                        {{ $departments->links() }}
+            <!-- Department Tab -->
+            <div id="department-panel" class="tab-panel hidden">
+                <div class="flex justify-between items-center mb-4">
+                    <x-action-button href="{{ route('admin.departments.create') }}" type="primary">
+                        Add Department
+                    </x-action-button>
+                    <div class="flex gap-2">
+                        <input type="search" class="px-4 py-2 border theme-border-primary rounded-lg theme-bg-primary theme-text-primary" placeholder="Search departments..." aria-label="Search departments">
+                        <button class="px-4 py-2 border theme-border-primary text-theme-text-primary rounded-lg hover:theme-bg-secondary transition">Search</button>
                     </div>
                 </div>
 
-                <!-- Department Users Tab -->
-                <div class="tab-pane fade" id="dept-users" role="tabpanel" aria-labelledby="dept-users-tab">
-                    <form method="GET" class="row gy-2 gx-2 align-items-center mb-3">
-                        <div class="col-md-6">
-                            <select class="form-select" name="department_id">
-                                <option value="">Select Department</option>
-                                @foreach($departments as $d)
-                                    <option value="{{ $d->id }}" @if(request('department_id') == $d->id) selected @endif>{{ $d->name }} ({{ $d->college->name ?? '' }})</option>
-                                @endforeach
-                            </select>
-                        </div>
-                        <div class="col-md-2">
-                            <button class="btn btn-primary">Load Users</button>
-                        </div>
-                    </form>
+                <x-data-table>
+                    <x-table-header :columns="['#', 'Name', 'College', 'Actions']" />
+                    <tbody>
+                        @forelse($departments as $d)
+                            <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                                <td class="px-6 py-3 font-semibold theme-text-primary">{{ $d->id }}</td>
+                                <td class="px-6 py-3 theme-text-primary">{{ $d->name }}</td>
+                                <td class="px-6 py-3 theme-text-secondary">{{ optional($d->college)->name ?? '-' }}</td>
+                                <td class="px-6 py-3 flex gap-2">
+                                    <x-action-button href="#" type="secondary" class="w-20 text-center">Edit</x-action-button>
+                                    <x-action-button href="#" type="danger" class="w-24 text-center">Delete</x-action-button>
+                                </td>
+                            </tr>
+                        @empty
+                            <x-empty-state title="No departments found" colspan="4" />
+                        @endforelse
+                    </tbody>
+                </x-data-table>
 
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm">
-                            <thead class="table-light">
-                                <tr>
-                                    <th style="width:60px">#</th>
-                                    <th>Name</th>
-                                    <th>Email</th>
-                                    <th>Role</th>
-                                    <th style="width:140px">Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @forelse($departmentUsers as $u)
-                                    <tr>
-                                        <td>{{ $u->id }}</td>
-                                        <td>{{ $u->name }}</td>
-                                        <td>{{ $u->email ?? '-' }}</td>
-                                        <td>{{ $u->role ?? '-' }}</td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-outline-secondary">View</a>
-                                        </td>
-                                    </tr>
-                                @empty
-                                    <tr><td colspan="5" class="text-center">No users found for this department.</td></tr>
-                                @endforelse
-                            </tbody>
-                        </table>
-                    </div>
+                <div class="mt-4">
+                    {{ $departments->links() }}
                 </div>
+            </div>
+
+            <!-- Department Users Tab -->
+            <div id="dept-users-panel" class="tab-panel hidden">
+                <form method="GET" class="flex gap-2 items-center mb-4">
+                    <select class="flex-1 px-4 py-2 border theme-border-primary rounded-lg theme-bg-primary theme-text-primary" name="department_id">
+                        <option value="">Select Department</option>
+                        @foreach($departments as $d)
+                            <option value="{{ $d->id }}" @if(request('department_id') == $d->id) selected @endif>{{ $d->name }} ({{ optional($d->college)->name ?? '' }})</option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition font-medium">
+                        Load Users
+                    </button>
+                </form>
+
+                <x-data-table>
+                    <x-table-header :columns="['#', 'Name', 'Email', 'Role', 'Actions']" />
+                    <tbody>
+                        @forelse($departmentUsers as $u)
+                            <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                                <td class="px-6 py-3 font-semibold theme-text-primary">{{ $u->id }}</td>
+                                <td class="px-6 py-3 theme-text-primary">{{ $u->name }}</td>
+                                <td class="px-6 py-3 theme-text-secondary">{{ $u->email ?? '-' }}</td>
+                                <td class="px-6 py-3">
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                                        {{ ucfirst(str_replace('_', ' ', $u->role ?? 'unknown')) }}
+                                    </span>
+                                </td>
+                                <td class="px-6 py-3">
+                                    <x-action-button href="#" type="secondary" class="w-16 text-center text-sm">View</x-action-button>
+                                </td>
+                            </tr>
+                        @empty
+                            <x-empty-state title="No users found for this department" colspan="5" />
+                        @endforelse
+                    </tbody>
+                </x-data-table>
             </div>
         </div>
     </div>
-</div>
+</x-theme-container>
 
 @push('scripts')
 <script>
-    // Preserve active tab in hash and on page load
-    (function() {
-        const triggerTabList = [].slice.call(document.querySelectorAll('#collegeTabs button'))
-        triggerTabList.forEach(function (triggerEl) {
-            const tabTrigger = new bootstrap.Tab(triggerEl)
-            triggerEl.addEventListener('click', function (event) {
-                const target = event.currentTarget.getAttribute('data-bs-target')
-                history.replaceState(null, null, '#'+target.replace('#',''))
-            })
-        })
+    document.querySelectorAll('[data-tab]').forEach(button => {
+        button.addEventListener('click', function() {
+            const tabName = this.getAttribute('data-tab');
+            
+            // Hide all panels
+            document.querySelectorAll('.tab-panel').forEach(panel => {
+                panel.classList.add('hidden');
+            });
+            
+            // Show selected panel
+            document.getElementById(tabName + '-panel').classList.remove('hidden');
+            
+            // Update button styles
+            document.querySelectorAll('[data-tab]').forEach(btn => {
+                btn.classList.remove('theme-text-primary', 'border-blue-600');
+                btn.classList.add('theme-text-secondary', 'border-transparent');
+            });
+            
+            this.classList.remove('theme-text-secondary', 'border-transparent');
+            this.classList.add('theme-text-primary', 'border-blue-600');
+            
+            // Update URL hash
+            history.replaceState(null, null, '#' + tabName);
+        });
+    });
 
-        // On load, activate tab from hash
-        const hash = location.hash
-        if (hash) {
-            const el = document.querySelector('#collegeTabs button[data-bs-target="'+hash+'"]')
-            if (el) {
-                new bootstrap.Tab(el).show()
-            }
+    // Restore tab from hash on load
+    const hash = location.hash.replace('#', '');
+    if (hash) {
+        const button = document.querySelector(`[data-tab="${hash}"]`);
+        if (button) {
+            button.click();
         }
-    })();
+    }
 </script>
 @endpush
 

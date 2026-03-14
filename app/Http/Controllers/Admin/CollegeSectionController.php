@@ -53,8 +53,23 @@ class CollegeSectionController extends Controller
      */
     public function department(Request $request)
     {
-        $query = Department::with('college');
+        $sansthas = Sanstha::with('colleges.departments')->orderBy('name')->get();
         
+        $query = Department::with(['college', 'college.sanstha']);
+        
+        // Filter by Sanstha if provided
+        if ($request->filled('sanstha_id')) {
+            $query->whereHas('college', function($q) {
+                $q->where('sanstha_id', request('sanstha_id'));
+            });
+        }
+        
+        // Filter by College if provided
+        if ($request->filled('college_id')) {
+            $query->where('college_id', $request->input('college_id'));
+        }
+        
+        // Search by department name
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where('name', 'like', "%{$search}%");
@@ -62,7 +77,7 @@ class CollegeSectionController extends Controller
         
         $departments = $query->paginate(15);
         
-        return view('admin.college-section.department', compact('departments'));
+        return view('admin.college-section.department', compact('departments', 'sansthas'));
     }
 
     /**
@@ -70,15 +85,21 @@ class CollegeSectionController extends Controller
      */
     public function departmentUsers(Request $request)
     {
-        $allDepartments = Department::with('college')->orderBy('name')->get();
+        $sansthas = Sanstha::with('colleges.departments')->orderBy('name')->get();
+        $allDepartments = Department::with('college.sanstha')->orderBy('name')->get();
         $departmentUsers = [];
         
         if ($request->filled('department_id')) {
-            $department = Department::with('teachers')->find($request->get('department_id'));
-            $departmentUsers = $department ? $department->teachers()->get() : [];
+            $department = Department::with(['teachers', 'hods'])->find($request->get('department_id'));
+            
+            if ($department) {
+                $teachers = $department->teachers()->get();
+                $hods = $department->hods()->get();
+                $departmentUsers = $teachers->merge($hods)->sortByDesc('created_at');
+            }
         }
         
-        return view('admin.college-section.department-users', compact('departmentUsers', 'allDepartments'));
+        return view('admin.college-section.department-users', compact('departmentUsers', 'allDepartments', 'sansthas'));
     }
 
     /**

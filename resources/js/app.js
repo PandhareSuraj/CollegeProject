@@ -1,25 +1,108 @@
 /**
- * Theme Toggle Functionality
+ * Unified Theme Management System
+ * Works across all pages (welcome, dashboards, auth)
  */
-document.addEventListener('DOMContentLoaded', function() {
-    const themeToggle = document.getElementById('themeToggle');
-    const htmlRoot = document.getElementById('html-root');
-
-    if (themeToggle) {
-        themeToggle.addEventListener('click', function() {
-            const isDark = htmlRoot.classList.toggle('dark');
-            localStorage.setItem('theme', isDark ? 'dark' : 'light');
-
-            // Update icon based on theme
-            const moonIcon = document.getElementById('icon-moon');
-            const sunIcon = document.getElementById('icon-sun');
-            if (moonIcon && sunIcon) {
-                moonIcon.style.display = isDark ? 'none' : 'block';
-                sunIcon.style.display = isDark ? 'block' : 'none';
-            }
-        });
+const ThemeManager = {
+    LIGHT: 'light',
+    DARK: 'dark',
+    STORAGE_KEY: 'ccsms-theme',
+    
+    init() {
+        // Detect user's theme preference
+        let savedTheme = localStorage.getItem(this.STORAGE_KEY);
+        
+        if (!savedTheme) {
+            const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+            savedTheme = prefersDark ? this.DARK : this.LIGHT;
+        }
+        
+        this.setTheme(savedTheme, false);
+        this.setupThemeToggle();
+        
+        // Retry setup after a short delay in case DOM is still loading
+        setTimeout(() => {
+            this.setupThemeToggle();
+        }, 100);
+    },
+    
+    setTheme(theme, saveToStorage = true) {
+        const htmlRoot = document.getElementById('html-root');
+        
+        if (!htmlRoot) return;
+        
+        if (theme === this.DARK) {
+            htmlRoot.classList.add('dark');
+            htmlRoot.removeAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            htmlRoot.classList.remove('dark');
+            htmlRoot.removeAttribute('data-theme');
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
+        
+        if (saveToStorage) {
+            localStorage.setItem(this.STORAGE_KEY, theme);
+        }
+        
+        // Update theme icons
+        this.updateThemeIcons(theme);
+        
+        // Also trigger a small delay to ensure DOM is ready for icon updates
+        setTimeout(() => {
+            this.updateThemeIcons(theme);
+        }, 50);
+    },
+    
+    toggleTheme() {
+        const htmlRoot = document.getElementById('html-root');
+        const currentTheme = htmlRoot?.classList.contains('dark') ? this.DARK : this.LIGHT;
+        const newTheme = currentTheme === this.DARK ? this.LIGHT : this.DARK;
+        this.setTheme(newTheme, true);
+    },
+    
+    updateThemeIcons(theme) {
+        // Update moon/sun icons for theme toggle button
+        // Try both ID and class selectors for compatibility
+        const moonIcons = document.querySelectorAll('#icon-moon, .icon-moon');
+        const sunIcons = document.querySelectorAll('#icon-sun, .icon-sun');
+        
+        if (moonIcons.length > 0 || sunIcons.length > 0) {
+            moonIcons.forEach(icon => {
+                if (icon) {
+                    icon.style.display = theme === this.DARK ? 'none' : 'block';
+                }
+            });
+            
+            sunIcons.forEach(icon => {
+                if (icon) {
+                    icon.style.display = theme === this.LIGHT ? 'none' : 'block';
+                }
+            });
+        }
+    },
+    
+    setupThemeToggle() {
+        // Find and setup theme toggle button
+        const themeToggle = document.getElementById('themeToggle');
+        
+        if (themeToggle && !themeToggle.hasAttribute('data-theme-listener-attached')) {
+            themeToggle.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                this.toggleTheme();
+            });
+            
+            // Mark that we've attached the listener to prevent duplicate listeners
+            themeToggle.setAttribute('data-theme-listener-attached', 'true');
+        }
     }
+};
 
+// Initialize theme when DOM is ready
+document.addEventListener('DOMContentLoaded', function() {
+    ThemeManager.init();
+
+    
     /**
      * College Menu Toggle
      */

@@ -11,7 +11,7 @@ class DepartmentController extends Controller
 {
     public function index()
     {
-        $departments = Department::with('college')->paginate(15);
+        $departments = Department::with('college')->withCount('teachers', 'hods', 'requests')->paginate(15);
         return view('admin.departments.index', compact('departments'));
     }
 

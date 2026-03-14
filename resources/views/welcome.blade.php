@@ -8,6 +8,21 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 
+    {{-- Initialize Theme Before First Paint --}}
+    <script>
+        (function() {
+            var root = document.getElementById('html-root');
+            var t = localStorage.getItem('ccsms-theme');
+            var dark = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme:dark)').matches;
+            if (dark) {
+                root.classList.add('dark');
+                document.documentElement.setAttribute('data-theme', 'dark');
+            } else {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        })();
+    </script>
+
     <style>
         /* ── Variables ── */
         :root {
@@ -156,10 +171,16 @@
             transform: rotate(20deg);
         }
         .btn-theme svg { width: 17px; height: 17px; }
-        .icon-sun  { display: none; }
-        .icon-moon { display: block; }
-        html.light .icon-sun  { display: block; }
-        html.light .icon-moon { display: none; }
+        
+        /* Theme Icon Display - Light Mode (Show Moon) */
+        #icon-moon, .icon-moon { display: block; }
+        #icon-sun, .icon-sun { display: none; }
+        
+        /* Theme Icon Display - Dark Mode (Show Sun) */
+        html.dark #icon-moon,
+        html.dark .icon-moon { display: none; }
+        html.dark #icon-sun,
+        html.dark .icon-sun { display: block; }
 
         /* ── Hero Content ── */
         .hero-content {
@@ -861,8 +882,7 @@
     <p style="text-align:center;margin-top:44px;font-size:0.875rem;color:rgba(255,255,255,0.35);">
         Don't have an account? &nbsp;·&nbsp;
         <a href="{{ route('auth.register-form') }}" style="color:var(--gold);text-decoration:none;font-weight:600;">Create Account →</a>
-        &nbsp;&nbsp;|&nbsp;&nbsp;
-        <a href="{{ route('auth.role-selection') }}" style="color:rgba(255,255,255,0.5);text-decoration:none;">Role Selection Page →</a>
+        &nbsp;&nbsp;&nbsp;&nbsp;
     </p>
 </section>
 

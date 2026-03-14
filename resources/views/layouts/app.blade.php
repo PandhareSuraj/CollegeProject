@@ -13,38 +13,38 @@
            LIGHT THEME VARIABLES (default)
            ============================================= */
         :root {
-            --bg-body:        #f1f5f9;
-            --bg-sidebar:     #1e40af;
+            --bg-body:        #f9fafb;
+            --bg-sidebar:     #2563eb;
             --bg-sidebar-end: #1d4ed8;
             --bg-navbar:      #ffffff;
             --bg-card:        #ffffff;
             --bg-hover:       rgba(255,255,255,0.15);
             --bg-active:      rgba(255,255,255,0.25);
 
-            --text-primary:   #0f172a;
-            --text-secondary: #475569;
-            --text-tertiary:  #94a3b8;
+            --text-primary:   #111827;
+            --text-secondary: #4b5563;
+            --text-tertiary:  #9ca3af;
             --text-sidebar:   #ffffff;
 
-            --border-color:   #e2e8f0;
+            --border-color:   #e5e7eb;
             --shadow:         0 1px 3px rgba(0,0,0,0.10);
 
             --input-bg:       #ffffff;
-            --input-border:   #cbd5e1;
-            --input-text:     #0f172a;
+            --input-border:   #d1d5db;
+            --input-text:     #111827;
 
             --badge-bg:       #dbeafe;
-            --badge-text:     #1e40af;
+            --badge-text:     #2563eb;
 
             /* Table */
-            --table-header-bg:  #f8fafc;
-            --table-header-text:#0f172a;
+            --table-header-bg:  #f3f4f6;
+            --table-header-text:#111827;
             --table-row-bg:     #ffffff;
-            --table-row-alt:    #f8fafc;
-            --table-row-hover:  #f1f5f9;
-            --table-border:     #e2e8f0;
-            --table-text:       #0f172a;
-            --table-text-muted: #475569;
+            --table-row-alt:    #f9fafb;
+            --table-row-hover:  #f3f4f6;
+            --table-border:     #e5e7eb;
+            --table-text:       #111827;
+            --table-text-muted: #4b5563;
 
             /* Status badges — light */
             --badge-pending-bg:    rgba(245,158,11,0.12);
@@ -66,38 +66,38 @@
            DARK THEME VARIABLES
            ============================================= */
         html.dark {
-            --bg-body:        #18181b;
-            --bg-sidebar:     #0f172a;
-            --bg-sidebar-end: #1e1b4b;
-            --bg-navbar:      #1e293b;
-            --bg-card:        #1e293b;
-            --bg-hover:       rgba(255,255,255,0.10);
-            --bg-active:      rgba(255,255,255,0.18);
+            --bg-body:        #111827;
+            --bg-sidebar:     #1f2937;
+            --bg-sidebar-end: #111827;
+            --bg-navbar:      #1f2937;
+            --bg-card:        #2d3748;
+            --bg-hover:       rgba(255,255,255,0.12);
+            --bg-active:      rgba(255,255,255,0.20);
 
-            --text-primary:   #f1f5f9;
-            --text-secondary: #94a3b8;
-            --text-tertiary:  #64748b;
-            --text-sidebar:   #e2e8f0;
+            --text-primary:   #f3f4f6;
+            --text-secondary: #9ca3af;
+            --text-tertiary:  #6b7280;
+            --text-sidebar:   #f3f4f6;
 
-            --border-color:   #334155;
-            --shadow:         0 1px 3px rgba(0,0,0,0.35);
+            --border-color:   #374151;
+            --shadow:         0 1px 3px rgba(0,0,0,0.40);
 
-            --input-bg:       #1e293b;
-            --input-border:   #475569;
-            --input-text:     #f1f5f9;
+            --input-bg:       #374151;
+            --input-border:   #4b5563;
+            --input-text:     #f3f4f6;
 
-            --badge-bg:       #1e3a8a;
+            --badge-bg:       #1f2937;
             --badge-text:     #93c5fd;
 
             /* Table */
-            --table-header-bg:  #262630;
-            --table-header-text:#f1f5f9;
-            --table-row-bg:     #1e293b;
-            --table-row-alt:    #232c3d;
-            --table-row-hover:  #2d3748;
-            --table-border:     #334155;
-            --table-text:       #f1f5f9;
-            --table-text-muted: #94a3b8;
+            --table-header-bg:  #1f2937;
+            --table-header-text:#f3f4f6;
+            --table-row-bg:     #2d3748;
+            --table-row-alt:    #374151;
+            --table-row-hover:  #4b5563;
+            --table-border:     #374151;
+            --table-text:       #f3f4f6;
+            --table-text-muted: #9ca3af;
 
             /* Status badges — dark */
             --badge-pending-bg:    rgba(245,158,11,0.18);
@@ -227,6 +227,98 @@
         }
         #sidebar:not(.is-open) .nav-item:hover::after { opacity: 1; }
 
+        /* College submenu button */
+        #collegeBtn {
+            pointer-events: auto;
+            z-index: 10;
+        }
+        #collegeBtn:active,
+        #collegeBtn:focus {
+            outline: none;
+            background: var(--bg-hover);
+        }
+
+        /* College container and menu */
+        #collegeContainer {
+            display: flex;
+            flex-direction: column;
+            gap: 0;
+            width: 100%;
+        }
+
+        #collegeMenu {
+            max-height: 0;
+            overflow: hidden;
+            opacity: 0;
+            transition: max-height 0.3s ease, opacity 0.3s ease;
+            flex-direction: column;
+            gap: 3px;
+            padding: 0;
+            margin: 0;
+            width: 100%;
+        }
+
+        #collegeContainer.open #collegeMenu {
+            max-height: 300px;
+            opacity: 1;
+            padding: 8px 0;
+            margin-top: 2px;
+            padding-left: 18px;
+            border-left: 2px solid rgba(255,255,255,0.25);
+            margin-left: 8px;
+            display: flex;
+        }
+
+        #collegeMenu a {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            border-radius: 8px;
+            color: #ffffff;
+            text-decoration: none;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            opacity: 1;
+            font-weight: 500;
+        }
+
+        #collegeMenu a svg {
+            flex-shrink: 0;
+            opacity: 0.9;
+        }
+
+        #collegeMenu a .nav-label {
+            opacity: 1;
+            color: #ffffff;
+            font-weight: 500;
+        }
+
+        #collegeContainer.open #collegeMenu a {
+            opacity: 1;
+            transition: all 0.2s ease;
+        }
+
+        #collegeMenu a:hover {
+            background: rgba(255,255,255,0.15);
+            color: #ffffff;
+        }
+
+        #collegeMenu a.active {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+            box-shadow: inset 0 0 0 1px rgba(255,255,255,0.15);
+        }
+
+        #collegeBtn:hover #collegeArrow {
+            color: #fff;
+        }
+
+        #collegeContainer.open #collegeArrow {
+            transform: rotate(180deg);
+        }
+
         .nav-arrow {
             width: 16px; height: 16px; flex-shrink: 0;
             transition: transform 0.25s; opacity: 0;
@@ -275,11 +367,20 @@
         .icon-btn:hover { background: var(--border-color); color: var(--text-primary); }
         .icon-btn svg { width: 22px; height: 22px; }
 
-        /* ─── Theme icon: NO CSS controlling display.
+        {{-- Theme icon: NO CSS controlling display.
                JS alone sets style.display on #icon-sun and #icon-moon.
                Rule of thumb:
                  Light mode → show MOON  (click to go dark)
-                 Dark mode  → show SUN   (click to go light)          ─── */
+                 Dark mode  → show SUN   (click to go light)          --- --}}
+        
+        /* Light mode (default): Show moon, hide sun */
+        #icon-moon { display: block !important; }
+        #icon-sun { display: none !important; }
+        
+        /* Dark mode: Hide moon, show sun */
+        html.dark #icon-moon { display: none !important; }
+        html.dark #icon-sun { display: block !important; }
+        
         .notif-dot {
             position: absolute; top: 7px; right: 7px;
             width: 9px; height: 9px; background: #ef4444;
@@ -473,9 +574,14 @@
     <script>
     (function(){
         var root  = document.getElementById('html-root');
-        var t     = localStorage.getItem('theme');
+        var t     = localStorage.getItem('ccsms-theme');
         var dark  = t ? t === 'dark' : window.matchMedia('(prefers-color-scheme:dark)').matches;
-        if (dark) root.classList.add('dark');
+        if (dark) {
+            root.classList.add('dark');
+            document.documentElement.setAttribute('data-theme', 'dark');
+        } else {
+            document.documentElement.setAttribute('data-theme', 'light');
+        }
         var pinned = localStorage.getItem('sidebarPinned') === 'true';
         document.documentElement.style.setProperty('--sb-w', pinned ? '240px' : '72px');
     })();
@@ -555,34 +661,31 @@
                     <span class="nav-label">Departments</span>
                 </a>
 
-                <button id="collegeBtn"
-                        class="nav-item {{ request()->routeIs('admin.college-section.*') ? 'active' : '' }}">
-                    <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18V15l7 4 7-4v-3.82L23 9zm0 2.27L19.52 9 12 12.73 4.48 9zm6 6.43L12 15.73 6 11.7V12.9l6 3.27 6-3.27z"/></svg>
-                    <span class="nav-label" style="flex:1;text-align:left;">College Section</span>
-                    <svg id="collegeArrow" class="nav-arrow" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
-                </button>
+                <div id="collegeContainer" class="{{ request()->routeIs('admin.college-section.*') ? 'open' : '' }}">
+                    <button type="button" id="collegeBtn" class="nav-item {{ request()->routeIs('admin.college-section.*') ? 'active' : '' }}">
+                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24"><path d="M12 3L1 9l4 2.18V15l7 4 7-4v-3.82L23 9zm0 2.27L19.52 9 12 12.73 4.48 9zm6 6.43L12 15.73 6 11.7V12.9l6 3.27 6-3.27z"/></svg>
+                        <span class="nav-label" style="flex:1;text-align:left;">College Section</span>
+                        <svg id="collegeArrow" class="nav-arrow" fill="currentColor" viewBox="0 0 24 24"><path d="M7 10l5 5 5-5z"/></svg>
+                    </button>
 
-                <div id="collegeMenu" style="display:none;flex-direction:column;gap:3px;padding-left:18px;margin-top:2px;border-left:2px solid rgba(255,255,255,0.1);margin-left:8px;">
-                    <a href="{{ route('admin.college-section.sanstha') }}" data-label="Sanstha"
-                       class="nav-item {{ request()->routeIs('admin.college-section.sanstha') ? 'active' : '' }}" style="font-size:.85rem;padding:8px 10px;">
-                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
-                        <span class="nav-label">Sanstha</span>
-                    </a>
-                    <a href="{{ route('admin.college-section.college') }}" data-label="College"
-                       class="nav-item {{ request()->routeIs('admin.college-section.college') ? 'active' : '' }}" style="font-size:.85rem;padding:8px 10px;">
-                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82M12 3L1 9l11 6.18L23 9 12 3z"/></svg>
-                        <span class="nav-label">College</span>
-                    </a>
-                    <a href="{{ route('admin.college-section.department') }}" data-label="Department"
-                       class="nav-item {{ request()->routeIs('admin.college-section.department') ? 'active' : '' }}" style="font-size:.85rem;padding:8px 10px;">
-                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
-                        <span class="nav-label">Department</span>
-                    </a>
-                    <a href="{{ route('admin.college-section.department-users') }}" data-label="Dept. Users"
-                       class="nav-item {{ request()->routeIs('admin.college-section.department-users') ? 'active' : '' }}" style="font-size:.85rem;padding:8px 10px;">
-                        <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
-                        <span class="nav-label">Dept. Users</span>
-                    </a>
+                    <div id="collegeMenu">
+                        <a href="{{ route('admin.college-section.sanstha') }}" class="{{ request()->routeIs('admin.college-section.sanstha') ? 'active' : '' }}">
+                            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z"/></svg>
+                            <span class="nav-label">Sanstha</span>
+                        </a>
+                        <a href="{{ route('admin.college-section.college') }}" class="{{ request()->routeIs('admin.college-section.college') ? 'active' : '' }}">
+                            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82M12 3L1 9l11 6.18L23 9 12 3z"/></svg>
+                            <span class="nav-label">College</span>
+                        </a>
+                        <a href="{{ route('admin.college-section.department') }}" class="{{ request()->routeIs('admin.college-section.department') ? 'active' : '' }}">
+                            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
+                            <span class="nav-label">Department</span>
+                        </a>
+                        <a href="{{ route('admin.college-section.department-users') }}" class="{{ request()->routeIs('admin.college-section.department-users') ? 'active' : '' }}">
+                            <svg class="nav-icon" fill="currentColor" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z"/></svg>
+                            <span class="nav-label">Dept. Users</span>
+                        </a>
+                    </div>
                 </div>
                 @endif
 
@@ -713,6 +816,32 @@
     <script>
     document.addEventListener('DOMContentLoaded', function () {
 
+        // College menu toggle
+        function toggleCollegeMenu() {
+            var container = document.getElementById('collegeContainer');
+            if (container) {
+                container.classList.toggle('open');
+            }
+        }
+
+        // Attach click handler to college button
+        var collegeBtn = document.getElementById('collegeBtn');
+        if (collegeBtn) {
+            collegeBtn.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                toggleCollegeMenu();
+            });
+        }
+
+        // Close menu when clicking outside
+        document.addEventListener('click', function(e) {
+            var container = document.getElementById('collegeContainer');
+            if (container && !container.contains(e.target)) {
+                container.classList.remove('open');
+            }
+        });
+
         var html    = document.getElementById('html-root');
         var root    = document.documentElement;
         var sidebar = document.getElementById('sidebar');
@@ -799,7 +928,7 @@
         if (themeBtn) {
             themeBtn.addEventListener('click', function () {
                 var nowDark = html.classList.toggle('dark');
-                localStorage.setItem('theme', nowDark ? 'dark' : 'light');
+                localStorage.setItem('ccsms-theme', nowDark ? 'dark' : 'light');
                 applyThemeIcons(nowDark);
             });
         }
@@ -813,25 +942,7 @@
             });
         }
 
-        /* ─── College submenu ─── */
-        var collegeBtn   = document.getElementById('collegeBtn');
-        var collegeMenu  = document.getElementById('collegeMenu');
-        var collegeArrow = document.getElementById('collegeArrow');
-        if (collegeBtn && collegeMenu) {
-            collegeBtn.addEventListener('click', function (e) {
-                e.preventDefault();
-                var open = collegeMenu.style.display === 'flex';
-                collegeMenu.style.display = open ? 'none' : 'flex';
-                if (collegeArrow) collegeArrow.style.transform = open ? 'rotate(0deg)' : 'rotate(180deg)';
-            });
-            if (window.location.pathname.includes('college-section')) {
-                collegeMenu.style.display = 'flex';
-                if (collegeArrow) collegeArrow.style.transform = 'rotate(180deg)';
-            }
-        }
+        /* ─── College submenu auto-open handled by CSS class ─── */
+
     });
     </script>
-
-    @stack('scripts')
-</body>
-</html>

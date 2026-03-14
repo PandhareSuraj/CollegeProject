@@ -2,9 +2,56 @@
 @import '../../vendor/livewire/flux/dist/flux.css';
 
 /* ============================================
-   LIGHT THEME VARIABLES
+   UNIFIED THEME SYSTEM
+   Light Mode (default) - Clean, Bright
+   Dark Mode - Dark, Easy on Eyes
    ============================================ */
+
+/* ════ LIGHT THEME (DEFAULT) ════ */
 :root {
+  color-scheme: light;
+  
+  /* Primary Colors */
+  --bg-light: #ffffff;
+  --bg-light-secondary: #f8fafc;
+  --bg-light-tertiary: #f1f5f9;
+  
+  /* Text Colors */
+  --text-light-primary: #0f172a;
+  --text-light-secondary: #475569;
+  --text-light-tertiary: #94a3b8;
+  
+  /* UI Elements */
+  --border-light: #e2e8f0;
+  --border-light-dark: #cbd5e1;
+  --shadow-light: rgba(0, 0, 0, 0.08);
+  
+  /* Component Colors */
+  --card-light-bg: #ffffff;
+  --navbar-light-bg: #ffffff;
+  --sidebar-light-bg: #0f172a;
+  --sidebar-light-text: #f1f5f9;
+  --input-light-bg: #ffffff;
+  --input-light-border: #cbd5e1;
+  --input-light-text: #0f172a;
+  
+  /* Table Colors */
+  --table-light-header: #f8fafc;
+  --table-light-row: #ffffff;
+  --table-light-hover: #f1f5f9;
+  --table-light-border: #e2e8f0;
+  --table-light-text-primary: #0f172a;
+  --table-light-text-secondary: #475569;
+  
+  /* Status Colors - Light Theme */
+  --status-pending-light-bg: rgba(245, 158, 11, 0.12);
+  --status-pending-light-text: #d97706;
+  --status-approved-light-bg: rgba(34, 197, 94, 0.12);
+  --status-approved-light-text: #16a34a;
+  --status-rejected-light-bg: rgba(239, 68, 68, 0.12);
+  --status-rejected-light-text: #dc2626;
+  
+  /* Legacy Variables for Compatibility */
   --theme-bg-primary: rgb(255 255 255);
   --theme-bg-secondary: rgb(249 250 251);
   --theme-bg-tertiary: rgb(243 244 246);
@@ -15,7 +62,6 @@
   --theme-border-secondary: rgb(203 213 225);
   --theme-shadow: rgba(0 0 0 / 0.08);
   --theme-shadow-lg: rgba(0 0 0 / 0.12);
-
   --theme-card-bg: rgb(255 255 255);
   --theme-card-border: rgb(226 232 240);
   --theme-navbar-bg: rgb(255 255 255);
@@ -25,7 +71,6 @@
   --theme-input-bg: rgb(255 255 255);
   --theme-input-border: rgb(203 213 225);
   --theme-input-text: rgb(15 23 42);
-
   --theme-table-header-bg: rgb(249 250 251);
   --theme-table-header-text: rgb(15 23 42);
   --theme-table-row-bg: rgb(255 255 255);
@@ -33,6 +78,7 @@
   --theme-table-row-hover: rgb(248 250 252);
   --theme-table-border: rgb(226 232 240);
 
+  /* Color Variants */
   --color-blue-bg: rgb(219 234 254);
   --color-blue-text: rgb(37 99 235);
   --color-amber-bg: rgb(254 243 224);
@@ -53,10 +99,51 @@
   --color-pink-text: rgb(190 24 93);
 }
 
-/* ============================================
-   DARK THEME VARIABLES
-   ============================================ */
+/* ════ DARK THEME ════ */
 html.dark {
+  color-scheme: dark;
+  
+  /* Primary Colors */
+  --bg-light: #18181b;
+  --bg-light-secondary: #27272a;
+  --bg-light-tertiary: #3f3f46;
+  
+  /* Text Colors */
+  --text-light-primary: #fafafa;
+  --text-light-secondary: #a1a1a1;
+  --text-light-tertiary: #71717a;
+  
+  /* UI Elements */
+  --border-light: #3f3f46;
+  --border-light-dark: #52525b;
+  --shadow-light: rgba(0, 0, 0, 0.35);
+  
+  /* Component Colors */
+  --card-light-bg: #27272a;
+  --navbar-light-bg: #18181b;
+  --sidebar-light-bg: #09090b;
+  --sidebar-light-text: #e4e4e7;
+  --input-light-bg: #27272a;
+  --input-light-border: #52525b;
+  --input-light-text: #fafafa;
+  
+  /* Table Colors */
+  --table-light-header: #27272a;
+  --table-light-row: #18181b;
+  --table-light-hover: #27272a;
+  --table-light-border: #3f3f46;
+  --table-light-text-primary: #fafafa;
+  --table-light-text-secondary: #a1a1a1;
+  
+  /* Status Colors - Dark Theme */
+  --status-pending-light-bg: rgba(245, 158, 11, 0.2);
+  --status-pending-light-text: #fbbf24;
+  --status-approved-light-bg: rgba(34, 197, 94, 0.2);
+  --status-approved-light-text: #4ade80;
+  --status-rejected-light-bg: rgba(239, 68, 68, 0.2);
+  --status-rejected-light-text: #f87171;
+  
+  /* Legacy Variables for Compatibility */
   --theme-bg-primary: rgb(24 24 27);
   --theme-bg-secondary: rgb(32 32 36);
   --theme-bg-tertiary: rgb(38 38 43);
@@ -67,7 +154,6 @@ html.dark {
   --theme-border-secondary: rgb(75 85 99);
   --theme-shadow: rgba(0 0 0 / 0.35);
   --theme-shadow-lg: rgba(0 0 0 / 0.5);
-
   --theme-card-bg: rgb(52 54 60);
   --theme-card-border: rgb(68 70 78);
   --theme-navbar-bg: rgb(30 30 34);
@@ -77,7 +163,6 @@ html.dark {
   --theme-input-bg: rgb(44 46 52);
   --theme-input-border: rgb(75 85 99);
   --theme-input-text: rgb(241 245 249);
-
   --theme-table-header-bg: rgb(38 40 46);
   --theme-table-header-text: rgb(241 245 249);
   --theme-table-row-bg: rgb(44 46 52);
@@ -85,6 +170,7 @@ html.dark {
   --theme-table-row-hover: rgb(58 60 68);
   --theme-table-border: rgb(55 65 81);
 
+  /* Color Variants - Dark Mode */
   --color-blue-bg: rgb(30 58 138 / 0.4);
   --color-blue-text: rgb(147 197 253);
   --color-amber-bg: rgb(120 53 15 / 0.4);

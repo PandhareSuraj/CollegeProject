@@ -3,114 +3,102 @@
 @section('title', 'View User')
 
 @section('content')
-<div class="row mb-4">
-    <div class="col-md-8">
-        <h1><i class="fas fa-user"></i> {{ $user->name }}</h1>
-    </div>
-    <div class="col-md-4 text-end">
-        <a href="{{ route('admin.users.edit', $user->id) }}" class="btn btn-warning">
-            <i class="fas fa-edit"></i> Edit
-        </a>
-        <a href="{{ route('admin.users.index') }}" class="btn btn-secondary">
-            <i class="fas fa-arrow-left"></i> Back
-        </a>
-    </div>
-</div>
+<x-theme-container class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <x-page-header title="{{ $user->name }}" icon="user" />
 
-<div class="row">
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h5 class="mb-0">User Details</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label><strong>Name:</strong></label>
-                    <p>{{ $user->name }}</p>
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+        <!-- User Details -->
+        <div class="theme-card p-6">
+            <h2 class="text-xl font-semibold theme-text-primary mb-4">User Details</h2>
+            <div class="space-y-3 text-sm">
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary">Name</p>
+                    <p class="font-semibold theme-text-primary">{{ $user->name }}</p>
                 </div>
-
-                <div class="mb-3">
-                    <label><strong>Email:</strong></label>
-                    <p>{{ $user->email }}</p>
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary">Email</p>
+                    <p class="font-semibold theme-text-primary">{{ $user->email }}</p>
                 </div>
-
-                <div class="mb-3">
-                    <label><strong>Role:</strong></label>
-                    <p><span class="badge bg-primary">{{ ucfirst($user->role) }}</span></p>
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary">Role</p>
+                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-300">
+                        {{ ucfirst(str_replace('_', ' ', $user->role)) }}
+                    </span>
                 </div>
-
-                <div class="mb-3">
-                    <label><strong>Department:</strong></label>
-                    <p>{{ $user->department->name ?? 'N/A' }}</p>
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary">Department</p>
+                    <p class="font-semibold theme-text-primary">{{ optional($user->department)->name ?? 'N/A' }}</p>
                 </div>
-
-                <div class="mb-3">
-                    <label><strong>Joined:</strong></label>
-                    <p>{{ $user->created_at->format('M d, Y H:i') }}</p>
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary">Joined</p>
+                    <p class="font-semibold theme-text-primary">{{ $user->created_at->format('M d, Y H:i') }}</p>
                 </div>
             </div>
         </div>
-    </div>
 
-    <div class="col-md-6">
-        <div class="card mb-3">
-            <div class="card-header">
-                <h5 class="mb-0">Statistics</h5>
-            </div>
-            <div class="card-body">
-                <div class="mb-3">
-                    <label><strong>Requests Created:</strong></label>
-                    <p style="font-size: 1.5rem; color: #3498db;">{{ $requestsCount ?? 0 }}</p>
+        <!-- Statistics -->
+        <div class="theme-card p-6">
+            <h2 class="text-xl font-semibold theme-text-primary mb-4">Statistics</h2>
+            <div class="space-y-4">
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary mb-1">Requests Created</p>
+                    <p class="text-3xl font-bold text-blue-600">{{ $requestsCount ?? 0 }}</p>
                 </div>
-
-                <div class="mb-3">
-                    <label><strong>Approvals Given:</strong></label>
-                    <p style="font-size: 1.5rem; color: #27ae60;">{{ $approvalsCount ?? 0 }}</p>
+                <div>
+                    <p class="text-xs font-semibold theme-text-secondary mb-1">Approvals Given</p>
+                    <p class="text-3xl font-bold text-green-600">{{ $approvalsCount ?? 0 }}</p>
                 </div>
-
                 @if(($requestsCount ?? 0) === 0 && ($approvalsCount ?? 0) === 0)
-                    <p class="text-muted">No statistics available for this user</p>
+                    <p class="text-xs theme-text-secondary">No statistics available for this user</p>
                 @endif
             </div>
         </div>
     </div>
-</div>
 
-@if(!empty($hasRecentRequests))
-    <div class="card mt-3">
-        <div class="card-header">
-            <h5 class="mb-0"><i class="fas fa-file-invoice"></i> User's Requests</h5>
+    @if(!empty($hasRecentRequests))
+    <!-- User Requests -->
+    <div class="theme-card">
+        <div class="border-b theme-border-primary px-6 py-4">
+            <h2 class="text-xl font-semibold theme-text-primary">User's Requests</h2>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
-                <thead class="table-light">
-                    <tr>
-                        <th>Request ID</th>
-                        <th>Date</th>
-                        <th>Amount</th>
-                        <th>Status</th>
+        <x-data-table>
+            <x-table-header :columns="['Request ID', 'Date', 'Amount', 'Status']" />
+            <tbody>
+                @foreach($recentRequests as $request)
+                    <tr class="border-b theme-border-primary hover:theme-bg-secondary transition">
+                        <td class="px-6 py-3 font-semibold theme-text-primary">#{{ $request->id }}</td>
+                        <td class="px-6 py-3 theme-text-secondary">{{ $request->created_at->format('M d, Y') }}</td>
+                        <td class="px-6 py-3 font-semibold theme-text-primary">₹{{ number_format($request->total_amount, 2) }}</td>
+                        <td class="px-6 py-3">
+                            @if($request->isPending())
+                                <x-status-badge :status="'pending'" />
+                            @elseif($request->isApproved())
+                                <x-status-badge :status="'approved'" />
+                            @elseif($request->isRejected())
+                                <x-status-badge :status="'rejected'" />
+                            @endif
+                        </td>
                     </tr>
-                </thead>
-                <tbody>
-                    @foreach($recentRequests as $request)
-                        <tr>
-                            <td>#{{ $request->id }}</td>
-                            <td>{{ $request->created_at->format('M d, Y') }}</td>
-                            <td>₹{{ number_format($request->total_amount, 2) }}</td>
-                            <td>
-                                @if($request->isPending())
-                                    <span class="badge badge-pending">Pending</span>
-                                @elseif($request->isApproved())
-                                    <span class="badge badge-approved">Approved</span>
-                                @elseif($request->isRejected())
-                                    <span class="badge badge-rejected">Rejected</span>
-                                @endif
-                            </td>
-                        </tr>
-                    @endforeach
-                </tbody>
-            </table>
-        </div>
+                @endforeach
+            </tbody>
+        </x-data-table>
     </div>
-@endif
+    @endif
+
+    <!-- Action Buttons -->
+    <div class="mt-6 flex gap-3">
+        <x-action-button 
+            href="{{ route('admin.users.edit', $user->id) }}"
+            type="primary"
+        >
+            Edit User
+        </x-action-button>
+        <x-action-button 
+            href="{{ route('admin.users.index') }}"
+            type="secondary"
+        >
+            Back to Users
+        </x-action-button>
+    </div>
+</x-theme-container>
 @endsection
